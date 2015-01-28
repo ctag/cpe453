@@ -2,4 +2,5 @@
 # Sprint 1
 12-1-2015 1hr
 25-1-2015 3hr
+26-1-2015 4hr - NOT able to install mysql.
 
