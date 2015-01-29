@@ -5,4 +5,7 @@
 26-1-2015 4hr - NOT able to install mysql.
 
 28-1-2015 3hr - SQL Discussion, work to be done setting up remote test server at berocs.com
+29-1-2015 5.3hr - Setting up postgres and making it work from campus.
+	0000-0200 - Setting up debian server under berocs.com
+	1200-1430 - Configuring remote access and writing demo code
 
