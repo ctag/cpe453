@@ -4,3 +4,5 @@
 25-1-2015 3hr
 26-1-2015 4hr - NOT able to install mysql.
 
+28-1-2015 3hr - SQL Discussion, work to be done setting up remote test server at berocs.com
+
