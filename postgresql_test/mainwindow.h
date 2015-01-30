@@ -20,9 +20,20 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    
+
+protected slots:
+    void connectDB();
+
 private:
     Ui::MainWindow *ui;
+    QSqlDatabase db;
+    QString hostname;
+    QString username;
+    QString password;
+    QString database;
+    QString table;
+    int port;
+
 };
 
 #endif // MAINWINDOW_H

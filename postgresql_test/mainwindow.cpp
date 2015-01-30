@@ -8,29 +8,38 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     
-    /*QNetworkProxy proxy;
-    proxy.setType(QNetworkProxy::Socks5Proxy);
-    proxy.setHostName("172.21.0.1");
-    proxy.setPort(3128);
-    QNetworkProxy::setApplicationProxy(proxy);
-    */
+    connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(connectDB()));
+
     
-    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
-    db.setHostName("berocs.com");
-    db.setPort(5432);
-    db.setDatabaseName("tmpsql");
-    db.setUserName("testsql");
-    db.setPassword("test");
-    
+}
+
+void MainWindow::connectDB()
+{
+    hostname = ui->lineEdit_hostname->text();
+    port = ui->spinBox_port->value();
+    database = ui->lineEdit_database->text();
+    username = ui->lineEdit_user->text();
+    password = ui->lineEdit_password->text();
+    table = ui->lineEdit_table->text();
+
+    db = QSqlDatabase::addDatabase("QPSQL");
+    db.setHostName(hostname);
+    db.setPort(port);
+    db.setUserName(username);
+    db.setPassword(password);
+    db.setDatabaseName(database);
+
+
     if (!db.open())
     {
-        qDebug() << "Opening postgresql database failed.";
-        qDebug() << db.lastError();
+        ui->textBrowser_output->append("Opening postgresql database failed.");
+        ui->textBrowser_output->append(db.lastError().text());
     } else {
-        qDebug() << "Database opened.";
-        
+        ui->textBrowser_output->append("Database opened.");
     }
-    
+
+    db.close();
+    ui->textBrowser_output->append("Database closed.");
 }
 
 MainWindow::~MainWindow()
