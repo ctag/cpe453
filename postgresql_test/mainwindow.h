@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <QSqlDatabase>
 #include <QtSql>
+#include <QTableView>
 #include <QDebug>
 #include <QtDebug>
 #include <QNetworkProxy>
@@ -23,6 +24,9 @@ public:
 
 protected slots:
     void connectDB();
+    void disconnectDB();
+    void tableText();
+    void queryModel();
 
 private:
     Ui::MainWindow *ui;
@@ -33,6 +37,9 @@ private:
     QString database;
     QString table;
     int port;
+    QSqlQuery dbQuery;
+    QSqlQueryModel* dbQueryModel;
+    QTableView* dbTableView;
 
 };
 
