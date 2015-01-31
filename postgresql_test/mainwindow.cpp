@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(disconnectDB()));
     connect(ui->pushButton_tableText, SIGNAL(clicked()), this, SLOT(tableText()));
     connect(ui->pushButton_queryModel, SIGNAL(clicked()), this, SLOT(queryModel()));
+    connect(ui->pushButton_runQuery, SIGNAL(clicked()), this, SLOT(runQuery()));
     
 }
 
@@ -60,6 +61,7 @@ void MainWindow::connectDB()
         ui->pushButton_disconnect->setEnabled(true);
         ui->pushButton_tableText->setEnabled(true);
         ui->pushButton_queryModel->setEnabled(true);
+        ui->pushButton_runQuery->setEnabled(true);
     }
 
 }
@@ -80,6 +82,7 @@ void MainWindow::disconnectDB()
             ui->pushButton_disconnect->setEnabled(false);
             ui->pushButton_tableText->setEnabled(false);
             ui->pushButton_queryModel->setEnabled(false);
+            ui->pushButton_runQuery->setEnabled(false);
         }
     }
 }
@@ -113,17 +116,67 @@ void MainWindow::tableText()
 void MainWindow::queryModel()
 {
     ui->textBrowser_output->append("queryModel(): opening query view.");
-    //QSqlQueryModel dbQueryModel;
-    dbQueryModel->setQuery("SELECT * FROM public.testsql", db);
+
+    // Build the query from text entered in MainWindow.
+    // Match the form "SELECT * FROM schema.table" to agree with Postgresql.
+    schema = ui->lineEdit_schema->text();
+    table = ui->lineEdit_table->text();
+    QString tmpQuery = "SELECT * FROM ";
+    tmpQuery.append(schema);
+    tmpQuery.append(".");
+    tmpQuery.append(table);
+
+    // Load our query text into a query model
+    dbQueryModel->setQuery(tmpQuery, db);
+
+    // Check if the query model is correct
     if (dbQueryModel->lastError().isValid())
     {
         ui->textBrowser_output->append(dbQueryModel->lastError().text());
         ui->textBrowser_output->append("Issue with dbQueryModel listed above, exiting queryModel().");
         return;
     }
-    //QTableView dbTableView;
+
+    // Load the query model into the table view. This is an attempt at View/Model practices.
     dbTableView->setModel(dbQueryModel);
     dbTableView->show();
+}
+
+void MainWindow::runQuery()
+{
+    QString queryString = ui->lineEdit_query->text(); /* Pull fresh query from the main interface */
+    if (!db.isOpen()) /* Check that the database is still open */
+    {
+        ui->textBrowser_output->append("Database doesn't appear to be open :C");
+        return;
+    } else if (dbQuery.exec(queryString)) /* Execute the query and check that it succeeds */
+    {
+        ui->textBrowser_output->append("Query successful? :3");
+        if (dbQuery.isSelect()) /* A SELECT query was run */
+        {
+            ui->textBrowser_output->append("Detected that the query is type SELECT.");
+            while (dbQuery.next()) /* Must prime the results by calling .next(); the first row is always null */
+            {
+                int queryValue = 0;
+                QString queryResults = "";
+                while (!dbQuery.isNull(queryValue)) /* Cycle through the columns */
+                {
+                    queryResults.append("[");
+                    queryResults.append(QString("%1").arg(queryValue)); /* Cast the int as QString */
+                    queryResults.append("]: ");
+                    queryResults.append(dbQuery.value(queryValue).toString());
+                    queryValue++; /* Go to next column in row */
+                }
+                ui->textBrowser_output->append(queryResults);
+            }
+        } else { /* Query was not type SELECT */
+            ui->textBrowser_output->append("Detected that the query is NOT type SELECT.");
+            ui->textBrowser_output->append("Number of rows affected: " + QString("%1").arg(dbQuery.numRowsAffected()));
+        }
+    } else { /* The query was not successful */
+        ui->textBrowser_output->append("Dun goofed. This shouldn't happen.");
+        ui->textBrowser_output->append(dbQuery.lastError().text());
+    }
 }
 
 MainWindow::~MainWindow()

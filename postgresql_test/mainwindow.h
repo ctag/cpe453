@@ -27,6 +27,7 @@ protected slots:
     void disconnectDB();
     void tableText();
     void queryModel();
+    void runQuery();
 
 private:
     Ui::MainWindow *ui;
@@ -35,6 +36,7 @@ private:
     QString username;
     QString password;
     QString database;
+    QString schema;
     QString table;
     int port;
     QSqlQuery dbQuery;

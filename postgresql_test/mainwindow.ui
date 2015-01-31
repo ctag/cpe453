@@ -17,10 +17,10 @@
    <enum>QTabWidget::Triangular</enum>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_3">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_7">
-      <item>
+     <layout class="QFormLayout" name="formLayout_2">
+      <item row="0" column="0">
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -31,25 +31,12 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignLeft">
            <widget class="QLineEdit" name="lineEdit_hostname">
             <property name="text">
              <string>berocs.com</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_4">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </item>
@@ -62,7 +49,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignLeft">
            <widget class="QSpinBox" name="spinBox_port">
             <property name="maximum">
              <number>9999</number>
@@ -71,19 +58,6 @@
              <number>5432</number>
             </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_7">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </item>
@@ -96,25 +70,12 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignLeft">
            <widget class="QLineEdit" name="lineEdit_user">
             <property name="text">
              <string>testsql</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </item>
@@ -123,29 +84,16 @@
           <item>
            <widget class="QLabel" name="label_password">
             <property name="text">
-             <string>Password</string>
+             <string>Password: </string>
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignLeft">
            <widget class="QLineEdit" name="lineEdit_password">
             <property name="text">
              <string>test</string>
             </property>
            </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_6">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
           </item>
          </layout>
         </item>
@@ -158,25 +106,30 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignLeft">
            <widget class="QLineEdit" name="lineEdit_database">
             <property name="text">
              <string>tmpsql</string>
             </property>
            </widget>
           </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
           <item>
-           <spacer name="horizontalSpacer_8">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QLabel" name="label_schema">
+            <property name="text">
+             <string>Schema: </string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
+           </widget>
+          </item>
+          <item alignment="Qt::AlignLeft">
+           <widget class="QLineEdit" name="lineEdit_schema">
+            <property name="text">
+             <string>public</string>
             </property>
-           </spacer>
+           </widget>
           </item>
          </layout>
         </item>
@@ -189,32 +142,47 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item alignment="Qt::AlignLeft">
            <widget class="QLineEdit" name="lineEdit_table">
             <property name="text">
              <string>testsql</string>
             </property>
            </widget>
           </item>
-          <item>
-           <spacer name="horizontalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
          </layout>
         </item>
        </layout>
       </item>
-      <item>
+      <item row="0" column="1">
        <widget class="QTextBrowser" name="textBrowser_output"/>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout_7">
+      <item>
+       <widget class="QLabel" name="label_query">
+        <property name="text">
+         <string>SQL Query: </string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lineEdit_query">
+        <property name="text">
+         <string>SELECT * FROM public.testsql</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_runQuery">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Run Query</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

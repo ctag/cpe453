@@ -9,5 +9,7 @@
 	0000-0200 - Setting up debian server under berocs.com
 	1200-1430 - Configuring remote access and writing demo code
 	2200-0000 - Working on demo sql program
-
+30-1-2015 5hr
+	1500-1600 - The USB Buffer went missing
+	2000-2400 - Working on SQL ICD
 
