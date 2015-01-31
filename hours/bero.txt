@@ -12,4 +12,7 @@
 30-1-2015 5hr
 	1500-1600 - The USB Buffer went missing
 	2000-2400 - Working on SQL ICD
+31-1-2015 6hr
+	1200-1800 - Working on loconet usb buffer
+
 
