@@ -1,0 +1,129 @@
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    ui->lineEdit_opcode->setInputMask("HH");
+    ui->lineEdit_arg1->setInputMask("hh");
+    ui->lineEdit_arg2->setInputMask("hh");
+
+    ui->lineEdit_chk->setEnabled(false);
+
+    loconet = new QSerialPort;
+
+    connect(ui->pushButton_genChk, SIGNAL(clicked()), this, SLOT(genChecksum()));
+
+    ui->textBrowser_output->append("Program loaded! :3");
+}
+
+QBitArray MainWindow::genBitArray(QByteArray bytes)
+{
+    QBitArray bits(bytes.count()*8);
+    //ui->textBrowser_output->append("Array bytes: " + bytes.count());
+    for (int i = 0; i < bytes.count(); i++)
+    {
+        for (int b = 0; b < 8; b++)
+        {
+            bits.setBit((i*8)+b, bytes.at(i)&(1<<(7-b)));
+        }
+    }
+    return(bits);
+}
+
+QBitArray MainWindow::doXor(QBitArray ar1, QBitArray ar2)
+{
+    if (ar1.size() != ar2.size())
+    {
+        qDebug() << "bitarray size doesn't match, exiting doXor.";
+        QBitArray youlose(0);
+        return youlose;
+    }
+    QBitArray result(ar1.size());
+    for (int i = 0; i < ar1.size(); i++)
+    {
+            result.setBit(i, ar1[i]^ar2[i]);
+    }
+    return result;
+}
+
+void MainWindow::genChecksum()
+{
+    int packet_len = 0;
+    QString* opcode_text = new QString;
+    QString* arg1_text = new QString;
+    QString* arg2_text = new QString;
+    QByteArray conversion_data;
+    QByteArray opcode_hex;
+    QByteArray arg1_hex;
+    QByteArray arg2_hex;
+    QBitArray opcode_bits;
+    QBitArray arg1_bits;
+    QBitArray arg2_bits;
+    QBitArray checksum;
+
+
+    if (ui->lineEdit_opcode->hasAcceptableInput())
+    {
+        ui->textBrowser_output->append("opcode is valid :D");
+        packet_len++;
+    } else {
+        ui->textBrowser_output->append("opcode is not valid :C");
+        return;
+    }
+
+    opcode_text->append(ui->lineEdit_opcode->text());
+    arg1_text->append(ui->lineEdit_arg1->text());
+    arg2_text->append(ui->lineEdit_arg2->text());
+
+    conversion_data = opcode_text->toLatin1();
+    opcode_hex = QByteArray::fromHex(conversion_data);
+    conversion_data = arg1_text->toLatin1();
+    arg1_hex = QByteArray::fromHex(conversion_data);
+    conversion_data = arg2_text->toLatin1();
+    arg2_hex = QByteArray::fromHex(conversion_data);
+
+    opcode_bits = genBitArray(opcode_hex);
+    arg1_bits = genBitArray(arg1_hex);
+    arg2_bits = genBitArray(arg2_hex);
+
+    checksum = doXor(opcode_bits, arg1_bits);
+    checksum = doXor(checksum, arg2_bits);
+
+    qDebug() << opcode_bits << arg1_bits << arg2_bits << checksum << ~checksum;
+
+    checksum = ~checksum;
+
+    QBitArray tmp_bits = checksum;
+
+    qDebug() << "checksum: " << tmp_bits;
+
+    for (int c = 0; c < 8; c++)
+    {
+        checksum.setBit(c, tmp_bits.at(7-c));
+    }
+
+    QByteArray checksum_bytes;
+
+    for(int b=0; b<checksum.count(); ++b)
+    {
+        if (!checksum_bytes[b/8])
+        {
+            checksum_bytes[b/8] = NULL;
+        }
+        checksum_bytes[b/8] = (checksum_bytes.at(b/8) | ((checksum[b]?1:0)<<(b%8)));
+    }
+
+    qDebug() << genBitArray(checksum_bytes);
+
+    ui->lineEdit_chk->setText(checksum_bytes.toHex());
+
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
