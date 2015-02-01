@@ -31,6 +31,8 @@ QBitArray MainWindow::genBitArray(QByteArray bytes)
             bits.setBit((i*8)+b, bytes.at(i)&(1<<(7-b)));
         }
     }
+    QString textOutput = "BitArray Generated (^_^) ";
+    ui->textBrowser_output->append(textOutput);
     return(bits);
 }
 
@@ -38,7 +40,7 @@ QBitArray MainWindow::doXor(QBitArray ar1, QBitArray ar2)
 {
     if (ar1.size() != ar2.size())
     {
-        qDebug() << "bitarray size doesn't match, exiting doXor.";
+        ui->textBrowser_output->append("bitarray size doesn't match, exiting doXor.");
         QBitArray youlose(0);
         return youlose;
     }
@@ -47,6 +49,7 @@ QBitArray MainWindow::doXor(QBitArray ar1, QBitArray ar2)
     {
             result.setBit(i, ar1[i]^ar2[i]);
     }
+    ui->textBrowser_output->append("BitArray XOR'ed x)");
     return result;
 }
 

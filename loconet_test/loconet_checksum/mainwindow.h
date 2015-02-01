@@ -6,6 +6,7 @@
 #include <QSerialPort>
 #include <QDebug>
 #include <QByteArray>
+#include <QVariant>
 
 namespace Ui {
 class MainWindow;
