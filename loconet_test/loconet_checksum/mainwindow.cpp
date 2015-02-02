@@ -16,8 +16,40 @@ MainWindow::MainWindow(QWidget *parent) :
     loconet = new QSerialPort;
 
     connect(ui->pushButton_genChk, SIGNAL(clicked()), this, SLOT(genChecksum()));
+    connect(ui->comboBox_opcodes, SIGNAL(activated(int)), this, SLOT(loadOPCode(int)));
+
+    ui->comboBox_opcodes->setEditable(false);
+    ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
+
+    ui->comboBox_opcodes->insertItem(0, "Global Power On");
+    ui->comboBox_opcodes->insertItem(1, "Global Power Off");
+    ui->comboBox_opcodes->insertItem(2, "Global IDLE");
+    ui->comboBox_opcodes->insertItem(3, "Master Busy");
 
     ui->textBrowser_output->append("Program loaded! :3");
+}
+
+void MainWindow::loadOPCode(int index)
+{
+    switch (index)
+    {
+        case 0:
+            ui->lineEdit_opcode->setText("83"); /* Global ON */
+        break;
+        case 1:
+            ui->lineEdit_opcode->setText("82"); /* Global OFF */
+        break;
+        case 2:
+            ui->lineEdit_opcode->setText("85"); /* Force IDLE */
+        break;
+        case 3:
+            ui->lineEdit_opcode->setText("81"); /* MASTER busy */
+        break;
+        default:
+            ui->textBrowser_output->append("Whoops, error loading the OP code (-_-)");
+            ui->lineEdit_opcode->setText("00"); /* General Error */
+        break;
+    }
 }
 
 QBitArray MainWindow::genBitArray(QByteArray bytes)
@@ -32,6 +64,7 @@ QBitArray MainWindow::genBitArray(QByteArray bytes)
         }
     }
     QString textOutput = "BitArray Generated (^_^) ";
+    textOutput.append(bytes.toHex());
     ui->textBrowser_output->append(textOutput);
     return(bits);
 }
@@ -49,7 +82,7 @@ QBitArray MainWindow::doXor(QBitArray ar1, QBitArray ar2)
     {
             result.setBit(i, ar1[i]^ar2[i]);
     }
-    ui->textBrowser_output->append("BitArray XOR'ed x)");
+    ui->textBrowser_output->append("BitArray XOR'ed x) ");
     return result;
 }
 
@@ -123,6 +156,24 @@ void MainWindow::genChecksum()
     qDebug() << genBitArray(checksum_bytes);
 
     ui->lineEdit_chk->setText(checksum_bytes.toHex());
+
+    QString finalPacket = "Packet: ";
+    finalPacket.append(opcode_text);
+    finalPacket.append(" ");
+
+    if (arg1_text != QString::fromLatin1("00"))
+    {
+        finalPacket.append(arg1_text);
+        finalPacket.append(" ");
+    }
+    if (arg2_text != QString::fromLatin1("00"))
+    {
+        finalPacket.append(arg2_text);
+        finalPacket.append(" ");
+    }
+    finalPacket.append(checksum_bytes.toHex());
+
+    ui->textBrowser_output->append(finalPacket);
 
 }
 

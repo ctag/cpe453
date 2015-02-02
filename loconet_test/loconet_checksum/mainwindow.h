@@ -7,6 +7,7 @@
 #include <QDebug>
 #include <QByteArray>
 #include <QVariant>
+#include <QComboBox>
 
 namespace Ui {
 class MainWindow;
@@ -22,6 +23,7 @@ public:
 
 protected slots:
     void genChecksum();
+    void loadOPCode(int index);
 
 private:
     Ui::MainWindow *ui;
