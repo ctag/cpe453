@@ -1,0 +1,1097 @@
+19:08:14.595: [Rx - D0 62 78 30 10 15]  PM4x (Board ID 121) Power Status Report
+	Sub-District 1 - CircuitBreaker mode - Unshorted
+	Sub-District 2 - CircuitBreaker mode - Unshorted
+	Sub-District 3 - CircuitBreaker mode - Unshorted
+	Sub-District 4 - CircuitBreaker mode - Unshorted.
+19:08:14.599: [Rx - BB 00 00 44]  Request data/status for slot 0.
+19:08:14.617: [Rx - D0 62 6C 30 10 01]  PM4x (Board ID 109) Power Status Report
+	Sub-District 1 - CircuitBreaker mode - Unshorted
+	Sub-District 2 - CircuitBreaker mode - Unshorted
+	Sub-District 3 - CircuitBreaker mode - Unshorted
+	Sub-District 4 - CircuitBreaker mode - Unshorted.
+19:08:14.617: [Rx - D0 62 79 3F 13 18]  PM4x (Board ID 122) Power Status Report
+	Sub-District 1 - AutoReversing mode - Reversed
+	Sub-District 2 - AutoReversing mode - Reversed
+	Sub-District 3 - AutoReversing mode - Normal
+	Sub-District 4 - AutoReversing mode - Normal.
+19:08:14.625: [Rx - D0 62 08 30 10 65]  PM4x (Board ID 9) Power Status Report
+	Sub-District 1 - CircuitBreaker mode - Unshorted
+	Sub-District 2 - CircuitBreaker mode - Unshorted
+	Sub-District 3 - CircuitBreaker mode - Unshorted
+	Sub-District 4 - CircuitBreaker mode - Unshorted.
+19:08:14.637: [Rx - D0 63 5C 30 10 30]  PM4x (Board ID 221) Power Status Report
+	Sub-District 1 - CircuitBreaker mode - Unshorted
+	Sub-District 2 - CircuitBreaker mode - Unshorted
+	Sub-District 3 - CircuitBreaker mode - Unshorted
+	Sub-District 4 - CircuitBreaker mode - Unshorted.
+19:08:14.638: [Rx - D0 63 24 30 10 48]  PM4x (Board ID 165) Power Status Report
+	Sub-District 1 - CircuitBreaker mode - Unshorted
+	Sub-District 2 - CircuitBreaker mode - Unshorted
+	Sub-District 3 - CircuitBreaker mode - Unshorted
+	Sub-District 4 - CircuitBreaker mode - Unshorted.
+19:08:14.660: [Rx - D0 63 50 30 10 3C]  PM4x (Board ID 209) Power Status Report
+	Sub-District 1 - CircuitBreaker mode - Unshorted
+	Sub-District 2 - CircuitBreaker mode - Unshorted
+	Sub-District 3 - CircuitBreaker mode - Unshorted
+	Sub-District 4 - CircuitBreaker mode - Unshorted.
+19:08:14.661: [Rx - D0 62 34 30 10 59]  PM4x (Board ID 53) Power Status Report
+	Sub-District 1 - CircuitBreaker mode - Unshorted
+	Sub-District 2 - CircuitBreaker mode - Unshorted
+	Sub-District 3 - CircuitBreaker mode - Unshorted
+	Sub-District 4 - CircuitBreaker mode - Unshorted.
+19:08:14.661: [Rx - D0 62 40 30 10 2D]  PM4x (Board ID 65) Power Status Report
+	Sub-District 1 - CircuitBreaker mode - Unshorted
+	Sub-District 2 - CircuitBreaker mode - Unshorted
+	Sub-District 3 - CircuitBreaker mode - Unshorted
+	Sub-District 4 - CircuitBreaker mode - Unshorted.
+19:08:16.616: [Rx - B2 00 50 1D]  Sensor LS1 () is Hi.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:16.627: [Rx - B0 14 30 6B]  Requesting Switch at LT21 () to Closed (output On).
+19:08:16.658: [Rx - B0 15 30 6A]  Requesting Switch at LT22 () to Closed (output On).
+19:08:16.658: [Rx - B0 16 30 69]  Requesting Switch at LT23 () to Closed (output On).
+19:08:16.753: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:17.742: [Rx - B0 78 27 10]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 1/0/0; addresses...
+	33-40, 97-104, 161-168, 225-232, 289-296, 353-360, 417-424, 481-488,
+	545-552, 609-616, 673-680, 737-744, 801-808, 865-872, 929-936, 993-1000,
+	1057-1064, 1121-1128, 1185-1192, 1249-1256, 1313-1320, 1377-1384, 1441-1448, 1505-1512,
+	1569-1576, 1633-1640, 1697-1704, 1761-1768, 1825-1832, 1889-1896, 1953-1960, 2017-2024
+19:08:17.781: [Rx - BB 01 00 45]  Request data/status for slot 1.
+19:08:17.816: [Rx - E7 0E 01 33 03 7E 0D 04 00 00 00 00 57 07]  Response slot 1 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 126,
+	F0=Off, F1=On,  F2=Off, F3=On,  F4=On,  Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x57 0x0 (11136)
+19:08:17.821: [Rx - E7 0E 01 33 03 00 00 07 00 00 00 00 57 77]  Response slot 1 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: On; Programming Track: Available; SS2=0x0, ThrottleID=0x57 0x0 (11136)
+19:08:17.822: [Rx - BB 02 00 46]  Request data/status for slot 2.
+19:08:17.823: [Rx - E7 0E 02 33 00 16 00 04 00 00 00 02 57 60]  Response slot 2 information:
+	Loco 0 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 22,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x57 0x2 (11138)
+19:08:17.840: [Rx - E7 0E 02 33 00 00 00 04 00 00 00 02 57 76]  Response slot 2 information:
+	Loco 0 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x57 0x2 (11138)
+19:08:17.909: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:17.974: [Rx - A0 01 06 58]  Set speed of loco in slot 1 to 6.
+19:08:18.793: [Rx - B0 79 27 11]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 1/0/1; addresses...
+	41-48, 105-112, 169-176, 233-240, 297-304, 361-368, 425-432, 489-496,
+	553-560, 617-624, 681-688, 745-752, 809-816, 873-880, 937-944, 1001-1008,
+	1065-1072, 1129-1136, 1193-1200, 1257-1264, 1321-1328, 1385-1392, 1449-1456, 1513-1520,
+	1577-1584, 1641-1648, 1705-1712, 1769-1776, 1833-1840, 1897-1904, 1961-1968, 2025-2032
+19:08:18.936: [Rx - B0 32 10 6D]  Requesting Switch at LT51 () to Thrown (output On).
+19:08:18.939: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:18.960: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:18.963: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:18.967: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:18.970: [Rx - B2 00 50 1D]  Sensor LS1 () is Hi.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:18.983: [Rx - B2 01 50 1C]  Sensor LS3 () is Hi.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:18.985: [Rx - B2 02 50 1F]  Sensor LS5 () is Hi.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:19.000: [Rx - B2 03 50 1E]  Sensor LS7 () is Hi.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:19.001: [Rx - B0 33 30 4C]  Requesting Switch at LT52 () to Closed (output On).
+19:08:19.061: [Rx - B0 34 30 4B]  Requesting Switch at LT53 () to Closed (output On).
+19:08:19.065: [Rx - B4 30 00 7B]  LONG_ACK: Switch request Failed!
+19:08:19.066: [Rx - B0 35 10 6A]  Requesting Switch at LT54 () to Thrown (output On).
+19:08:19.071: [Rx - B4 30 00 7B]  LONG_ACK: Switch request Failed!
+19:08:19.067: [Tx - B0 34 30 4B]  Requesting Switch at LT53 () to Closed (output On).
+19:08:19.072: [Tx - B0 35 10 6A]  Requesting Switch at LT54 () to Thrown (output On).
+19:08:19.099: [Rx - B4 30 00 7B]  LONG_ACK: Switch request Failed!
+19:08:19.100: [Tx - B0 35 10 6A]  Requesting Switch at LT54 () to Thrown (output On).
+19:08:19.611: [Rx - BB 00 7F 3B]  Request data/status for slot 0.
+19:08:19.668: [Rx - E7 0E 00 33 03 00 00 04 00 00 00 00 00 22]  Response slot 0 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.673: [Rx - E7 0E 00 00 00 00 00 04 00 00 00 00 00 12]  Response slot 0 information:
+	Loco 0 is Not Consisted, Free, operating in 28 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.674: [Rx - BB 00 7F 3B]  Request data/status for slot 0.
+19:08:19.674: [Rx - E7 0E 00 33 03 00 00 04 00 00 00 00 00 22]  Response slot 0 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.675: [Rx - E7 0E 00 00 00 00 00 04 00 00 00 00 00 12]  Response slot 0 information:
+	Loco 0 is Not Consisted, Free, operating in 28 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.675: [Rx - BB 00 7F 3B]  Request data/status for slot 0.
+19:08:19.677: [Rx - E7 0E 00 33 03 00 00 04 00 00 00 00 00 22]  Response slot 0 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.708: [Rx - E7 0E 00 00 00 00 00 04 00 00 00 00 00 12]  Response slot 0 information:
+	Loco 0 is Not Consisted, Free, operating in 28 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.730: [Rx - BB 00 7F 3B]  Request data/status for slot 0.
+19:08:19.731: [Rx - E7 0E 00 33 03 00 00 04 00 00 00 00 00 22]  Response slot 0 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.731: [Rx - E7 0E 00 00 00 00 00 04 00 00 00 00 00 12]  Response slot 0 information:
+	Loco 0 is Not Consisted, Free, operating in 28 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.732: [Rx - BB 00 7F 3B]  Request data/status for slot 0.
+19:08:19.733: [Rx - E7 0E 00 33 03 00 00 04 00 00 00 00 00 22]  Response slot 0 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.786: [Rx - E7 0E 00 00 00 00 00 04 00 00 00 00 00 12]  Response slot 0 information:
+	Loco 0 is Not Consisted, Free, operating in 28 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.789: [Rx - A0 02 00 5D]  Set speed of loco in slot 2 to 0.
+19:08:19.789: [Rx - BB 00 7F 3B]  Request data/status for slot 0.
+19:08:19.790: [Rx - E7 0E 00 00 00 00 00 04 00 00 00 00 00 12]  Response slot 0 information:
+	Loco 0 is Not Consisted, Free, operating in 28 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.796: [Rx - E7 0E 00 33 03 00 00 04 00 00 00 00 00 22]  Response slot 0 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.798: [Rx - BB 00 7F 3B]  Request data/status for slot 0.
+19:08:19.802: [Rx - E7 0E 00 33 03 00 00 04 00 00 00 00 00 22]  Response slot 0 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.804: [Rx - E7 0E 00 00 00 00 00 04 00 00 00 00 00 12]  Response slot 0 information:
+	Loco 0 is Not Consisted, Free, operating in 28 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.805: [Rx - BB 00 7F 3B]  Request data/status for slot 0.
+19:08:19.852: [Rx - E7 0E 00 00 00 00 00 04 00 00 00 00 00 12]  Response slot 0 information:
+	Loco 0 is Not Consisted, Free, operating in 28 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.853: [Rx - E7 0E 00 33 03 00 00 04 00 00 00 00 00 22]  Response slot 0 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.853: [Rx - BB 00 7F 3B]  Request data/status for slot 0.
+19:08:19.856: [Rx - E7 0E 00 00 00 00 00 04 00 00 00 00 00 12]  Response slot 0 information:
+	Loco 0 is Not Consisted, Free, operating in 28 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.870: [Rx - E7 0E 00 33 03 00 00 04 00 00 00 00 00 22]  Response slot 0 information:
+	Loco 3 is Not Consisted, In-Use, operating in 128 SS mode, and is going Forward at speed 0,
+	F0=Off, F1=Off, F2=Off, F3=Off, F4=Off, Sound1/F5=Off, Sound2/F6=Off, Sound3/F7=Off, Sound4/F8=Off
+	Master: LocoNet 1.1; Track: Off; Programming Track: Available; SS2=0x0, ThrottleID=0x0 0x0 (0)
+19:08:19.871: [Rx - B0 7A 27 12]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 1/1/0; addresses...
+	49-56, 113-120, 177-184, 241-248, 305-312, 369-376, 433-440, 497-504,
+	561-568, 625-632, 689-696, 753-760, 817-824, 881-888, 945-952, 1009-1016,
+	1073-1080, 1137-1144, 1201-1208, 1265-1272, 1329-1336, 1393-1400, 1457-1464, 1521-1528,
+	1585-1592, 1649-1656, 1713-1720, 1777-1784, 1841-1848, 1905-1912, 1969-1976, 2033-2040
+19:08:19.873: [Rx - D0 62 62 01 11 3F]  Device type report - BDL16x Board ID 99 Version 10001 is present.
+19:08:19.873: [Rx - D0 62 6F 01 11 32]  Device type report - BDL16x Board ID 112 Version 10001 is present.
+19:08:19.925: [Rx - D0 62 2B 01 11 76]  Device type report - BDL16x Board ID 44 Version 10001 is present.
+19:08:19.935: [Rx - D0 62 6E 01 11 33]  Device type report - BDL16x Board ID 111 Version 10001 is present.
+19:08:19.944: [Rx - D0 63 7B 01 11 27]  Device type report - BDL16x Board ID 252 Version 10001 is present.
+19:08:19.944: [Rx - D0 62 2A 01 11 77]  Device type report - BDL16x Board ID 43 Version 10001 is present.
+19:08:19.945: [Rx - D0 63 7F 01 11 23]  Device type report - BDL16x Board ID 256 Version 10001 is present.
+19:08:19.945: [Rx - D0 63 52 01 11 0E]  Device type report - BDL16x Board ID 211 Version 10001 is present.
+19:08:19.947: [Rx - D0 63 53 01 11 0F]  Device type report - BDL16x Board ID 212 Version 10001 is present.
+19:08:19.948: [Rx - D0 62 37 01 11 6A]  Device type report - BDL16x Board ID 56 Version 10001 is present.
+19:08:19.951: [Rx - D0 63 1A 01 11 46]  Device type report - BDL16x Board ID 155 Version 10001 is present.
+19:08:19.954: [Rx - D0 63 46 01 11 1A]  Device type report - BDL16x Board ID 199 Version 10001 is present.
+19:08:19.991: [Rx - D0 62 00 01 11 5D]  Device type report - BDL16x Board ID 1 Version 10001 is present.
+19:08:19.997: [Rx - D0 62 36 01 11 6B]  Device type report - BDL16x Board ID 55 Version 10001 is present.
+19:08:20.020: [Rx - D0 63 78 01 11 24]  Device type report - BDL16x Board ID 249 Version 10001 is present.
+19:08:20.020: [Rx - D0 63 1B 01 11 47]  Device type report - BDL16x Board ID 156 Version 10001 is present.
+19:08:20.132: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:20.200: [Rx - B2 78 56 63]  Sensor LS1777 () is Hi.  (BDL16 #112, DS1; DS54/64 #223, AuxA/A1)
+19:08:20.238: [Rx - B2 18 5D 08]  Sensor LS3377 () is Hi.  (BDL16 #212, DS1; DS54/64 #423, AuxA/A1)
+19:08:20.246: [Rx - B2 38 53 26]  Sensor LS881 () is Hi.  (BDL16 #56, DS1; DS54/64 #111, AuxA/A1)
+19:08:20.254: [Rx - B2 58 59 4C]  Sensor LS2481 () is Hi.  (BDL16 #156, DS1; DS54/64 #311, AuxA/A1)
+19:08:20.255: [Rx - B2 10 5D 00]  Sensor LS3361 () is Hi.  (BDL16 #211, DS1; DS54/64 #421, AuxA/A1)
+19:08:20.256: [Rx - B2 78 76 43]  Sensor LS1778 () is Hi.  (BDL16 #112, DS2; DS54/64 #223, SwiA/S1)
+19:08:20.262: [Rx - B2 38 73 06]  Sensor LS882 () is Hi.  (BDL16 #56, DS2; DS54/64 #111, SwiA/S1)
+19:08:20.295: [Rx - B2 18 7D 28]  Sensor LS3378 () is Hi.  (BDL16 #212, DS2; DS54/64 #423, SwiA/S1)
+19:08:20.297: [Rx - B2 50 59 44]  Sensor LS2465 () is Hi.  (BDL16 #155, DS1; DS54/64 #309, AuxA/A1)
+19:08:20.297: [Rx - B2 30 53 2E]  Sensor LS865 () is Hi.  (BDL16 #55, DS1; DS54/64 #109, AuxA/A1)
+19:08:20.298: [Rx - B2 70 56 6B]  Sensor LS1761 () is Hi.  (BDL16 #111, DS1; DS54/64 #221, AuxA/A1)
+19:08:20.299: [Rx - B2 30 73 0E]  Sensor LS866 () is Hi.  (BDL16 #55, DS2; DS54/64 #109, SwiA/S1)
+19:08:20.305: [Rx - B2 39 53 27]  Sensor LS883 () is Hi.  (BDL16 #56, DS3; DS54/64 #111, AuxB/A2)
+19:08:20.309: [Rx - B2 50 79 64]  Sensor LS2466 () is Hi.  (BDL16 #155, DS2; DS54/64 #309, SwiA/S1)
+19:08:20.318: [Rx - B2 79 56 62]  Sensor LS1779 () is Hi.  (BDL16 #112, DS3; DS54/64 #223, AuxB/A2)
+19:08:20.319: [Rx - B2 70 76 4B]  Sensor LS1762 () is Hi.  (BDL16 #111, DS2; DS54/64 #221, SwiA/S1)
+19:08:20.323: [Rx - B2 58 79 6C]  Sensor LS2482 () is Hi.  (BDL16 #156, DS2; DS54/64 #311, SwiA/S1)
+19:08:20.324: [Rx - B2 19 5D 09]  Sensor LS3379 () is Hi.  (BDL16 #212, DS3; DS54/64 #423, AuxB/A2)
+19:08:20.338: [Rx - B2 79 76 42]  Sensor LS1780 () is Hi.  (BDL16 #112, DS4; DS54/64 #223, SwiB/S2)
+19:08:20.345: [Rx - B2 51 59 45]  Sensor LS2467 () is Hi.  (BDL16 #155, DS3; DS54/64 #309, AuxB/A2)
+19:08:20.346: [Rx - B2 59 59 4D]  Sensor LS2483 () is Hi.  (BDL16 #156, DS3; DS54/64 #311, AuxB/A2)
+19:08:20.360: [Rx - B2 31 53 2F]  Sensor LS867 () is Hi.  (BDL16 #55, DS3; DS54/64 #109, AuxB/A2)
+19:08:20.366: [Rx - B2 50 52 4F]  Sensor LS673 () is Hi.  (BDL16 #43, DS1; DS54/64 #85, AuxA/A1)
+19:08:20.367: [Rx - B2 71 56 6A]  Sensor LS1763 () is Hi.  (BDL16 #111, DS3; DS54/64 #221, AuxB/A2)
+19:08:20.390: [Rx - B2 10 7D 20]  Sensor LS3362 () is Hi.  (BDL16 #211, DS2; DS54/64 #421, SwiA/S1)
+19:08:20.390: [Rx - B2 7A 56 61]  Sensor LS1781 () is Hi.  (BDL16 #112, DS5; DS54/64 #223, AuxC/A3)
+19:08:20.391: [Rx - B2 71 76 4A]  Sensor LS1764 () is Hi.  (BDL16 #111, DS4; DS54/64 #221, SwiB/S2)
+19:08:20.392: [Rx - B2 51 79 65]  Sensor LS2468 () is Hi.  (BDL16 #155, DS4; DS54/64 #309, SwiB/S2)
+19:08:20.392: [Rx - B2 72 56 69]  Sensor LS1765 () is Hi.  (BDL16 #111, DS5; DS54/64 #221, AuxC/A3)
+19:08:20.393: [Rx - B2 39 73 07]  Sensor LS884 () is Hi.  (BDL16 #56, DS4; DS54/64 #111, SwiB/S2)
+19:08:20.430: [Rx - B2 59 79 6D]  Sensor LS2484 () is Hi.  (BDL16 #156, DS4; DS54/64 #311, SwiB/S2)
+19:08:20.432: [Rx - B2 3A 53 24]  Sensor LS885 () is Hi.  (BDL16 #56, DS5; DS54/64 #111, AuxC/A3)
+19:08:20.433: [Rx - B2 52 59 46]  Sensor LS2469 () is Hi.  (BDL16 #155, DS5; DS54/64 #309, AuxC/A3)
+19:08:20.434: [Rx - B2 3A 73 04]  Sensor LS886 () is Hi.  (BDL16 #56, DS6; DS54/64 #111, SwiC/S3)
+19:08:20.435: [Rx - B2 19 7D 29]  Sensor LS3380 () is Hi.  (BDL16 #212, DS4; DS54/64 #423, SwiB/S2)
+19:08:20.436: [Rx - B2 5A 59 4E]  Sensor LS2485 () is Hi.  (BDL16 #156, DS5; DS54/64 #311, AuxC/A3)
+19:08:20.437: [Rx - B2 11 5D 01]  Sensor LS3363 () is Hi.  (BDL16 #211, DS3; DS54/64 #421, AuxB/A2)
+19:08:20.453: [Rx - B2 52 79 66]  Sensor LS2470 () is Hi.  (BDL16 #155, DS6; DS54/64 #309, SwiC/S3)
+19:08:20.457: [Rx - B2 1A 5D 0A]  Sensor LS3381 () is Hi.  (BDL16 #212, DS5; DS54/64 #423, AuxC/A3)
+19:08:20.479: [Rx - B2 7A 76 41]  Sensor LS1782 () is Hi.  (BDL16 #112, DS6; DS54/64 #223, SwiC/S3)
+19:08:20.480: [Rx - B2 31 73 0F]  Sensor LS868 () is Hi.  (BDL16 #55, DS4; DS54/64 #109, SwiB/S2)
+19:08:20.481: [Rx - B2 5A 79 6E]  Sensor LS2486 () is Hi.  (BDL16 #156, DS6; DS54/64 #311, SwiC/S3)
+19:08:20.488: [Rx - B2 72 76 49]  Sensor LS1766 () is Hi.  (BDL16 #111, DS6; DS54/64 #221, SwiC/S3)
+19:08:20.488: [Rx - B2 3B 53 25]  Sensor LS887 () is Hi.  (BDL16 #56, DS7; DS54/64 #111, AuxD/A4)
+19:08:20.508: [Rx - B2 50 72 6F]  Sensor LS674 () is Hi.  (BDL16 #43, DS2; DS54/64 #85, SwiA/S1)
+19:08:20.514: [Rx - B2 58 5F 4A]  Sensor LS4017 () is Hi.  (BDL16 #252, DS1; DS54/64 #503, AuxA/A1)
+19:08:20.532: [Rx - B2 30 5C 21]  Sensor LS3169 () is Hi.  (BDL16 #199, DS1; DS54/64 #397, AuxA/A1)
+19:08:20.536: [Rx - B2 32 53 2C]  Sensor LS869 () is Hi.  (BDL16 #55, DS5; DS54/64 #109, AuxC/A3)
+19:08:20.537: [Rx - B2 7B 56 60]  Sensor LS1783 () is Hi.  (BDL16 #112, DS7; DS54/64 #223, AuxD/A4)
+19:08:20.545: [Rx - B2 5B 59 4F]  Sensor LS2487 () is Hi.  (BDL16 #156, DS7; DS54/64 #311, AuxD/A4)
+19:08:20.547: [Rx - B2 3B 73 05]  Sensor LS888 () is Hi.  (BDL16 #56, DS8; DS54/64 #111, SwiD/S4)
+19:08:20.549: [Rx - B2 32 73 0C]  Sensor LS870 () is Hi.  (BDL16 #55, DS6; DS54/64 #109, SwiC/S3)
+19:08:20.549: [Rx - B2 1A 7D 2A]  Sensor LS3382 () is Hi.  (BDL16 #212, DS6; DS54/64 #423, SwiC/S3)
+19:08:20.571: [Rx - B2 11 7D 21]  Sensor LS3364 () is Hi.  (BDL16 #211, DS4; DS54/64 #421, SwiB/S2)
+19:08:20.579: [Rx - B2 7B 76 40]  Sensor LS1784 () is Hi.  (BDL16 #112, DS8; DS54/64 #223, SwiD/S4)
+19:08:20.595: [Rx - B2 12 5D 02]  Sensor LS3365 () is Hi.  (BDL16 #211, DS5; DS54/64 #421, AuxC/A3)
+19:08:20.596: [Rx - B2 1B 5D 0B]  Sensor LS3383 () is Hi.  (BDL16 #212, DS7; DS54/64 #423, AuxD/A4)
+19:08:20.597: [Rx - B2 33 53 2D]  Sensor LS871 () is Hi.  (BDL16 #55, DS7; DS54/64 #109, AuxD/A4)
+19:08:20.608: [Rx - B2 3C 53 22]  Sensor LS889 () is Hi.  (BDL16 #56, DS9; DS54/64 #112, AuxA/A1)
+19:08:20.614: [Rx - B2 33 73 0D]  Sensor LS872 () is Hi.  (BDL16 #55, DS8; DS54/64 #109, SwiD/S4)
+19:08:20.616: [Rx - B2 5B 79 6F]  Sensor LS2488 () is Hi.  (BDL16 #156, DS8; DS54/64 #311, SwiD/S4)
+19:08:20.616: [Rx - B2 12 7D 22]  Sensor LS3366 () is Hi.  (BDL16 #211, DS6; DS54/64 #421, SwiC/S3)
+19:08:20.627: [Rx - B2 73 56 68]  Sensor LS1767 () is Hi.  (BDL16 #111, DS7; DS54/64 #221, AuxD/A4)
+19:08:20.631: [Rx - B2 34 53 2A]  Sensor LS873 () is Hi.  (BDL16 #55, DS9; DS54/64 #110, AuxA/A1)
+19:08:20.636: [Rx - B2 58 7F 6A]  Sensor LS4018 () is Hi.  (BDL16 #252, DS2; DS54/64 #503, SwiA/S1)
+19:08:20.647: [Rx - B2 13 5D 03]  Sensor LS3367 () is Hi.  (BDL16 #211, DS7; DS54/64 #421, AuxD/A4)
+19:08:20.651: [Rx - B2 53 59 47]  Sensor LS2471 () is Hi.  (BDL16 #155, DS7; DS54/64 #309, AuxD/A4)
+19:08:20.661: [Rx - B2 73 76 48]  Sensor LS1768 () is Hi.  (BDL16 #111, DS8; DS54/64 #221, SwiD/S4)
+19:08:20.668: [Rx - B2 7C 56 67]  Sensor LS1785 () is Hi.  (BDL16 #112, DS9; DS54/64 #224, AuxA/A1)
+19:08:20.672: [Rx - B2 3C 73 02]  Sensor LS890 () is Hi.  (BDL16 #56, DS10; DS54/64 #112, SwiA/S1)
+19:08:20.687: [Rx - B2 34 73 0A]  Sensor LS874 () is Hi.  (BDL16 #55, DS10; DS54/64 #110, SwiA/S1)
+19:08:20.702: [Rx - B2 7C 76 47]  Sensor LS1786 () is Hi.  (BDL16 #112, DS10; DS54/64 #224, SwiA/S1)
+19:08:20.707: [Rx - B2 13 7D 23]  Sensor LS3368 () is Hi.  (BDL16 #211, DS8; DS54/64 #421, SwiD/S4)
+19:08:20.709: [Rx - B2 1B 7D 2B]  Sensor LS3384 () is Hi.  (BDL16 #212, DS8; DS54/64 #423, SwiD/S4)
+19:08:20.721: [Rx - B2 51 52 4E]  Sensor LS675 () is Hi.  (BDL16 #43, DS3; DS54/64 #85, AuxB/A2)
+19:08:20.724: [Rx - B2 35 53 2B]  Sensor LS875 () is Hi.  (BDL16 #55, DS11; DS54/64 #110, AuxB/A2)
+19:08:20.729: [Rx - B2 5C 59 48]  Sensor LS2489 () is Hi.  (BDL16 #156, DS9; DS54/64 #312, AuxA/A1)
+19:08:20.750: [Rx - B2 14 5D 04]  Sensor LS3369 () is Hi.  (BDL16 #211, DS9; DS54/64 #422, AuxA/A1)
+19:08:20.751: [Rx - B2 5C 79 68]  Sensor LS2490 () is Hi.  (BDL16 #156, DS10; DS54/64 #312, SwiA/S1)
+19:08:20.752: [Rx - B2 3D 53 23]  Sensor LS891 () is Hi.  (BDL16 #56, DS11; DS54/64 #112, AuxB/A2)
+19:08:20.753: [Rx - B2 51 72 6E]  Sensor LS676 () is Hi.  (BDL16 #43, DS4; DS54/64 #85, SwiB/S2)
+19:08:20.755: [Rx - B2 7D 56 66]  Sensor LS1787 () is Hi.  (BDL16 #112, DS11; DS54/64 #224, AuxB/A2)
+19:08:20.769: [Rx - B2 53 79 67]  Sensor LS2472 () is Hi.  (BDL16 #155, DS8; DS54/64 #309, SwiD/S4)
+19:08:20.772: [Rx - B2 74 56 6F]  Sensor LS1769 () is Hi.  (BDL16 #111, DS9; DS54/64 #222, AuxA/A1)
+19:08:20.792: [Rx - B2 54 59 40]  Sensor LS2473 () is Hi.  (BDL16 #155, DS9; DS54/64 #310, AuxA/A1)
+19:08:20.805: [Rx - B2 59 5F 4B]  Sensor LS4019 () is Hi.  (BDL16 #252, DS3; DS54/64 #503, AuxB/A2)
+19:08:20.811: [Rx - B2 7D 76 46]  Sensor LS1788 () is Hi.  (BDL16 #112, DS12; DS54/64 #224, SwiB/S2)
+19:08:20.813: [Rx - B2 59 7F 6B]  Sensor LS4020 () is Hi.  (BDL16 #252, DS4; DS54/64 #503, SwiB/S2)
+19:08:20.815: [Rx - B2 30 7C 01]  Sensor LS3170 () is Hi.  (BDL16 #199, DS2; DS54/64 #397, SwiA/S1)
+19:08:20.824: [Rx - B2 1C 5D 0C]  Sensor LS3385 () is Hi.  (BDL16 #212, DS9; DS54/64 #424, AuxA/A1)
+19:08:20.846: [Rx - B2 14 7D 24]  Sensor LS3370 () is Hi.  (BDL16 #211, DS10; DS54/64 #422, SwiA/S1)
+19:08:20.865: [Rx - B2 52 52 4D]  Sensor LS677 () is Hi.  (BDL16 #43, DS5; DS54/64 #85, AuxC/A3)
+19:08:20.865: [Rx - B2 35 73 0B]  Sensor LS876 () is Hi.  (BDL16 #55, DS12; DS54/64 #110, SwiB/S2)
+19:08:20.890: [Rx - B2 5D 59 49]  Sensor LS2491 () is Hi.  (BDL16 #156, DS11; DS54/64 #312, AuxB/A2)
+19:08:20.891: [Rx - B2 31 5C 20]  Sensor LS3171 () is Hi.  (BDL16 #199, DS3; DS54/64 #397, AuxB/A2)
+19:08:20.894: [Rx - B2 7E 56 65]  Sensor LS1789 () is Hi.  (BDL16 #112, DS13; DS54/64 #224, AuxC/A3)
+19:08:20.901: [Rx - B2 54 79 60]  Sensor LS2474 () is Hi.  (BDL16 #155, DS10; DS54/64 #310, SwiA/S1)
+19:08:20.905: [Rx - B2 5A 5F 48]  Sensor LS4021 () is Hi.  (BDL16 #252, DS5; DS54/64 #503, AuxC/A3)
+19:08:20.905: [Rx - B2 52 72 6D]  Sensor LS678 () is Hi.  (BDL16 #43, DS6; DS54/64 #85, SwiC/S3)
+19:08:20.906: [Rx - B2 15 5D 05]  Sensor LS3371 () is Hi.  (BDL16 #211, DS11; DS54/64 #422, AuxB/A2)
+19:08:20.907: [Rx - B2 7E 76 45]  Sensor LS1790 () is Hi.  (BDL16 #112, DS14; DS54/64 #224, SwiC/S3)
+19:08:20.908: [Rx - B2 3D 73 03]  Sensor LS892 () is Hi.  (BDL16 #56, DS12; DS54/64 #112, SwiB/S2)
+19:08:20.909: [Rx - B2 15 7D 25]  Sensor LS3372 () is Hi.  (BDL16 #211, DS12; DS54/64 #422, SwiB/S2)
+19:08:20.914: [Rx - B0 7B 27 13]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 1/1/1; addresses...
+	57-64, 121-128, 185-192, 249-256, 313-320, 377-384, 441-448, 505-512,
+	569-576, 633-640, 697-704, 761-768, 825-832, 889-896, 953-960, 1017-1024,
+	1081-1088, 1145-1152, 1209-1216, 1273-1280, 1337-1344, 1401-1408, 1465-1472, 1529-1536,
+	1593-1600, 1657-1664, 1721-1728, 1785-1792, 1849-1856, 1913-1920, 1977-1984, 2041-2048
+19:08:20.917: [Rx - B2 53 52 4C]  Sensor LS679 () is Hi.  (BDL16 #43, DS7; DS54/64 #85, AuxD/A4)
+19:08:20.930: [Rx - B2 31 7C 00]  Sensor LS3172 () is Hi.  (BDL16 #199, DS4; DS54/64 #397, SwiB/S2)
+19:08:20.931: [Rx - A0 02 00 5D]  Set speed of loco in slot 2 to 0.
+19:08:20.932: [Rx - B2 74 76 4F]  Sensor LS1770 () is Hi.  (BDL16 #111, DS10; DS54/64 #222, SwiA/S1)
+19:08:20.933: [Rx - B2 1C 7D 2C]  Sensor LS3386 () is Hi.  (BDL16 #212, DS10; DS54/64 #424, SwiA/S1)
+19:08:20.972: [Rx - B2 7F 56 64]  Sensor LS1791 () is Hi.  (BDL16 #112, DS15; DS54/64 #224, AuxD/A4)
+19:08:20.979: [Rx - B2 75 56 6E]  Sensor LS1771 () is Hi.  (BDL16 #111, DS11; DS54/64 #222, AuxB/A2)
+19:08:20.980: [Rx - B2 53 72 6C]  Sensor LS680 () is Hi.  (BDL16 #43, DS8; DS54/64 #85, SwiD/S4)
+19:08:20.981: [Rx - B2 55 59 41]  Sensor LS2475 () is Hi.  (BDL16 #155, DS11; DS54/64 #310, AuxB/A2)
+19:08:20.981: [Rx - B2 36 53 28]  Sensor LS877 () is Hi.  (BDL16 #55, DS13; DS54/64 #110, AuxC/A3)
+19:08:20.993: [Rx - B2 5D 79 69]  Sensor LS2492 () is Hi.  (BDL16 #156, DS12; DS54/64 #312, SwiB/S2)
+19:08:21.001: [Rx - B2 1D 5D 0D]  Sensor LS3387 () is Hi.  (BDL16 #212, DS11; DS54/64 #424, AuxB/A2)
+19:08:21.002: [Rx - B2 55 79 61]  Sensor LS2476 () is Hi.  (BDL16 #155, DS12; DS54/64 #310, SwiB/S2)
+19:08:21.007: [Rx - B2 3E 53 20]  Sensor LS893 () is Hi.  (BDL16 #56, DS13; DS54/64 #112, AuxC/A3)
+19:08:21.009: [Rx - B2 16 5D 06]  Sensor LS3373 () is Hi.  (BDL16 #211, DS13; DS54/64 #422, AuxC/A3)
+19:08:21.019: [Rx - B2 1D 7D 2D]  Sensor LS3388 () is Hi.  (BDL16 #212, DS12; DS54/64 #424, SwiB/S2)
+19:08:21.041: [Rx - B2 54 52 4B]  Sensor LS681 () is Hi.  (BDL16 #43, DS9; DS54/64 #86, AuxA/A1)
+19:08:21.045: [Rx - B2 36 73 08]  Sensor LS878 () is Hi.  (BDL16 #55, DS14; DS54/64 #110, SwiC/S3)
+19:08:21.047: [Rx - B2 5E 59 4A]  Sensor LS2493 () is Hi.  (BDL16 #156, DS13; DS54/64 #312, AuxC/A3)
+19:08:21.050: [Rx - B2 5A 7F 68]  Sensor LS4022 () is Hi.  (BDL16 #252, DS6; DS54/64 #503, SwiC/S3)
+19:08:21.065: [Rx - B2 32 5C 23]  Sensor LS3173 () is Hi.  (BDL16 #199, DS5; DS54/64 #397, AuxC/A3)
+19:08:21.068: [Rx - B2 37 53 29]  Sensor LS879 () is Hi.  (BDL16 #55, DS15; DS54/64 #110, AuxD/A4)
+19:08:21.071: [Rx - B2 75 76 4E]  Sensor LS1772 () is Hi.  (BDL16 #111, DS12; DS54/64 #222, SwiB/S2)
+19:08:21.075: [Rx - B2 1E 5D 0E]  Sensor LS3389 () is Hi.  (BDL16 #212, DS13; DS54/64 #424, AuxC/A3)
+19:08:21.078: [Rx - B2 54 72 6B]  Sensor LS682 () is Hi.  (BDL16 #43, DS10; DS54/64 #86, SwiA/S1)
+19:08:21.081: [Rx - B2 5E 79 6A]  Sensor LS2494 () is Hi.  (BDL16 #156, DS14; DS54/64 #312, SwiC/S3)
+19:08:21.089: [Rx - B2 37 73 09]  Sensor LS880 () is Hi.  (BDL16 #55, DS16; DS54/64 #110, SwiD/S4)
+19:08:21.096: [Rx - B2 32 7C 03]  Sensor LS3174 () is Hi.  (BDL16 #199, DS6; DS54/64 #397, SwiC/S3)
+19:08:21.097: [Rx - B2 76 56 6D]  Sensor LS1773 () is Hi.  (BDL16 #111, DS13; DS54/64 #222, AuxC/A3)
+19:08:21.120: [Rx - B2 5B 5F 49]  Sensor LS4023 () is Hi.  (BDL16 #252, DS7; DS54/64 #503, AuxD/A4)
+19:08:21.124: [Rx - B2 16 7D 26]  Sensor LS3374 () is Hi.  (BDL16 #211, DS14; DS54/64 #422, SwiC/S3)
+19:08:21.125: [Rx - B2 76 76 4D]  Sensor LS1774 () is Hi.  (BDL16 #111, DS14; DS54/64 #222, SwiC/S3)
+19:08:21.129: [Rx - B2 1E 7D 2E]  Sensor LS3390 () is Hi.  (BDL16 #212, DS14; DS54/64 #424, SwiC/S3)
+19:08:21.130: [Rx - B2 5B 7F 69]  Sensor LS4024 () is Hi.  (BDL16 #252, DS8; DS54/64 #503, SwiD/S4)
+19:08:21.135: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:21.139: [Rx - B2 1F 5D 0F]  Sensor LS3391 () is Hi.  (BDL16 #212, DS15; DS54/64 #424, AuxD/A4)
+19:08:21.152: [Rx - B2 77 56 6C]  Sensor LS1775 () is Hi.  (BDL16 #111, DS15; DS54/64 #222, AuxD/A4)
+19:08:21.165: [Rx - B2 55 52 4A]  Sensor LS683 () is Hi.  (BDL16 #43, DS11; DS54/64 #86, AuxB/A2)
+19:08:21.167: [Rx - B2 17 5D 07]  Sensor LS3375 () is Hi.  (BDL16 #211, DS15; DS54/64 #422, AuxD/A4)
+19:08:21.191: [Rx - B2 56 59 42]  Sensor LS2477 () is Hi.  (BDL16 #155, DS13; DS54/64 #310, AuxC/A3)
+19:08:21.201: [Rx - B2 55 72 6A]  Sensor LS684 () is Hi.  (BDL16 #43, DS12; DS54/64 #86, SwiB/S2)
+19:08:21.206: [Rx - B2 5F 59 4B]  Sensor LS2495 () is Hi.  (BDL16 #156, DS15; DS54/64 #312, AuxD/A4)
+19:08:21.210: [Rx - B2 33 5C 22]  Sensor LS3175 () is Hi.  (BDL16 #199, DS7; DS54/64 #397, AuxD/A4)
+19:08:21.212: [Rx - B2 5C 5F 4E]  Sensor LS4025 () is Hi.  (BDL16 #252, DS9; DS54/64 #504, AuxA/A1)
+19:08:21.214: [Rx - B2 33 7C 02]  Sensor LS3176 () is Hi.  (BDL16 #199, DS8; DS54/64 #397, SwiD/S4)
+19:08:21.216: [Rx - B2 56 52 49]  Sensor LS685 () is Hi.  (BDL16 #43, DS13; DS54/64 #86, AuxC/A3)
+19:08:21.228: [Rx - B2 5F 79 6B]  Sensor LS2496 () is Hi.  (BDL16 #156, DS16; DS54/64 #312, SwiD/S4)
+19:08:21.243: [Rx - B2 77 76 4C]  Sensor LS1776 () is Hi.  (BDL16 #111, DS16; DS54/64 #222, SwiD/S4)
+19:08:21.253: [Rx - B2 56 79 62]  Sensor LS2478 () is Hi.  (BDL16 #155, DS14; DS54/64 #310, SwiC/S3)
+19:08:21.258: [Rx - B2 17 7D 27]  Sensor LS3376 () is Hi.  (BDL16 #211, DS16; DS54/64 #422, SwiD/S4)
+19:08:21.261: [Rx - B2 57 59 43]  Sensor LS2479 () is Hi.  (BDL16 #155, DS15; DS54/64 #310, AuxD/A4)
+19:08:21.273: [Rx - B2 1F 7D 2F]  Sensor LS3392 () is Hi.  (BDL16 #212, DS16; DS54/64 #424, SwiD/S4)
+19:08:21.280: [Rx - B2 56 72 69]  Sensor LS686 () is Hi.  (BDL16 #43, DS14; DS54/64 #86, SwiC/S3)
+19:08:21.285: [Rx - B2 34 5C 25]  Sensor LS3177 () is Hi.  (BDL16 #199, DS9; DS54/64 #398, AuxA/A1)
+19:08:21.286: [Rx - B2 57 52 48]  Sensor LS687 () is Hi.  (BDL16 #43, DS15; DS54/64 #86, AuxD/A4)
+19:08:21.301: [Rx - B2 57 72 68]  Sensor LS688 () is Hi.  (BDL16 #43, DS16; DS54/64 #86, SwiD/S4)
+19:08:21.302: [Rx - B2 57 79 63]  Sensor LS2480 () is Hi.  (BDL16 #155, DS16; DS54/64 #310, SwiD/S4)
+19:08:21.304: [Rx - B2 34 7C 05]  Sensor LS3178 () is Hi.  (BDL16 #199, DS10; DS54/64 #398, SwiA/S1)
+19:08:21.313: [Rx - B2 5C 7F 6E]  Sensor LS4026 () is Hi.  (BDL16 #252, DS10; DS54/64 #504, SwiA/S1)
+19:08:21.316: [Rx - B2 35 5C 24]  Sensor LS3179 () is Hi.  (BDL16 #199, DS11; DS54/64 #398, AuxB/A2)
+19:08:21.320: [Rx - B2 5D 5F 4F]  Sensor LS4027 () is Hi.  (BDL16 #252, DS11; DS54/64 #504, AuxB/A2)
+19:08:21.323: [Rx - B2 35 7C 04]  Sensor LS3180 () is Hi.  (BDL16 #199, DS12; DS54/64 #398, SwiB/S2)
+19:08:21.326: [Rx - B2 5D 7F 6F]  Sensor LS4028 () is Hi.  (BDL16 #252, DS12; DS54/64 #504, SwiB/S2)
+19:08:21.337: [Rx - B2 5E 5F 4C]  Sensor LS4029 () is Hi.  (BDL16 #252, DS13; DS54/64 #504, AuxC/A3)
+19:08:21.341: [Rx - B2 36 5C 27]  Sensor LS3181 () is Hi.  (BDL16 #199, DS13; DS54/64 #398, AuxC/A3)
+19:08:21.344: [Rx - B2 5E 7F 6C]  Sensor LS4030 () is Hi.  (BDL16 #252, DS14; DS54/64 #504, SwiC/S3)
+19:08:21.356: [Rx - B2 36 7C 07]  Sensor LS3182 () is Hi.  (BDL16 #199, DS14; DS54/64 #398, SwiC/S3)
+19:08:21.366: [Rx - B2 5F 5F 4D]  Sensor LS4031 () is Hi.  (BDL16 #252, DS15; DS54/64 #504, AuxD/A4)
+19:08:21.367: [Rx - B2 37 5C 26]  Sensor LS3183 () is Hi.  (BDL16 #199, DS15; DS54/64 #398, AuxD/A4)
+19:08:21.368: [Rx - B2 5F 7F 6D]  Sensor LS4032 () is Hi.  (BDL16 #252, DS16; DS54/64 #504, SwiD/S4)
+19:08:21.379: [Rx - B2 37 7C 06]  Sensor LS3184 () is Hi.  (BDL16 #199, DS16; DS54/64 #398, SwiD/S4)
+19:08:21.397: [Rx - B2 10 56 0B]  Sensor LS1569 () is Hi.  (BDL16 #99, DS1; DS54/64 #197, AuxA/A1)
+19:08:21.432: [Rx - B0 78 27 10]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 1/0/0; addresses...
+	33-40, 97-104, 161-168, 225-232, 289-296, 353-360, 417-424, 481-488,
+	545-552, 609-616, 673-680, 737-744, 801-808, 865-872, 929-936, 993-1000,
+	1057-1064, 1121-1128, 1185-1192, 1249-1256, 1313-1320, 1377-1384, 1441-1448, 1505-1512,
+	1569-1576, 1633-1640, 1697-1704, 1761-1768, 1825-1832, 1889-1896, 1953-1960, 2017-2024
+19:08:21.433: [Rx - B2 10 76 2B]  Sensor LS1570 () is Hi.  (BDL16 #99, DS2; DS54/64 #197, SwiA/S1)
+19:08:21.434: [Rx - B2 11 56 0A]  Sensor LS1571 () is Hi.  (BDL16 #99, DS3; DS54/64 #197, AuxB/A2)
+19:08:21.435: [Rx - B2 11 76 2A]  Sensor LS1572 () is Hi.  (BDL16 #99, DS4; DS54/64 #197, SwiB/S2)
+19:08:21.449: [Rx - B2 12 56 09]  Sensor LS1573 () is Hi.  (BDL16 #99, DS5; DS54/64 #197, AuxC/A3)
+19:08:21.465: [Rx - B2 12 76 29]  Sensor LS1574 () is Hi.  (BDL16 #99, DS6; DS54/64 #197, SwiC/S3)
+19:08:21.483: [Rx - B2 13 56 08]  Sensor LS1575 () is Hi.  (BDL16 #99, DS7; DS54/64 #197, AuxD/A4)
+19:08:21.499: [Rx - B2 58 52 47]  Sensor LS689 () is Hi.  (BDL16 #44, DS1; DS54/64 #87, AuxA/A1)
+19:08:21.500: [Rx - B2 13 76 28]  Sensor LS1576 () is Hi.  (BDL16 #99, DS8; DS54/64 #197, SwiD/S4)
+19:08:21.519: [Rx - B2 14 56 0F]  Sensor LS1577 () is Hi.  (BDL16 #99, DS9; DS54/64 #198, AuxA/A1)
+19:08:21.520: [Rx - B2 58 72 67]  Sensor LS690 () is Hi.  (BDL16 #44, DS2; DS54/64 #87, SwiA/S1)
+19:08:21.533: [Rx - B2 14 76 2F]  Sensor LS1578 () is Hi.  (BDL16 #99, DS10; DS54/64 #198, SwiA/S1)
+19:08:21.546: [Rx - B2 00 50 1D]  Sensor LS1 () is Hi.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:21.555: [Rx - B2 15 56 0E]  Sensor LS1579 () is Hi.  (BDL16 #99, DS11; DS54/64 #198, AuxB/A2)
+19:08:21.556: [Rx - B2 59 52 46]  Sensor LS691 () is Hi.  (BDL16 #44, DS3; DS54/64 #87, AuxB/A2)
+19:08:21.567: [Rx - B2 15 76 2E]  Sensor LS1580 () is Hi.  (BDL16 #99, DS12; DS54/64 #198, SwiB/S2)
+19:08:21.569: [Rx - B2 59 72 66]  Sensor LS692 () is Hi.  (BDL16 #44, DS4; DS54/64 #87, SwiB/S2)
+19:08:21.584: [Rx - B2 00 70 3D]  Sensor LS2 () is Hi.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:21.598: [Rx - B2 78 56 63]  Sensor LS1777 () is Hi.  (BDL16 #112, DS1; DS54/64 #223, AuxA/A1)
+19:08:21.607: [Rx - B2 5A 52 45]  Sensor LS693 () is Hi.  (BDL16 #44, DS5; DS54/64 #87, AuxC/A3)
+19:08:21.608: [Rx - B2 78 76 43]  Sensor LS1778 () is Hi.  (BDL16 #112, DS2; DS54/64 #223, SwiA/S1)
+19:08:21.610: [Rx - B2 16 56 0D]  Sensor LS1581 () is Hi.  (BDL16 #99, DS13; DS54/64 #198, AuxC/A3)
+19:08:21.612: [Rx - B2 01 50 1C]  Sensor LS3 () is Hi.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:21.617: [Rx - B2 79 56 62]  Sensor LS1779 () is Hi.  (BDL16 #112, DS3; DS54/64 #223, AuxB/A2)
+19:08:21.646: [Rx - B2 40 5F 52]  Sensor LS3969 () is Hi.  (BDL16 #249, DS1; DS54/64 #497, AuxA/A1)
+19:08:21.661: [Rx - B2 01 70 3C]  Sensor LS4 () is Hi.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:21.667: [Rx - B2 02 50 1F]  Sensor LS5 () is Hi.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:21.668: [Rx - B2 16 76 2D]  Sensor LS1582 () is Hi.  (BDL16 #99, DS14; DS54/64 #198, SwiC/S3)
+19:08:21.685: [Rx - B2 5A 72 65]  Sensor LS694 () is Hi.  (BDL16 #44, DS6; DS54/64 #87, SwiC/S3)
+19:08:21.686: [Rx - B2 17 56 0C]  Sensor LS1583 () is Hi.  (BDL16 #99, DS15; DS54/64 #198, AuxD/A4)
+19:08:21.700: [Rx - B2 79 76 42]  Sensor LS1780 () is Hi.  (BDL16 #112, DS4; DS54/64 #223, SwiB/S2)
+19:08:21.701: [Rx - B2 5B 52 44]  Sensor LS695 () is Hi.  (BDL16 #44, DS7; DS54/64 #87, AuxD/A4)
+19:08:21.702: [Rx - B2 7A 56 61]  Sensor LS1781 () is Hi.  (BDL16 #112, DS5; DS54/64 #223, AuxC/A3)
+19:08:21.710: [Rx - B2 40 7F 72]  Sensor LS3970 () is Hi.  (BDL16 #249, DS2; DS54/64 #497, SwiA/S1)
+19:08:21.726: [Rx - B2 7A 76 41]  Sensor LS1782 () is Hi.  (BDL16 #112, DS6; DS54/64 #223, SwiC/S3)
+19:08:21.735: [Rx - B2 7B 56 60]  Sensor LS1783 () is Hi.  (BDL16 #112, DS7; DS54/64 #223, AuxD/A4)
+19:08:21.736: [Rx - B2 5B 72 64]  Sensor LS696 () is Hi.  (BDL16 #44, DS8; DS54/64 #87, SwiD/S4)
+19:08:21.737: [Rx - B2 41 5F 53]  Sensor LS3971 () is Hi.  (BDL16 #249, DS3; DS54/64 #497, AuxB/A2)
+19:08:21.747: [Rx - B2 17 76 2C]  Sensor LS1584 () is Hi.  (BDL16 #99, DS16; DS54/64 #198, SwiD/S4)
+19:08:21.761: [Rx - B2 02 70 3F]  Sensor LS6 () is Hi.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:21.781: [Rx - B2 7B 76 40]  Sensor LS1784 () is Hi.  (BDL16 #112, DS8; DS54/64 #223, SwiD/S4)
+19:08:21.782: [Rx - B2 7C 56 67]  Sensor LS1785 () is Hi.  (BDL16 #112, DS9; DS54/64 #224, AuxA/A1)
+19:08:21.783: [Rx - B2 5C 52 43]  Sensor LS697 () is Hi.  (BDL16 #44, DS9; DS54/64 #88, AuxA/A1)
+19:08:21.784: [Rx - B2 7C 76 47]  Sensor LS1786 () is Hi.  (BDL16 #112, DS10; DS54/64 #224, SwiA/S1)
+19:08:21.786: [Rx - B2 03 50 1E]  Sensor LS7 () is Hi.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:21.787: [Rx - B2 7D 56 66]  Sensor LS1787 () is Hi.  (BDL16 #112, DS11; DS54/64 #224, AuxB/A2)
+19:08:21.812: [Rx - B2 41 7F 73]  Sensor LS3972 () is Hi.  (BDL16 #249, DS4; DS54/64 #497, SwiB/S2)
+19:08:21.819: [Rx - B2 7D 76 46]  Sensor LS1788 () is Hi.  (BDL16 #112, DS12; DS54/64 #224, SwiB/S2)
+19:08:21.821: [Rx - B2 5C 72 63]  Sensor LS698 () is Hi.  (BDL16 #44, DS10; DS54/64 #88, SwiA/S1)
+19:08:21.844: [Rx - B2 42 5F 50]  Sensor LS3973 () is Hi.  (BDL16 #249, DS5; DS54/64 #497, AuxC/A3)
+19:08:21.845: [Rx - B2 03 70 3E]  Sensor LS8 () is Hi.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:21.846: [Rx - B2 7E 56 65]  Sensor LS1789 () is Hi.  (BDL16 #112, DS13; DS54/64 #224, AuxC/A3)
+19:08:21.847: [Rx - B2 7E 76 45]  Sensor LS1790 () is Hi.  (BDL16 #112, DS14; DS54/64 #224, SwiC/S3)
+19:08:21.866: [Rx - B2 5D 52 42]  Sensor LS699 () is Hi.  (BDL16 #44, DS11; DS54/64 #88, AuxB/A2)
+19:08:21.867: [Rx - B2 04 50 19]  Sensor LS9 () is Hi.  (BDL16 #1, DS9; DS54/64/SE8c #2, AuxA/A1/DS01)
+19:08:21.868: [Rx - B2 7F 56 64]  Sensor LS1791 () is Hi.  (BDL16 #112, DS15; DS54/64 #224, AuxD/A4)
+19:08:21.870: [Rx - B2 42 7F 70]  Sensor LS3974 () is Hi.  (BDL16 #249, DS6; DS54/64 #497, SwiC/S3)
+19:08:21.891: [Rx - B2 7F 76 44]  Sensor LS1792 () is Hi.  (BDL16 #112, DS16; DS54/64 #224, SwiD/S4)
+19:08:21.898: [Rx - B2 5D 72 62]  Sensor LS700 () is Hi.  (BDL16 #44, DS12; DS54/64 #88, SwiB/S2)
+19:08:21.900: [Rx - B2 43 5F 51]  Sensor LS3975 () is Hi.  (BDL16 #249, DS7; DS54/64 #497, AuxD/A4)
+19:08:21.931: [Rx - B2 04 70 39]  Sensor LS10 () is Hi.  (BDL16 #1, DS10; DS54/64/SE8c #2, SwiA/S1/DS02)
+19:08:21.931: [Rx - B2 38 53 26]  Sensor LS881 () is Hi.  (BDL16 #56, DS1; DS54/64 #111, AuxA/A1)
+19:08:21.932: [Rx - B2 38 73 06]  Sensor LS882 () is Hi.  (BDL16 #56, DS2; DS54/64 #111, SwiA/S1)
+19:08:21.933: [Rx - B2 78 5F 6A]  Sensor LS4081 () is Hi.  (BDL16 #256, DS1; DS54/64 #511, AuxA/A1)
+19:08:21.933: [Rx - B2 05 50 18]  Sensor LS11 () is Hi.  (BDL16 #1, DS11; DS54/64/SE8c #2, AuxB/A2/DS03)
+19:08:21.980: [Rx - B2 39 53 27]  Sensor LS883 () is Hi.  (BDL16 #56, DS3; DS54/64 #111, AuxB/A2)
+19:08:21.981: [Rx - B2 5E 52 41]  Sensor LS701 () is Hi.  (BDL16 #44, DS13; DS54/64 #88, AuxC/A3)
+19:08:21.982: [Rx - B2 43 7F 71]  Sensor LS3976 () is Hi.  (BDL16 #249, DS8; DS54/64 #497, SwiD/S4)
+19:08:21.982: [Rx - B2 5E 72 61]  Sensor LS702 () is Hi.  (BDL16 #44, DS14; DS54/64 #88, SwiC/S3)
+19:08:21.983: [Rx - B2 44 5F 56]  Sensor LS3977 () is Hi.  (BDL16 #249, DS9; DS54/64 #498, AuxA/A1)
+19:08:21.983: [Rx - B2 39 73 07]  Sensor LS884 () is Hi.  (BDL16 #56, DS4; DS54/64 #111, SwiB/S2)
+19:08:21.985: [Rx - B2 05 70 38]  Sensor LS12 () is Hi.  (BDL16 #1, DS12; DS54/64/SE8c #2, SwiB/S2/DS04)
+19:08:22.039: [Rx - B2 78 7F 4A]  Sensor LS4082 () is Hi.  (BDL16 #256, DS2; DS54/64 #511, SwiA/S1)
+19:08:22.040: [Rx - B2 3A 53 24]  Sensor LS885 () is Hi.  (BDL16 #56, DS5; DS54/64 #111, AuxC/A3)
+19:08:22.133: [Rx - B2 3A 73 04]  Sensor LS886 () is Hi.  (BDL16 #56, DS6; DS54/64 #111, SwiC/S3)
+19:08:22.135: [Rx - B2 06 50 1B]  Sensor LS13 () is Hi.  (BDL16 #1, DS13; DS54/64/SE8c #2, AuxC/A3/DS05)
+19:08:22.137: [Rx - B2 44 7F 76]  Sensor LS3978 () is Hi.  (BDL16 #249, DS10; DS54/64 #498, SwiA/S1)
+19:08:22.137: [Rx - B2 79 5F 6B]  Sensor LS4083 () is Hi.  (BDL16 #256, DS3; DS54/64 #511, AuxB/A2)
+19:08:22.142: [Rx - B2 5F 52 40]  Sensor LS703 () is Hi.  (BDL16 #44, DS15; DS54/64 #88, AuxD/A4)
+19:08:22.143: [Rx - B2 3B 53 25]  Sensor LS887 () is Hi.  (BDL16 #56, DS7; DS54/64 #111, AuxD/A4)
+19:08:22.146: [Rx - B2 45 5F 57]  Sensor LS3979 () is Hi.  (BDL16 #249, DS11; DS54/64 #498, AuxB/A2)
+19:08:22.147: [Rx - B2 5F 72 60]  Sensor LS704 () is Hi.  (BDL16 #44, DS16; DS54/64 #88, SwiD/S4)
+19:08:22.148: [Rx - B2 79 7F 4B]  Sensor LS4084 () is Hi.  (BDL16 #256, DS4; DS54/64 #511, SwiB/S2)
+19:08:22.148: [Rx - B2 06 70 3B]  Sensor LS14 () is Hi.  (BDL16 #1, DS14; DS54/64/SE8c #2, SwiC/S3/DS06)
+19:08:22.149: [Rx - B2 7A 5F 68]  Sensor LS4085 () is Hi.  (BDL16 #256, DS5; DS54/64 #511, AuxC/A3)
+19:08:22.150: [Rx - B2 45 7F 77]  Sensor LS3980 () is Hi.  (BDL16 #249, DS12; DS54/64 #498, SwiB/S2)
+19:08:22.150: [Rx - B2 07 50 1A]  Sensor LS15 () is Hi.  (BDL16 #1, DS15; DS54/64/SE8c #2, AuxD/A4/DS07)
+19:08:22.150: [Rx - B2 3B 73 05]  Sensor LS888 () is Hi.  (BDL16 #56, DS8; DS54/64 #111, SwiD/S4)
+19:08:22.151: [Rx - B2 7A 7F 48]  Sensor LS4086 () is Hi.  (BDL16 #256, DS6; DS54/64 #511, SwiC/S3)
+19:08:22.152: [Rx - B2 07 70 3A]  Sensor LS16 () is Hi.  (BDL16 #1, DS16; DS54/64/SE8c #2, SwiD/S4/DS08)
+19:08:22.152: [Rx - B2 3C 53 22]  Sensor LS889 () is Hi.  (BDL16 #56, DS9; DS54/64 #112, AuxA/A1)
+19:08:22.154: [Rx - B2 46 5F 54]  Sensor LS3981 () is Hi.  (BDL16 #249, DS13; DS54/64 #498, AuxC/A3)
+19:08:22.162: [Rx - B2 7B 5F 69]  Sensor LS4087 () is Hi.  (BDL16 #256, DS7; DS54/64 #511, AuxD/A4)
+19:08:22.163: [Rx - B2 3C 73 02]  Sensor LS890 () is Hi.  (BDL16 #56, DS10; DS54/64 #112, SwiA/S1)
+19:08:22.173: [Rx - B2 46 7F 74]  Sensor LS3982 () is Hi.  (BDL16 #249, DS14; DS54/64 #498, SwiC/S3)
+19:08:22.176: [Rx - B2 3D 53 23]  Sensor LS891 () is Hi.  (BDL16 #56, DS11; DS54/64 #112, AuxB/A2)
+19:08:22.178: [Rx - B2 7B 7F 49]  Sensor LS4088 () is Hi.  (BDL16 #256, DS8; DS54/64 #511, SwiD/S4)
+19:08:22.180: [Rx - B2 3D 73 03]  Sensor LS892 () is Hi.  (BDL16 #56, DS12; DS54/64 #112, SwiB/S2)
+19:08:22.187: [Rx - B2 47 5F 55]  Sensor LS3983 () is Hi.  (BDL16 #249, DS15; DS54/64 #498, AuxD/A4)
+19:08:22.206: [Rx - B2 47 7F 75]  Sensor LS3984 () is Hi.  (BDL16 #249, DS16; DS54/64 #498, SwiD/S4)
+19:08:22.219: [Rx - B2 7C 5F 6E]  Sensor LS4089 () is Hi.  (BDL16 #256, DS9; DS54/64 #512, AuxA/A1)
+19:08:22.220: [Rx - B2 3E 53 20]  Sensor LS893 () is Hi.  (BDL16 #56, DS13; DS54/64 #112, AuxC/A3)
+19:08:22.233: [Rx - B2 7C 7F 4E]  Sensor LS4090 () is Hi.  (BDL16 #256, DS10; DS54/64 #512, SwiA/S1)
+19:08:22.234: [Rx - B2 3E 73 00]  Sensor LS894 () is Hi.  (BDL16 #56, DS14; DS54/64 #112, SwiC/S3)
+19:08:22.269: [Rx - B2 7D 5F 6F]  Sensor LS4091 () is Hi.  (BDL16 #256, DS11; DS54/64 #512, AuxB/A2)
+19:08:22.270: [Rx - B2 3F 53 21]  Sensor LS895 () is Hi.  (BDL16 #56, DS15; DS54/64 #112, AuxD/A4)
+19:08:22.277: [Rx - B2 7D 7F 4F]  Sensor LS4092 () is Hi.  (BDL16 #256, DS12; DS54/64 #512, SwiB/S2)
+19:08:22.280: [Rx - B2 3F 73 01]  Sensor LS896 () is Hi.  (BDL16 #56, DS16; DS54/64 #112, SwiD/S4)
+19:08:22.281: [Rx - B2 7E 5F 6C]  Sensor LS4093 () is Hi.  (BDL16 #256, DS13; DS54/64 #512, AuxC/A3)
+19:08:22.294: [Rx - B2 7E 7F 4C]  Sensor LS4094 () is Hi.  (BDL16 #256, DS14; DS54/64 #512, SwiC/S3)
+19:08:22.305: [Rx - B2 7F 5F 6D]  Sensor LS4095 () is Hi.  (BDL16 #256, DS15; DS54/64 #512, AuxD/A4)
+19:08:22.320: [Rx - B2 7F 7F 4D]  Sensor LS4096 () is Hi.  (BDL16 #256, DS16; DS54/64 #512, SwiD/S4)
+19:08:22.454: [Rx - B0 79 27 11]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 1/0/1; addresses...
+	41-48, 105-112, 169-176, 233-240, 297-304, 361-368, 425-432, 489-496,
+	553-560, 617-624, 681-688, 745-752, 809-816, 873-880, 937-944, 1001-1008,
+	1065-1072, 1129-1136, 1193-1200, 1257-1264, 1321-1328, 1385-1392, 1449-1456, 1513-1520,
+	1577-1584, 1641-1648, 1705-1712, 1769-1776, 1833-1840, 1897-1904, 1961-1968, 2025-2032
+19:08:23.500: [Rx - B0 7A 27 12]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 1/1/0; addresses...
+	49-56, 113-120, 177-184, 241-248, 305-312, 369-376, 433-440, 497-504,
+	561-568, 625-632, 689-696, 753-760, 817-824, 881-888, 945-952, 1009-1016,
+	1073-1080, 1137-1144, 1201-1208, 1265-1272, 1329-1336, 1393-1400, 1457-1464, 1521-1528,
+	1585-1592, 1649-1656, 1713-1720, 1777-1784, 1841-1848, 1905-1912, 1969-1976, 2033-2040
+19:08:23.746: [Rx - B2 70 56 6B]  Sensor LS1761 () is Hi.  (BDL16 #111, DS1; DS54/64 #221, AuxA/A1)
+19:08:23.761: [Rx - B2 30 5C 21]  Sensor LS3169 () is Hi.  (BDL16 #199, DS1; DS54/64 #397, AuxA/A1)
+19:08:23.762: [Rx - B2 30 53 2E]  Sensor LS865 () is Hi.  (BDL16 #55, DS1; DS54/64 #109, AuxA/A1)
+19:08:23.767: [Rx - B2 70 76 4B]  Sensor LS1762 () is Hi.  (BDL16 #111, DS2; DS54/64 #221, SwiA/S1)
+19:08:23.773: [Rx - B2 30 73 0E]  Sensor LS866 () is Hi.  (BDL16 #55, DS2; DS54/64 #109, SwiA/S1)
+19:08:23.779: [Rx - B2 71 56 6A]  Sensor LS1763 () is Hi.  (BDL16 #111, DS3; DS54/64 #221, AuxB/A2)
+19:08:23.785: [Rx - B2 30 7C 01]  Sensor LS3170 () is Hi.  (BDL16 #199, DS2; DS54/64 #397, SwiA/S1)
+19:08:23.792: [Rx - B2 31 53 2F]  Sensor LS867 () is Hi.  (BDL16 #55, DS3; DS54/64 #109, AuxB/A2)
+19:08:23.799: [Rx - B2 71 76 4A]  Sensor LS1764 () is Hi.  (BDL16 #111, DS4; DS54/64 #221, SwiB/S2)
+19:08:23.805: [Rx - B2 31 5C 20]  Sensor LS3171 () is Hi.  (BDL16 #199, DS3; DS54/64 #397, AuxB/A2)
+19:08:23.808: [Rx - B2 31 73 0F]  Sensor LS868 () is Hi.  (BDL16 #55, DS4; DS54/64 #109, SwiB/S2)
+19:08:23.826: [Rx - B2 72 56 69]  Sensor LS1765 () is Hi.  (BDL16 #111, DS5; DS54/64 #221, AuxC/A3)
+19:08:23.827: [Rx - B2 32 53 2C]  Sensor LS869 () is Hi.  (BDL16 #55, DS5; DS54/64 #109, AuxC/A3)
+19:08:23.832: [Rx - B2 72 76 49]  Sensor LS1766 () is Hi.  (BDL16 #111, DS6; DS54/64 #221, SwiC/S3)
+19:08:23.835: [Rx - B2 31 7C 00]  Sensor LS3172 () is Hi.  (BDL16 #199, DS4; DS54/64 #397, SwiB/S2)
+19:08:23.850: [Rx - B2 73 56 68]  Sensor LS1767 () is Hi.  (BDL16 #111, DS7; DS54/64 #221, AuxD/A4)
+19:08:23.851: [Rx - B2 32 73 0C]  Sensor LS870 () is Hi.  (BDL16 #55, DS6; DS54/64 #109, SwiC/S3)
+19:08:23.859: [Rx - B2 32 5C 23]  Sensor LS3173 () is Hi.  (BDL16 #199, DS5; DS54/64 #397, AuxC/A3)
+19:08:23.860: [Rx - B2 33 53 2D]  Sensor LS871 () is Hi.  (BDL16 #55, DS7; DS54/64 #109, AuxD/A4)
+19:08:23.867: [Rx - A0 02 00 5D]  Set speed of loco in slot 2 to 0.
+19:08:23.881: [Rx - B2 73 76 48]  Sensor LS1768 () is Hi.  (BDL16 #111, DS8; DS54/64 #221, SwiD/S4)
+19:08:23.893: [Rx - B2 74 56 6F]  Sensor LS1769 () is Hi.  (BDL16 #111, DS9; DS54/64 #222, AuxA/A1)
+19:08:23.907: [Rx - B2 33 73 0D]  Sensor LS872 () is Hi.  (BDL16 #55, DS8; DS54/64 #109, SwiD/S4)
+19:08:23.908: [Rx - B2 74 76 4F]  Sensor LS1770 () is Hi.  (BDL16 #111, DS10; DS54/64 #222, SwiA/S1)
+19:08:23.917: [Rx - B2 32 7C 03]  Sensor LS3174 () is Hi.  (BDL16 #199, DS6; DS54/64 #397, SwiC/S3)
+19:08:23.918: [Rx - B2 34 53 2A]  Sensor LS873 () is Hi.  (BDL16 #55, DS9; DS54/64 #110, AuxA/A1)
+19:08:23.931: [Rx - B2 75 56 6E]  Sensor LS1771 () is Hi.  (BDL16 #111, DS11; DS54/64 #222, AuxB/A2)
+19:08:23.934: [Rx - B2 33 5C 22]  Sensor LS3175 () is Hi.  (BDL16 #199, DS7; DS54/64 #397, AuxD/A4)
+19:08:23.938: [Rx - B2 33 7C 02]  Sensor LS3176 () is Hi.  (BDL16 #199, DS8; DS54/64 #397, SwiD/S4)
+19:08:23.945: [Rx - B2 75 76 4E]  Sensor LS1772 () is Hi.  (BDL16 #111, DS12; DS54/64 #222, SwiB/S2)
+19:08:23.957: [Rx - B2 34 73 0A]  Sensor LS874 () is Hi.  (BDL16 #55, DS10; DS54/64 #110, SwiA/S1)
+19:08:23.974: [Rx - B2 35 53 2B]  Sensor LS875 () is Hi.  (BDL16 #55, DS11; DS54/64 #110, AuxB/A2)
+19:08:23.974: [Rx - B2 76 56 6D]  Sensor LS1773 () is Hi.  (BDL16 #111, DS13; DS54/64 #222, AuxC/A3)
+19:08:23.976: [Rx - B2 34 5C 25]  Sensor LS3177 () is Hi.  (BDL16 #199, DS9; DS54/64 #398, AuxA/A1)
+19:08:23.989: [Rx - B2 76 76 4D]  Sensor LS1774 () is Hi.  (BDL16 #111, DS14; DS54/64 #222, SwiC/S3)
+19:08:23.994: [Rx - B2 77 56 6C]  Sensor LS1775 () is Hi.  (BDL16 #111, DS15; DS54/64 #222, AuxD/A4)
+19:08:23.995: [Rx - B2 35 73 0B]  Sensor LS876 () is Hi.  (BDL16 #55, DS12; DS54/64 #110, SwiB/S2)
+19:08:23.998: [Rx - B2 36 53 28]  Sensor LS877 () is Hi.  (BDL16 #55, DS13; DS54/64 #110, AuxC/A3)
+19:08:24.001: [Rx - B2 77 76 4C]  Sensor LS1776 () is Hi.  (BDL16 #111, DS16; DS54/64 #222, SwiD/S4)
+19:08:24.010: [Rx - B2 34 7C 05]  Sensor LS3178 () is Hi.  (BDL16 #199, DS10; DS54/64 #398, SwiA/S1)
+19:08:24.012: [Rx - B2 36 73 08]  Sensor LS878 () is Hi.  (BDL16 #55, DS14; DS54/64 #110, SwiC/S3)
+19:08:24.013: [Rx - B2 35 5C 24]  Sensor LS3179 () is Hi.  (BDL16 #199, DS11; DS54/64 #398, AuxB/A2)
+19:08:24.019: [Rx - B2 35 7C 04]  Sensor LS3180 () is Hi.  (BDL16 #199, DS12; DS54/64 #398, SwiB/S2)
+19:08:24.030: [Rx - B2 37 53 29]  Sensor LS879 () is Hi.  (BDL16 #55, DS15; DS54/64 #110, AuxD/A4)
+19:08:24.032: [Rx - B2 36 5C 27]  Sensor LS3181 () is Hi.  (BDL16 #199, DS13; DS54/64 #398, AuxC/A3)
+19:08:24.042: [Rx - B2 37 73 09]  Sensor LS880 () is Hi.  (BDL16 #55, DS16; DS54/64 #110, SwiD/S4)
+19:08:24.059: [Rx - B2 36 7C 07]  Sensor LS3182 () is Hi.  (BDL16 #199, DS14; DS54/64 #398, SwiC/S3)
+19:08:24.073: [Rx - B2 37 5C 26]  Sensor LS3183 () is Hi.  (BDL16 #199, DS15; DS54/64 #398, AuxD/A4)
+19:08:24.091: [Rx - B2 37 7C 06]  Sensor LS3184 () is Hi.  (BDL16 #199, DS16; DS54/64 #398, SwiD/S4)
+19:08:24.252: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:24.546: [Rx - B0 7B 27 13]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 1/1/1; addresses...
+	57-64, 121-128, 185-192, 249-256, 313-320, 377-384, 441-448, 505-512,
+	569-576, 633-640, 697-704, 761-768, 825-832, 889-896, 953-960, 1017-1024,
+	1081-1088, 1145-1152, 1209-1216, 1273-1280, 1337-1344, 1401-1408, 1465-1472, 1529-1536,
+	1593-1600, 1657-1664, 1721-1728, 1785-1792, 1849-1856, 1913-1920, 1977-1984, 2041-2048
+19:08:24.577: [Rx - B0 78 07 30]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 0/0/0; addresses...
+	1-8, 65-72, 129-136, 193-200, 257-264, 321-328, 385-392, 449-456,
+	513-520, 577-584, 641-648, 705-712, 769-776, 833-840, 897-904, 961-968,
+	1025-1032, 1089-1096, 1153-1160, 1217-1224, 1281-1288, 1345-1352, 1409-1416, 1473-1480,
+	1537-1544, 1601-1608, 1665-1672, 1729-1736, 1793-1800, 1857-1864, 1921-1928, 1985-1992
+19:08:24.586: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:24.587: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:24.588: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:24.592: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:24.602: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:24.604: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:24.604: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:24.605: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:24.606: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:24.610: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:24.620: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:24.626: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:24.627: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:24.628: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:24.636: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:24.639: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:24.642: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:24.643: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:24.644: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:24.657: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:24.662: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:24.668: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:24.670: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:24.685: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:24.687: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:24.687: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:24.691: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:24.693: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:24.696: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:24.697: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:24.704: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:24.705: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:24.705: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:24.706: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:24.706: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:24.713: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:24.717: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:24.720: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:24.723: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:24.726: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:24.729: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:24.730: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:24.732: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:24.734: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:24.735: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:24.744: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:24.747: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:24.751: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:24.754: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:24.758: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:24.760: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:24.766: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:24.769: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:24.770: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:24.771: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:24.776: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:24.782: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:24.784: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:24.790: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:24.792: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:24.795: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:24.797: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:24.799: [Rx - A0 02 00 5D]  Set speed of loco in slot 2 to 0.
+19:08:24.805: [Rx - B2 78 56 63]  Sensor LS1777 () is Hi.  (BDL16 #112, DS1; DS54/64 #223, AuxA/A1)
+19:08:24.811: [Rx - B2 38 53 26]  Sensor LS881 () is Hi.  (BDL16 #56, DS1; DS54/64 #111, AuxA/A1)
+19:08:24.815: [Rx - B2 78 76 43]  Sensor LS1778 () is Hi.  (BDL16 #112, DS2; DS54/64 #223, SwiA/S1)
+19:08:24.821: [Rx - B2 38 73 06]  Sensor LS882 () is Hi.  (BDL16 #56, DS2; DS54/64 #111, SwiA/S1)
+19:08:24.827: [Rx - B2 79 56 62]  Sensor LS1779 () is Hi.  (BDL16 #112, DS3; DS54/64 #223, AuxB/A2)
+19:08:24.837: [Rx - B2 79 76 42]  Sensor LS1780 () is Hi.  (BDL16 #112, DS4; DS54/64 #223, SwiB/S2)
+19:08:24.843: [Rx - B2 39 53 27]  Sensor LS883 () is Hi.  (BDL16 #56, DS3; DS54/64 #111, AuxB/A2)
+19:08:24.849: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:24.851: [Rx - B2 7A 56 61]  Sensor LS1781 () is Hi.  (BDL16 #112, DS5; DS54/64 #223, AuxC/A3)
+19:08:24.863: [Rx - B2 78 5F 6A]  Sensor LS4081 () is Hi.  (BDL16 #256, DS1; DS54/64 #511, AuxA/A1)
+19:08:24.871: [Rx - B2 7A 76 41]  Sensor LS1782 () is Hi.  (BDL16 #112, DS6; DS54/64 #223, SwiC/S3)
+19:08:24.890: [Rx - B2 78 7F 4A]  Sensor LS4082 () is Hi.  (BDL16 #256, DS2; DS54/64 #511, SwiA/S1)
+19:08:24.895: [Rx - B2 39 73 07]  Sensor LS884 () is Hi.  (BDL16 #56, DS4; DS54/64 #111, SwiB/S2)
+19:08:24.904: [Rx - B2 7B 56 60]  Sensor LS1783 () is Hi.  (BDL16 #112, DS7; DS54/64 #223, AuxD/A4)
+19:08:24.905: [Rx - B2 7B 76 40]  Sensor LS1784 () is Hi.  (BDL16 #112, DS8; DS54/64 #223, SwiD/S4)
+19:08:24.914: [Rx - B2 3A 53 24]  Sensor LS885 () is Hi.  (BDL16 #56, DS5; DS54/64 #111, AuxC/A3)
+19:08:24.925: [Rx - B2 7C 56 67]  Sensor LS1785 () is Hi.  (BDL16 #112, DS9; DS54/64 #224, AuxA/A1)
+19:08:24.927: [Rx - B2 79 5F 6B]  Sensor LS4083 () is Hi.  (BDL16 #256, DS3; DS54/64 #511, AuxB/A2)
+19:08:24.936: [Rx - B2 7C 76 47]  Sensor LS1786 () is Hi.  (BDL16 #112, DS10; DS54/64 #224, SwiA/S1)
+19:08:24.941: [Rx - B2 3A 73 04]  Sensor LS886 () is Hi.  (BDL16 #56, DS6; DS54/64 #111, SwiC/S3)
+19:08:24.942: [Rx - B2 3B 53 25]  Sensor LS887 () is Hi.  (BDL16 #56, DS7; DS54/64 #111, AuxD/A4)
+19:08:24.954: [Rx - B2 7D 56 66]  Sensor LS1787 () is Hi.  (BDL16 #112, DS11; DS54/64 #224, AuxB/A2)
+19:08:24.962: [Rx - B2 3B 73 05]  Sensor LS888 () is Hi.  (BDL16 #56, DS8; DS54/64 #111, SwiD/S4)
+19:08:24.964: [Rx - B2 7D 76 46]  Sensor LS1788 () is Hi.  (BDL16 #112, DS12; DS54/64 #224, SwiB/S2)
+19:08:24.983: [Rx - B2 00 50 1D]  Sensor LS1 () is Hi.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:24.992: [Rx - B2 79 7F 4B]  Sensor LS4084 () is Hi.  (BDL16 #256, DS4; DS54/64 #511, SwiB/S2)
+19:08:24.993: [Rx - B2 00 70 3D]  Sensor LS2 () is Hi.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:24.994: [Rx - B2 3C 53 22]  Sensor LS889 () is Hi.  (BDL16 #56, DS9; DS54/64 #112, AuxA/A1)
+19:08:24.997: [Rx - B2 7E 56 65]  Sensor LS1789 () is Hi.  (BDL16 #112, DS13; DS54/64 #224, AuxC/A3)
+19:08:25.018: [Rx - B2 7E 76 45]  Sensor LS1790 () is Hi.  (BDL16 #112, DS14; DS54/64 #224, SwiC/S3)
+19:08:25.022: [Rx - B2 3C 73 02]  Sensor LS890 () is Hi.  (BDL16 #56, DS10; DS54/64 #112, SwiA/S1)
+19:08:25.024: [Rx - B2 7F 56 64]  Sensor LS1791 () is Hi.  (BDL16 #112, DS15; DS54/64 #224, AuxD/A4)
+19:08:25.025: [Rx - B2 3D 53 23]  Sensor LS891 () is Hi.  (BDL16 #56, DS11; DS54/64 #112, AuxB/A2)
+19:08:25.025: [Rx - B2 01 50 1C]  Sensor LS3 () is Hi.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:25.034: [Rx - B2 7F 76 44]  Sensor LS1792 () is Hi.  (BDL16 #112, DS16; DS54/64 #224, SwiD/S4)
+19:08:25.039: [Rx - B2 3D 73 03]  Sensor LS892 () is Hi.  (BDL16 #56, DS12; DS54/64 #112, SwiB/S2)
+19:08:25.042: [Rx - B2 01 70 3C]  Sensor LS4 () is Hi.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:25.051: [Rx - B2 7A 5F 68]  Sensor LS4085 () is Hi.  (BDL16 #256, DS5; DS54/64 #511, AuxC/A3)
+19:08:25.053: [Rx - A0 02 00 5D]  Set speed of loco in slot 2 to 0.
+19:08:25.061: [Rx - B2 3E 53 20]  Sensor LS893 () is Hi.  (BDL16 #56, DS13; DS54/64 #112, AuxC/A3)
+19:08:25.078: [Rx - B2 7A 7F 48]  Sensor LS4086 () is Hi.  (BDL16 #256, DS6; DS54/64 #511, SwiC/S3)
+19:08:25.090: [Rx - B2 02 50 1F]  Sensor LS5 () is Hi.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:25.094: [Rx - B2 3E 73 00]  Sensor LS894 () is Hi.  (BDL16 #56, DS14; DS54/64 #112, SwiC/S3)
+19:08:25.114: [Rx - B2 02 70 3F]  Sensor LS6 () is Hi.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:25.115: [Rx - B2 7B 5F 69]  Sensor LS4087 () is Hi.  (BDL16 #256, DS7; DS54/64 #511, AuxD/A4)
+19:08:25.126: [Rx - B2 3F 53 21]  Sensor LS895 () is Hi.  (BDL16 #56, DS15; DS54/64 #112, AuxD/A4)
+19:08:25.129: [Rx - B2 3F 73 01]  Sensor LS896 () is Hi.  (BDL16 #56, DS16; DS54/64 #112, SwiD/S4)
+19:08:25.130: [Rx - B2 03 50 1E]  Sensor LS7 () is Hi.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:25.130: [Rx - B2 7B 7F 49]  Sensor LS4088 () is Hi.  (BDL16 #256, DS8; DS54/64 #511, SwiD/S4)
+19:08:25.139: [Rx - B2 7C 5F 6E]  Sensor LS4089 () is Hi.  (BDL16 #256, DS9; DS54/64 #512, AuxA/A1)
+19:08:25.144: [Rx - B2 03 70 3E]  Sensor LS8 () is Hi.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:25.154: [Rx - B2 7C 7F 4E]  Sensor LS4090 () is Hi.  (BDL16 #256, DS10; DS54/64 #512, SwiA/S1)
+19:08:25.155: [Rx - B2 04 50 19]  Sensor LS9 () is Hi.  (BDL16 #1, DS9; DS54/64/SE8c #2, AuxA/A1/DS01)
+19:08:25.173: [Rx - B2 7D 5F 6F]  Sensor LS4091 () is Hi.  (BDL16 #256, DS11; DS54/64 #512, AuxB/A2)
+19:08:25.175: [Rx - B2 04 70 39]  Sensor LS10 () is Hi.  (BDL16 #1, DS10; DS54/64/SE8c #2, SwiA/S1/DS02)
+19:08:25.186: [Rx - B2 7D 7F 4F]  Sensor LS4092 () is Hi.  (BDL16 #256, DS12; DS54/64 #512, SwiB/S2)
+19:08:25.197: [Rx - B2 05 50 18]  Sensor LS11 () is Hi.  (BDL16 #1, DS11; DS54/64/SE8c #2, AuxB/A2/DS03)
+19:08:25.198: [Rx - B2 7E 5F 6C]  Sensor LS4093 () is Hi.  (BDL16 #256, DS13; DS54/64 #512, AuxC/A3)
+19:08:25.209: [Rx - B2 05 70 38]  Sensor LS12 () is Hi.  (BDL16 #1, DS12; DS54/64/SE8c #2, SwiB/S2/DS04)
+19:08:25.220: [Rx - B2 7E 7F 4C]  Sensor LS4094 () is Hi.  (BDL16 #256, DS14; DS54/64 #512, SwiC/S3)
+19:08:25.221: [Rx - B2 06 50 1B]  Sensor LS13 () is Hi.  (BDL16 #1, DS13; DS54/64/SE8c #2, AuxC/A3/DS05)
+19:08:25.233: [Rx - B2 7F 5F 6D]  Sensor LS4095 () is Hi.  (BDL16 #256, DS15; DS54/64 #512, AuxD/A4)
+19:08:25.234: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:25.243: [Rx - B2 06 70 3B]  Sensor LS14 () is Hi.  (BDL16 #1, DS14; DS54/64/SE8c #2, SwiC/S3/DS06)
+19:08:25.247: [Rx - B2 07 50 1A]  Sensor LS15 () is Hi.  (BDL16 #1, DS15; DS54/64/SE8c #2, AuxD/A4/DS07)
+19:08:25.262: [Rx - B2 7F 7F 4D]  Sensor LS4096 () is Hi.  (BDL16 #256, DS16; DS54/64 #512, SwiD/S4)
+19:08:25.281: [Rx - B2 07 70 3A]  Sensor LS16 () is Hi.  (BDL16 #1, DS16; DS54/64/SE8c #2, SwiD/S4/DS08)
+19:08:25.293: [Rx - B2 40 5F 52]  Sensor LS3969 () is Hi.  (BDL16 #249, DS1; DS54/64 #497, AuxA/A1)
+19:08:25.311: [Rx - B2 40 7F 72]  Sensor LS3970 () is Hi.  (BDL16 #249, DS2; DS54/64 #497, SwiA/S1)
+19:08:25.334: [Rx - B2 41 5F 53]  Sensor LS3971 () is Hi.  (BDL16 #249, DS3; DS54/64 #497, AuxB/A2)
+19:08:25.337: [Rx - B2 41 7F 73]  Sensor LS3972 () is Hi.  (BDL16 #249, DS4; DS54/64 #497, SwiB/S2)
+19:08:25.346: [Rx - B2 42 5F 50]  Sensor LS3973 () is Hi.  (BDL16 #249, DS5; DS54/64 #497, AuxC/A3)
+19:08:25.358: [Rx - B2 42 7F 70]  Sensor LS3974 () is Hi.  (BDL16 #249, DS6; DS54/64 #497, SwiC/S3)
+19:08:25.375: [Rx - B2 43 5F 51]  Sensor LS3975 () is Hi.  (BDL16 #249, DS7; DS54/64 #497, AuxD/A4)
+19:08:25.387: [Rx - B2 43 7F 71]  Sensor LS3976 () is Hi.  (BDL16 #249, DS8; DS54/64 #497, SwiD/S4)
+19:08:25.401: [Rx - B2 44 5F 56]  Sensor LS3977 () is Hi.  (BDL16 #249, DS9; DS54/64 #498, AuxA/A1)
+19:08:25.418: [Rx - B2 44 7F 76]  Sensor LS3978 () is Hi.  (BDL16 #249, DS10; DS54/64 #498, SwiA/S1)
+19:08:25.435: [Rx - B2 45 5F 57]  Sensor LS3979 () is Hi.  (BDL16 #249, DS11; DS54/64 #498, AuxB/A2)
+19:08:25.452: [Rx - B2 45 7F 77]  Sensor LS3980 () is Hi.  (BDL16 #249, DS12; DS54/64 #498, SwiB/S2)
+19:08:25.473: [Rx - B2 46 5F 54]  Sensor LS3981 () is Hi.  (BDL16 #249, DS13; DS54/64 #498, AuxC/A3)
+19:08:25.496: [Rx - B2 46 7F 74]  Sensor LS3982 () is Hi.  (BDL16 #249, DS14; DS54/64 #498, SwiC/S3)
+19:08:25.518: [Rx - B2 47 5F 55]  Sensor LS3983 () is Hi.  (BDL16 #249, DS15; DS54/64 #498, AuxD/A4)
+19:08:25.528: [Rx - B2 47 7F 75]  Sensor LS3984 () is Hi.  (BDL16 #249, DS16; DS54/64 #498, SwiD/S4)
+19:08:25.629: [Rx - B0 79 07 31]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 0/0/1; addresses...
+	9-16, 73-80, 137-144, 201-208, 265-272, 329-336, 393-400, 457-464,
+	521-528, 585-592, 649-656, 713-720, 777-784, 841-848, 905-912, 969-976,
+	1033-1040, 1097-1104, 1161-1168, 1225-1232, 1289-1296, 1353-1360, 1417-1424, 1481-1488,
+	1545-1552, 1609-1616, 1673-1680, 1737-1744, 1801-1808, 1865-1872, 1929-1936, 1993-2000
+19:08:26.679: [Rx - B0 7A 07 32]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 0/1/0; addresses...
+	17-24, 81-88, 145-152, 209-216, 273-280, 337-344, 401-408, 465-472,
+	529-536, 593-600, 657-664, 721-728, 785-792, 849-856, 913-920, 977-984,
+	1041-1048, 1105-1112, 1169-1176, 1233-1240, 1297-1304, 1361-1368, 1425-1432, 1489-1496,
+	1553-1560, 1617-1624, 1681-1688, 1745-1752, 1809-1816, 1873-1880, 1937-1944, 2001-2008
+19:08:26.922: [Rx - B2 50 52 4F]  Sensor LS673 () is Hi.  (BDL16 #43, DS1; DS54/64 #85, AuxA/A1)
+19:08:26.935: [Rx - B2 10 5D 00]  Sensor LS3361 () is Hi.  (BDL16 #211, DS1; DS54/64 #421, AuxA/A1)
+19:08:26.949: [Rx - B2 10 56 0B]  Sensor LS1569 () is Hi.  (BDL16 #99, DS1; DS54/64 #197, AuxA/A1)
+19:08:26.957: [Rx - B2 50 72 6F]  Sensor LS674 () is Hi.  (BDL16 #43, DS2; DS54/64 #85, SwiA/S1)
+19:08:26.960: [Rx - B2 10 76 2B]  Sensor LS1570 () is Hi.  (BDL16 #99, DS2; DS54/64 #197, SwiA/S1)
+19:08:26.961: [Rx - B2 10 7D 20]  Sensor LS3362 () is Hi.  (BDL16 #211, DS2; DS54/64 #421, SwiA/S1)
+19:08:26.975: [Rx - B2 51 52 4E]  Sensor LS675 () is Hi.  (BDL16 #43, DS3; DS54/64 #85, AuxB/A2)
+19:08:26.977: [Rx - B2 50 59 44]  Sensor LS2465 () is Hi.  (BDL16 #155, DS1; DS54/64 #309, AuxA/A1)
+19:08:26.989: [Rx - B2 11 5D 01]  Sensor LS3363 () is Hi.  (BDL16 #211, DS3; DS54/64 #421, AuxB/A2)
+19:08:26.990: [Rx - B2 50 79 64]  Sensor LS2466 () is Hi.  (BDL16 #155, DS2; DS54/64 #309, SwiA/S1)
+19:08:26.992: [Rx - B2 51 72 6E]  Sensor LS676 () is Hi.  (BDL16 #43, DS4; DS54/64 #85, SwiB/S2)
+19:08:26.993: [Rx - B2 11 56 0A]  Sensor LS1571 () is Hi.  (BDL16 #99, DS3; DS54/64 #197, AuxB/A2)
+19:08:27.015: [Rx - B2 52 52 4D]  Sensor LS677 () is Hi.  (BDL16 #43, DS5; DS54/64 #85, AuxC/A3)
+19:08:27.016: [Rx - B2 11 7D 21]  Sensor LS3364 () is Hi.  (BDL16 #211, DS4; DS54/64 #421, SwiB/S2)
+19:08:27.016: [Rx - B2 12 5D 02]  Sensor LS3365 () is Hi.  (BDL16 #211, DS5; DS54/64 #421, AuxC/A3)
+19:08:27.017: [Rx - B2 52 72 6D]  Sensor LS678 () is Hi.  (BDL16 #43, DS6; DS54/64 #85, SwiC/S3)
+19:08:27.025: [Rx - B2 11 76 2A]  Sensor LS1572 () is Hi.  (BDL16 #99, DS4; DS54/64 #197, SwiB/S2)
+19:08:27.029: [Rx - B2 12 7D 22]  Sensor LS3366 () is Hi.  (BDL16 #211, DS6; DS54/64 #421, SwiC/S3)
+19:08:27.030: [Rx - B2 12 56 09]  Sensor LS1573 () is Hi.  (BDL16 #99, DS5; DS54/64 #197, AuxC/A3)
+19:08:27.042: [Rx - B2 53 52 4C]  Sensor LS679 () is Hi.  (BDL16 #43, DS7; DS54/64 #85, AuxD/A4)
+19:08:27.044: [Rx - B2 51 59 45]  Sensor LS2467 () is Hi.  (BDL16 #155, DS3; DS54/64 #309, AuxB/A2)
+19:08:27.052: [Rx - B2 53 72 6C]  Sensor LS680 () is Hi.  (BDL16 #43, DS8; DS54/64 #85, SwiD/S4)
+19:08:27.057: [Rx - B2 51 79 65]  Sensor LS2468 () is Hi.  (BDL16 #155, DS4; DS54/64 #309, SwiB/S2)
+19:08:27.060: [Rx - B2 13 5D 03]  Sensor LS3367 () is Hi.  (BDL16 #211, DS7; DS54/64 #421, AuxD/A4)
+19:08:27.072: [Rx - B2 54 52 4B]  Sensor LS681 () is Hi.  (BDL16 #43, DS9; DS54/64 #86, AuxA/A1)
+19:08:27.077: [Rx - B2 13 7D 23]  Sensor LS3368 () is Hi.  (BDL16 #211, DS8; DS54/64 #421, SwiD/S4)
+19:08:27.083: [Rx - B2 12 76 29]  Sensor LS1574 () is Hi.  (BDL16 #99, DS6; DS54/64 #197, SwiC/S3)
+19:08:27.091: [Rx - B2 54 72 6B]  Sensor LS682 () is Hi.  (BDL16 #43, DS10; DS54/64 #86, SwiA/S1)
+19:08:27.101: [Rx - B2 14 5D 04]  Sensor LS3369 () is Hi.  (BDL16 #211, DS9; DS54/64 #422, AuxA/A1)
+19:08:27.104: [Rx - B2 52 59 46]  Sensor LS2469 () is Hi.  (BDL16 #155, DS5; DS54/64 #309, AuxC/A3)
+19:08:27.117: [Rx - B2 55 52 4A]  Sensor LS683 () is Hi.  (BDL16 #43, DS11; DS54/64 #86, AuxB/A2)
+19:08:27.121: [Rx - B2 14 7D 24]  Sensor LS3370 () is Hi.  (BDL16 #211, DS10; DS54/64 #422, SwiA/S1)
+19:08:27.123: [Rx - B2 13 56 08]  Sensor LS1575 () is Hi.  (BDL16 #99, DS7; DS54/64 #197, AuxD/A4)
+19:08:27.124: [Rx - B2 52 79 66]  Sensor LS2470 () is Hi.  (BDL16 #155, DS6; DS54/64 #309, SwiC/S3)
+19:08:27.138: [Rx - B2 53 59 47]  Sensor LS2471 () is Hi.  (BDL16 #155, DS7; DS54/64 #309, AuxD/A4)
+19:08:27.147: [Rx - B2 55 72 6A]  Sensor LS684 () is Hi.  (BDL16 #43, DS12; DS54/64 #86, SwiB/S2)
+19:08:27.149: [Rx - B2 15 5D 05]  Sensor LS3371 () is Hi.  (BDL16 #211, DS11; DS54/64 #422, AuxB/A2)
+19:08:27.150: [Rx - B2 56 52 49]  Sensor LS685 () is Hi.  (BDL16 #43, DS13; DS54/64 #86, AuxC/A3)
+19:08:27.161: [Rx - B2 53 79 67]  Sensor LS2472 () is Hi.  (BDL16 #155, DS8; DS54/64 #309, SwiD/S4)
+19:08:27.165: [Rx - B2 56 72 69]  Sensor LS686 () is Hi.  (BDL16 #43, DS14; DS54/64 #86, SwiC/S3)
+19:08:27.182: [Rx - B2 54 59 40]  Sensor LS2473 () is Hi.  (BDL16 #155, DS9; DS54/64 #310, AuxA/A1)
+19:08:27.184: [Rx - B2 57 52 48]  Sensor LS687 () is Hi.  (BDL16 #43, DS15; DS54/64 #86, AuxD/A4)
+19:08:27.203: [Rx - B2 13 76 28]  Sensor LS1576 () is Hi.  (BDL16 #99, DS8; DS54/64 #197, SwiD/S4)
+19:08:27.208: [Rx - B2 54 79 60]  Sensor LS2474 () is Hi.  (BDL16 #155, DS10; DS54/64 #310, SwiA/S1)
+19:08:27.211: [Rx - B2 14 56 0F]  Sensor LS1577 () is Hi.  (BDL16 #99, DS9; DS54/64 #198, AuxA/A1)
+19:08:27.216: [Rx - B2 57 72 68]  Sensor LS688 () is Hi.  (BDL16 #43, DS16; DS54/64 #86, SwiD/S4)
+19:08:27.217: [Rx - B2 14 76 2F]  Sensor LS1578 () is Hi.  (BDL16 #99, DS10; DS54/64 #198, SwiA/S1)
+19:08:27.220: [Rx - B2 15 7D 25]  Sensor LS3372 () is Hi.  (BDL16 #211, DS12; DS54/64 #422, SwiB/S2)
+19:08:27.221: [Rx - A0 02 00 5D]  Set speed of loco in slot 2 to 0.
+19:08:27.231: [Rx - B2 15 56 0E]  Sensor LS1579 () is Hi.  (BDL16 #99, DS11; DS54/64 #198, AuxB/A2)
+19:08:27.234: [Rx - B2 15 76 2E]  Sensor LS1580 () is Hi.  (BDL16 #99, DS12; DS54/64 #198, SwiB/S2)
+19:08:27.246: [Rx - B2 55 59 41]  Sensor LS2475 () is Hi.  (BDL16 #155, DS11; DS54/64 #310, AuxB/A2)
+19:08:27.247: [Rx - B2 16 5D 06]  Sensor LS3373 () is Hi.  (BDL16 #211, DS13; DS54/64 #422, AuxC/A3)
+19:08:27.249: [Rx - B2 16 56 0D]  Sensor LS1581 () is Hi.  (BDL16 #99, DS13; DS54/64 #198, AuxC/A3)
+19:08:27.271: [Rx - B2 16 7D 26]  Sensor LS3374 () is Hi.  (BDL16 #211, DS14; DS54/64 #422, SwiC/S3)
+19:08:27.273: [Rx - B2 16 76 2D]  Sensor LS1582 () is Hi.  (BDL16 #99, DS14; DS54/64 #198, SwiC/S3)
+19:08:27.273: [Rx - B2 17 5D 07]  Sensor LS3375 () is Hi.  (BDL16 #211, DS15; DS54/64 #422, AuxD/A4)
+19:08:27.289: [Rx - B2 17 56 0C]  Sensor LS1583 () is Hi.  (BDL16 #99, DS15; DS54/64 #198, AuxD/A4)
+19:08:27.292: [Rx - B2 17 7D 27]  Sensor LS3376 () is Hi.  (BDL16 #211, DS16; DS54/64 #422, SwiD/S4)
+19:08:27.293: [Rx - B2 55 79 61]  Sensor LS2476 () is Hi.  (BDL16 #155, DS12; DS54/64 #310, SwiB/S2)
+19:08:27.295: [Rx - B2 17 76 2C]  Sensor LS1584 () is Hi.  (BDL16 #99, DS16; DS54/64 #198, SwiD/S4)
+19:08:27.315: [Rx - B2 56 59 42]  Sensor LS2477 () is Hi.  (BDL16 #155, DS13; DS54/64 #310, AuxC/A3)
+19:08:27.316: [Rx - B2 56 79 62]  Sensor LS2478 () is Hi.  (BDL16 #155, DS14; DS54/64 #310, SwiC/S3)
+19:08:27.322: [Rx - B2 57 59 43]  Sensor LS2479 () is Hi.  (BDL16 #155, DS15; DS54/64 #310, AuxD/A4)
+19:08:27.333: [Rx - B2 57 79 63]  Sensor LS2480 () is Hi.  (BDL16 #155, DS16; DS54/64 #310, SwiD/S4)
+19:08:27.390: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:27.731: [Rx - B0 7B 07 33]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 0/1/1; addresses...
+	25-32, 89-96, 153-160, 217-224, 281-288, 345-352, 409-416, 473-480,
+	537-544, 601-608, 665-672, 729-736, 793-800, 857-864, 921-928, 985-992,
+	1049-1056, 1113-1120, 1177-1184, 1241-1248, 1305-1312, 1369-1376, 1433-1440, 1497-1504,
+	1561-1568, 1625-1632, 1689-1696, 1753-1760, 1817-1824, 1881-1888, 1945-1952, 2009-2016
+19:08:27.974: [Rx - B2 58 5F 4A]  Sensor LS4017 () is Hi.  (BDL16 #252, DS1; DS54/64 #503, AuxA/A1)
+19:08:27.991: [Rx - B2 58 52 47]  Sensor LS689 () is Hi.  (BDL16 #44, DS1; DS54/64 #87, AuxA/A1)
+19:08:27.992: [Rx - B2 18 5D 08]  Sensor LS3377 () is Hi.  (BDL16 #212, DS1; DS54/64 #423, AuxA/A1)
+19:08:27.993: [Rx - B2 58 7F 6A]  Sensor LS4018 () is Hi.  (BDL16 #252, DS2; DS54/64 #503, SwiA/S1)
+19:08:28.000: [Rx - B2 58 72 67]  Sensor LS690 () is Hi.  (BDL16 #44, DS2; DS54/64 #87, SwiA/S1)
+19:08:28.008: [Rx - B2 58 59 4C]  Sensor LS2481 () is Hi.  (BDL16 #156, DS1; DS54/64 #311, AuxA/A1)
+19:08:28.012: [Rx - B2 18 7D 28]  Sensor LS3378 () is Hi.  (BDL16 #212, DS2; DS54/64 #423, SwiA/S1)
+19:08:28.013: [Rx - B2 58 79 6C]  Sensor LS2482 () is Hi.  (BDL16 #156, DS2; DS54/64 #311, SwiA/S1)
+19:08:28.027: [Rx - B2 59 5F 4B]  Sensor LS4019 () is Hi.  (BDL16 #252, DS3; DS54/64 #503, AuxB/A2)
+19:08:28.028: [Rx - B2 59 52 46]  Sensor LS691 () is Hi.  (BDL16 #44, DS3; DS54/64 #87, AuxB/A2)
+19:08:28.039: [Rx - B2 59 59 4D]  Sensor LS2483 () is Hi.  (BDL16 #156, DS3; DS54/64 #311, AuxB/A2)
+19:08:28.047: [Rx - B2 59 79 6D]  Sensor LS2484 () is Hi.  (BDL16 #156, DS4; DS54/64 #311, SwiB/S2)
+19:08:28.053: [Rx - B2 19 5D 09]  Sensor LS3379 () is Hi.  (BDL16 #212, DS3; DS54/64 #423, AuxB/A2)
+19:08:28.064: [Rx - B2 59 72 66]  Sensor LS692 () is Hi.  (BDL16 #44, DS4; DS54/64 #87, SwiB/S2)
+19:08:28.065: [Rx - B2 59 7F 6B]  Sensor LS4020 () is Hi.  (BDL16 #252, DS4; DS54/64 #503, SwiB/S2)
+19:08:28.076: [Rx - B2 5A 59 4E]  Sensor LS2485 () is Hi.  (BDL16 #156, DS5; DS54/64 #311, AuxC/A3)
+19:08:28.085: [Rx - B2 19 7D 29]  Sensor LS3380 () is Hi.  (BDL16 #212, DS4; DS54/64 #423, SwiB/S2)
+19:08:28.087: [Rx - B2 5A 79 6E]  Sensor LS2486 () is Hi.  (BDL16 #156, DS6; DS54/64 #311, SwiC/S3)
+19:08:28.096: [Rx - B2 5A 5F 48]  Sensor LS4021 () is Hi.  (BDL16 #252, DS5; DS54/64 #503, AuxC/A3)
+19:08:28.099: [Rx - B2 5B 59 4F]  Sensor LS2487 () is Hi.  (BDL16 #156, DS7; DS54/64 #311, AuxD/A4)
+19:08:28.100: [Rx - B2 5A 7F 68]  Sensor LS4022 () is Hi.  (BDL16 #252, DS6; DS54/64 #503, SwiC/S3)
+19:08:28.105: [Rx - B2 5A 52 45]  Sensor LS693 () is Hi.  (BDL16 #44, DS5; DS54/64 #87, AuxC/A3)
+19:08:28.109: [Rx - B2 5B 5F 49]  Sensor LS4023 () is Hi.  (BDL16 #252, DS7; DS54/64 #503, AuxD/A4)
+19:08:28.114: [Rx - B2 1A 5D 0A]  Sensor LS3381 () is Hi.  (BDL16 #212, DS5; DS54/64 #423, AuxC/A3)
+19:08:28.124: [Rx - B2 5A 72 65]  Sensor LS694 () is Hi.  (BDL16 #44, DS6; DS54/64 #87, SwiC/S3)
+19:08:28.125: [Rx - B2 5B 7F 69]  Sensor LS4024 () is Hi.  (BDL16 #252, DS8; DS54/64 #503, SwiD/S4)
+19:08:28.144: [Rx - B2 1A 7D 2A]  Sensor LS3382 () is Hi.  (BDL16 #212, DS6; DS54/64 #423, SwiC/S3)
+19:08:28.145: [Rx - B2 5B 79 6F]  Sensor LS2488 () is Hi.  (BDL16 #156, DS8; DS54/64 #311, SwiD/S4)
+19:08:28.157: [Rx - B2 1B 5D 0B]  Sensor LS3383 () is Hi.  (BDL16 #212, DS7; DS54/64 #423, AuxD/A4)
+19:08:28.157: [Rx - B2 5C 59 48]  Sensor LS2489 () is Hi.  (BDL16 #156, DS9; DS54/64 #312, AuxA/A1)
+19:08:28.158: [Rx - B2 5B 52 44]  Sensor LS695 () is Hi.  (BDL16 #44, DS7; DS54/64 #87, AuxD/A4)
+19:08:28.170: [Rx - B2 5C 5F 4E]  Sensor LS4025 () is Hi.  (BDL16 #252, DS9; DS54/64 #504, AuxA/A1)
+19:08:28.171: [Rx - B2 5B 72 64]  Sensor LS696 () is Hi.  (BDL16 #44, DS8; DS54/64 #87, SwiD/S4)
+19:08:28.181: [Rx - B2 5C 7F 6E]  Sensor LS4026 () is Hi.  (BDL16 #252, DS10; DS54/64 #504, SwiA/S1)
+19:08:28.181: [Rx - B2 5C 52 43]  Sensor LS697 () is Hi.  (BDL16 #44, DS9; DS54/64 #88, AuxA/A1)
+19:08:28.189: [Rx - B2 5C 79 68]  Sensor LS2490 () is Hi.  (BDL16 #156, DS10; DS54/64 #312, SwiA/S1)
+19:08:28.192: [Rx - B2 5D 5F 4F]  Sensor LS4027 () is Hi.  (BDL16 #252, DS11; DS54/64 #504, AuxB/A2)
+19:08:28.194: [Rx - B2 1B 7D 2B]  Sensor LS3384 () is Hi.  (BDL16 #212, DS8; DS54/64 #423, SwiD/S4)
+19:08:28.206: [Rx - B2 5D 59 49]  Sensor LS2491 () is Hi.  (BDL16 #156, DS11; DS54/64 #312, AuxB/A2)
+19:08:28.207: [Rx - B2 1C 5D 0C]  Sensor LS3385 () is Hi.  (BDL16 #212, DS9; DS54/64 #424, AuxA/A1)
+19:08:28.215: [Rx - B2 5D 7F 6F]  Sensor LS4028 () is Hi.  (BDL16 #252, DS12; DS54/64 #504, SwiB/S2)
+19:08:28.220: [Rx - B0 78 07 30]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 0/0/0; addresses...
+	1-8, 65-72, 129-136, 193-200, 257-264, 321-328, 385-392, 449-456,
+	513-520, 577-584, 641-648, 705-712, 769-776, 833-840, 897-904, 961-968,
+	1025-1032, 1089-1096, 1153-1160, 1217-1224, 1281-1288, 1345-1352, 1409-1416, 1473-1480,
+	1537-1544, 1601-1608, 1665-1672, 1729-1736, 1793-1800, 1857-1864, 1921-1928, 1985-1992
+19:08:28.220: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:28.228: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:28.231: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:28.235: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:28.237: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:28.238: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:28.246: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:28.249: [Rx - B2 00 40 0D]  Sensor LS1 () is Lo.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:28.251: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:28.261: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:28.261: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:28.262: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:28.272: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:28.275: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:28.278: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:28.279: [Rx - B2 00 60 2D]  Sensor LS2 () is Lo.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:28.280: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:28.281: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:28.282: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:28.290: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:28.291: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:28.295: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:28.298: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:28.301: [Rx - B2 01 40 0C]  Sensor LS3 () is Lo.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:28.303: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:28.304: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:28.312: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:28.317: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:28.320: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:28.327: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:28.330: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:28.332: [Rx - B2 01 60 2C]  Sensor LS4 () is Lo.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:28.332: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:28.340: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:28.345: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:28.347: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:28.350: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:28.351: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:28.352: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:28.355: [Rx - B2 02 40 0F]  Sensor LS5 () is Lo.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:28.358: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:28.359: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:28.359: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:28.374: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:28.376: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:28.380: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:28.383: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:28.386: [Rx - B2 02 60 2F]  Sensor LS6 () is Lo.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:28.392: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:28.394: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:28.395: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:28.402: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:28.403: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:28.404: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:28.408: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:28.412: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:28.415: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:28.415: [Rx - B2 03 40 0E]  Sensor LS7 () is Lo.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:28.417: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:28.421: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:28.422: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:28.423: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:28.447: [Rx - B2 03 60 2E]  Sensor LS8 () is Lo.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:28.451: [Rx - A0 02 00 5D]  Set speed of loco in slot 2 to 0.
+19:08:28.454: [Rx - B2 5E 5F 4C]  Sensor LS4029 () is Hi.  (BDL16 #252, DS13; DS54/64 #504, AuxC/A3)
+19:08:28.456: [Rx - B2 5C 72 63]  Sensor LS698 () is Hi.  (BDL16 #44, DS10; DS54/64 #88, SwiA/S1)
+19:08:28.465: [Rx - B2 5E 7F 6C]  Sensor LS4030 () is Hi.  (BDL16 #252, DS14; DS54/64 #504, SwiC/S3)
+19:08:28.466: [Rx - B2 5D 52 42]  Sensor LS699 () is Hi.  (BDL16 #44, DS11; DS54/64 #88, AuxB/A2)
+19:08:28.471: [Rx - B2 5D 79 69]  Sensor LS2492 () is Hi.  (BDL16 #156, DS12; DS54/64 #312, SwiB/S2)
+19:08:28.474: [Rx - B2 1C 7D 2C]  Sensor LS3386 () is Hi.  (BDL16 #212, DS10; DS54/64 #424, SwiA/S1)
+19:08:28.485: [Rx - B2 5E 59 4A]  Sensor LS2493 () is Hi.  (BDL16 #156, DS13; DS54/64 #312, AuxC/A3)
+19:08:28.489: [Rx - B2 5D 72 62]  Sensor LS700 () is Hi.  (BDL16 #44, DS12; DS54/64 #88, SwiB/S2)
+19:08:28.492: [Rx - B2 5E 79 6A]  Sensor LS2494 () is Hi.  (BDL16 #156, DS14; DS54/64 #312, SwiC/S3)
+19:08:28.502: [Rx - B2 5F 59 4B]  Sensor LS2495 () is Hi.  (BDL16 #156, DS15; DS54/64 #312, AuxD/A4)
+19:08:28.503: [Rx - B2 1D 5D 0D]  Sensor LS3387 () is Hi.  (BDL16 #212, DS11; DS54/64 #424, AuxB/A2)
+19:08:28.515: [Rx - B2 5E 52 41]  Sensor LS701 () is Hi.  (BDL16 #44, DS13; DS54/64 #88, AuxC/A3)
+19:08:28.533: [Rx - B2 5F 5F 4D]  Sensor LS4031 () is Hi.  (BDL16 #252, DS15; DS54/64 #504, AuxD/A4)
+19:08:28.534: [Rx - B2 1D 7D 2D]  Sensor LS3388 () is Hi.  (BDL16 #212, DS12; DS54/64 #424, SwiB/S2)
+19:08:28.549: [Rx - B2 5E 72 61]  Sensor LS702 () is Hi.  (BDL16 #44, DS14; DS54/64 #88, SwiC/S3)
+19:08:28.551: [Rx - B2 5F 7F 6D]  Sensor LS4032 () is Hi.  (BDL16 #252, DS16; DS54/64 #504, SwiD/S4)
+19:08:28.572: [Rx - B2 00 50 1D]  Sensor LS1 () is Hi.  (BDL16 #1, DS1; DS54/64/SE8c #1, AuxA/A1/DS01)
+19:08:28.573: [Rx - B2 1E 5D 0E]  Sensor LS3389 () is Hi.  (BDL16 #212, DS13; DS54/64 #424, AuxC/A3)
+19:08:28.574: [Rx - B2 00 70 3D]  Sensor LS2 () is Hi.  (BDL16 #1, DS2; DS54/64/SE8c #1, SwiA/S1/DS02)
+19:08:28.574: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:28.575: [Rx - B2 1E 7D 2E]  Sensor LS3390 () is Hi.  (BDL16 #212, DS14; DS54/64 #424, SwiC/S3)
+19:08:28.592: [Rx - B2 5F 52 40]  Sensor LS703 () is Hi.  (BDL16 #44, DS15; DS54/64 #88, AuxD/A4)
+19:08:28.592: [Rx - B2 1F 5D 0F]  Sensor LS3391 () is Hi.  (BDL16 #212, DS15; DS54/64 #424, AuxD/A4)
+19:08:28.594: [Rx - B2 5F 72 60]  Sensor LS704 () is Hi.  (BDL16 #44, DS16; DS54/64 #88, SwiD/S4)
+19:08:28.595: [Rx - B2 01 50 1C]  Sensor LS3 () is Hi.  (BDL16 #1, DS3; DS54/64/SE8c #1, AuxB/A2/DS03)
+19:08:28.608: [Rx - B2 1F 7D 2F]  Sensor LS3392 () is Hi.  (BDL16 #212, DS16; DS54/64 #424, SwiD/S4)
+19:08:28.610: [Rx - B2 01 70 3C]  Sensor LS4 () is Hi.  (BDL16 #1, DS4; DS54/64/SE8c #1, SwiB/S2/DS04)
+19:08:28.611: [Rx - B2 5F 79 6B]  Sensor LS2496 () is Hi.  (BDL16 #156, DS16; DS54/64 #312, SwiD/S4)
+19:08:28.623: [Rx - B2 02 50 1F]  Sensor LS5 () is Hi.  (BDL16 #1, DS5; DS54/64/SE8c #1, AuxC/A3/DS05)
+19:08:28.636: [Rx - B2 40 5F 52]  Sensor LS3969 () is Hi.  (BDL16 #249, DS1; DS54/64 #497, AuxA/A1)
+19:08:28.649: [Rx - B2 02 70 3F]  Sensor LS6 () is Hi.  (BDL16 #1, DS6; DS54/64/SE8c #1, SwiC/S3/DS06)
+19:08:28.663: [Rx - B2 40 7F 72]  Sensor LS3970 () is Hi.  (BDL16 #249, DS2; DS54/64 #497, SwiA/S1)
+19:08:28.664: [Rx - B2 03 50 1E]  Sensor LS7 () is Hi.  (BDL16 #1, DS7; DS54/64/SE8c #1, AuxD/A4/DS07)
+19:08:28.685: [Rx - B2 41 5F 53]  Sensor LS3971 () is Hi.  (BDL16 #249, DS3; DS54/64 #497, AuxB/A2)
+19:08:28.686: [Rx - B2 03 70 3E]  Sensor LS8 () is Hi.  (BDL16 #1, DS8; DS54/64/SE8c #1, SwiD/S4/DS08)
+19:08:28.700: [Rx - B2 41 7F 73]  Sensor LS3972 () is Hi.  (BDL16 #249, DS4; DS54/64 #497, SwiB/S2)
+19:08:28.719: [Rx - B2 04 50 19]  Sensor LS9 () is Hi.  (BDL16 #1, DS9; DS54/64/SE8c #2, AuxA/A1/DS01)
+19:08:28.720: [Rx - B2 42 5F 50]  Sensor LS3973 () is Hi.  (BDL16 #249, DS5; DS54/64 #497, AuxC/A3)
+19:08:28.721: [Rx - B2 04 70 39]  Sensor LS10 () is Hi.  (BDL16 #1, DS10; DS54/64/SE8c #2, SwiA/S1/DS02)
+19:08:28.740: [Rx - B2 42 7F 70]  Sensor LS3974 () is Hi.  (BDL16 #249, DS6; DS54/64 #497, SwiC/S3)
+19:08:28.742: [Rx - B2 05 50 18]  Sensor LS11 () is Hi.  (BDL16 #1, DS11; DS54/64/SE8c #2, AuxB/A2/DS03)
+19:08:28.771: [Rx - B2 05 70 38]  Sensor LS12 () is Hi.  (BDL16 #1, DS12; DS54/64/SE8c #2, SwiB/S2/DS04)
+19:08:28.771: [Rx - B2 43 5F 51]  Sensor LS3975 () is Hi.  (BDL16 #249, DS7; DS54/64 #497, AuxD/A4)
+19:08:28.785: [Rx - B2 06 50 1B]  Sensor LS13 () is Hi.  (BDL16 #1, DS13; DS54/64/SE8c #2, AuxC/A3/DS05)
+19:08:28.787: [Rx - B2 43 7F 71]  Sensor LS3976 () is Hi.  (BDL16 #249, DS8; DS54/64 #497, SwiD/S4)
+19:08:28.797: [Rx - B2 06 70 3B]  Sensor LS14 () is Hi.  (BDL16 #1, DS14; DS54/64/SE8c #2, SwiC/S3/DS06)
+19:08:28.808: [Rx - B2 44 5F 56]  Sensor LS3977 () is Hi.  (BDL16 #249, DS9; DS54/64 #498, AuxA/A1)
+19:08:28.842: [Rx - B2 07 50 1A]  Sensor LS15 () is Hi.  (BDL16 #1, DS15; DS54/64/SE8c #2, AuxD/A4/DS07)
+19:08:28.849: [Rx - B2 44 7F 76]  Sensor LS3978 () is Hi.  (BDL16 #249, DS10; DS54/64 #498, SwiA/S1)
+19:08:28.850: [Rx - B2 07 70 3A]  Sensor LS16 () is Hi.  (BDL16 #1, DS16; DS54/64/SE8c #2, SwiD/S4/DS08)
+19:08:28.851: [Rx - B2 45 5F 57]  Sensor LS3979 () is Hi.  (BDL16 #249, DS11; DS54/64 #498, AuxB/A2)
+19:08:28.865: [Rx - B2 45 7F 77]  Sensor LS3980 () is Hi.  (BDL16 #249, DS12; DS54/64 #498, SwiB/S2)
+19:08:28.875: [Rx - B2 46 5F 54]  Sensor LS3981 () is Hi.  (BDL16 #249, DS13; DS54/64 #498, AuxC/A3)
+19:08:28.890: [Rx - B2 46 7F 74]  Sensor LS3982 () is Hi.  (BDL16 #249, DS14; DS54/64 #498, SwiC/S3)
+19:08:28.901: [Rx - B2 47 5F 55]  Sensor LS3983 () is Hi.  (BDL16 #249, DS15; DS54/64 #498, AuxD/A4)
+19:08:28.918: [Rx - B2 47 7F 75]  Sensor LS3984 () is Hi.  (BDL16 #249, DS16; DS54/64 #498, SwiD/S4)
+19:08:29.253: [Rx - B0 79 07 31]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 0/0/1; addresses...
+	9-16, 73-80, 137-144, 201-208, 265-272, 329-336, 393-400, 457-464,
+	521-528, 585-592, 649-656, 713-720, 777-784, 841-848, 905-912, 969-976,
+	1033-1040, 1097-1104, 1161-1168, 1225-1232, 1289-1296, 1353-1360, 1417-1424, 1481-1488,
+	1545-1552, 1609-1616, 1673-1680, 1737-1744, 1801-1808, 1865-1872, 1929-1936, 1993-2000
+19:08:30.299: [Rx - B0 7A 07 32]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 0/1/0; addresses...
+	17-24, 81-88, 145-152, 209-216, 273-280, 337-344, 401-408, 465-472,
+	529-536, 593-600, 657-664, 721-728, 785-792, 849-856, 913-920, 977-984,
+	1041-1048, 1105-1112, 1169-1176, 1233-1240, 1297-1304, 1361-1368, 1425-1432, 1489-1496,
+	1553-1560, 1617-1624, 1681-1688, 1745-1752, 1809-1816, 1873-1880, 1937-1944, 2001-2008
+19:08:30.541: [Rx - B2 50 59 44]  Sensor LS2465 () is Hi.  (BDL16 #155, DS1; DS54/64 #309, AuxA/A1)
+19:08:30.552: [Rx - B2 10 5D 00]  Sensor LS3361 () is Hi.  (BDL16 #211, DS1; DS54/64 #421, AuxA/A1)
+19:08:30.553: [Rx - B2 10 56 0B]  Sensor LS1569 () is Hi.  (BDL16 #99, DS1; DS54/64 #197, AuxA/A1)
+19:08:30.560: [Rx - B2 50 52 4F]  Sensor LS673 () is Hi.  (BDL16 #43, DS1; DS54/64 #85, AuxA/A1)
+19:08:30.568: [Rx - B2 50 72 6F]  Sensor LS674 () is Hi.  (BDL16 #43, DS2; DS54/64 #85, SwiA/S1)
+19:08:30.576: [Rx - B2 50 79 64]  Sensor LS2466 () is Hi.  (BDL16 #155, DS2; DS54/64 #309, SwiA/S1)
+19:08:30.580: [Rx - B2 10 7D 20]  Sensor LS3362 () is Hi.  (BDL16 #211, DS2; DS54/64 #421, SwiA/S1)
+19:08:30.588: [Rx - B2 51 59 45]  Sensor LS2467 () is Hi.  (BDL16 #155, DS3; DS54/64 #309, AuxB/A2)
+19:08:30.589: [Rx - B2 10 76 2B]  Sensor LS1570 () is Hi.  (BDL16 #99, DS2; DS54/64 #197, SwiA/S1)
+19:08:30.597: [Rx - B2 51 79 65]  Sensor LS2468 () is Hi.  (BDL16 #155, DS4; DS54/64 #309, SwiB/S2)
+19:08:30.600: [Rx - B2 51 52 4E]  Sensor LS675 () is Hi.  (BDL16 #43, DS3; DS54/64 #85, AuxB/A2)
+19:08:30.608: [Rx - B2 11 56 0A]  Sensor LS1571 () is Hi.  (BDL16 #99, DS3; DS54/64 #197, AuxB/A2)
+19:08:30.610: [Rx - B2 51 72 6E]  Sensor LS676 () is Hi.  (BDL16 #43, DS4; DS54/64 #85, SwiB/S2)
+19:08:30.618: [Rx - B2 52 59 46]  Sensor LS2469 () is Hi.  (BDL16 #155, DS5; DS54/64 #309, AuxC/A3)
+19:08:30.620: [Rx - B2 11 5D 01]  Sensor LS3363 () is Hi.  (BDL16 #211, DS3; DS54/64 #421, AuxB/A2)
+19:08:30.627: [Rx - B2 52 52 4D]  Sensor LS677 () is Hi.  (BDL16 #43, DS5; DS54/64 #85, AuxC/A3)
+19:08:30.640: [Rx - B2 11 7D 21]  Sensor LS3364 () is Hi.  (BDL16 #211, DS4; DS54/64 #421, SwiB/S2)
+19:08:30.640: [Rx - B2 52 79 66]  Sensor LS2470 () is Hi.  (BDL16 #155, DS6; DS54/64 #309, SwiC/S3)
+19:08:30.645: [Rx - B2 11 76 2A]  Sensor LS1572 () is Hi.  (BDL16 #99, DS4; DS54/64 #197, SwiB/S2)
+19:08:30.649: [Rx - B2 52 72 6D]  Sensor LS678 () is Hi.  (BDL16 #43, DS6; DS54/64 #85, SwiC/S3)
+19:08:30.669: [Rx - B2 53 52 4C]  Sensor LS679 () is Hi.  (BDL16 #43, DS7; DS54/64 #85, AuxD/A4)
+19:08:30.670: [Rx - B2 12 56 09]  Sensor LS1573 () is Hi.  (BDL16 #99, DS5; DS54/64 #197, AuxC/A3)
+19:08:30.677: [Rx - B2 53 72 6C]  Sensor LS680 () is Hi.  (BDL16 #43, DS8; DS54/64 #85, SwiD/S4)
+19:08:30.692: [Rx - B2 12 76 29]  Sensor LS1574 () is Hi.  (BDL16 #99, DS6; DS54/64 #197, SwiC/S3)
+19:08:30.706: [Rx - B2 13 56 08]  Sensor LS1575 () is Hi.  (BDL16 #99, DS7; DS54/64 #197, AuxD/A4)
+19:08:30.713: [Rx - B2 53 59 47]  Sensor LS2471 () is Hi.  (BDL16 #155, DS7; DS54/64 #309, AuxD/A4)
+19:08:30.714: [Rx - B2 54 52 4B]  Sensor LS681 () is Hi.  (BDL16 #43, DS9; DS54/64 #86, AuxA/A1)
+19:08:30.715: [Rx - B2 13 76 28]  Sensor LS1576 () is Hi.  (BDL16 #99, DS8; DS54/64 #197, SwiD/S4)
+19:08:30.723: [Rx - B2 54 72 6B]  Sensor LS682 () is Hi.  (BDL16 #43, DS10; DS54/64 #86, SwiA/S1)
+19:08:30.728: [Rx - B2 53 79 67]  Sensor LS2472 () is Hi.  (BDL16 #155, DS8; DS54/64 #309, SwiD/S4)
+19:08:30.740: [Rx - B2 54 59 40]  Sensor LS2473 () is Hi.  (BDL16 #155, DS9; DS54/64 #310, AuxA/A1)
+19:08:30.740: [Rx - B2 55 52 4A]  Sensor LS683 () is Hi.  (BDL16 #43, DS11; DS54/64 #86, AuxB/A2)
+19:08:30.750: [Rx - B2 54 79 60]  Sensor LS2474 () is Hi.  (BDL16 #155, DS10; DS54/64 #310, SwiA/S1)
+19:08:30.765: [Rx - B2 14 56 0F]  Sensor LS1577 () is Hi.  (BDL16 #99, DS9; DS54/64 #198, AuxA/A1)
+19:08:30.766: [Rx - B2 55 72 6A]  Sensor LS684 () is Hi.  (BDL16 #43, DS12; DS54/64 #86, SwiB/S2)
+19:08:30.767: [Rx - B2 14 76 2F]  Sensor LS1578 () is Hi.  (BDL16 #99, DS10; DS54/64 #198, SwiA/S1)
+19:08:30.778: [Rx - B2 12 5D 02]  Sensor LS3365 () is Hi.  (BDL16 #211, DS5; DS54/64 #421, AuxC/A3)
+19:08:30.780: [Rx - B2 15 56 0E]  Sensor LS1579 () is Hi.  (BDL16 #99, DS11; DS54/64 #198, AuxB/A2)
+19:08:30.781: [Rx - B2 12 7D 22]  Sensor LS3366 () is Hi.  (BDL16 #211, DS6; DS54/64 #421, SwiC/S3)
+19:08:30.786: [Rx - B2 55 59 41]  Sensor LS2475 () is Hi.  (BDL16 #155, DS11; DS54/64 #310, AuxB/A2)
+19:08:30.795: [Rx - B2 15 76 2E]  Sensor LS1580 () is Hi.  (BDL16 #99, DS12; DS54/64 #198, SwiB/S2)
+19:08:30.797: [Rx - B2 55 79 61]  Sensor LS2476 () is Hi.  (BDL16 #155, DS12; DS54/64 #310, SwiB/S2)
+19:08:30.806: [Rx - B2 56 52 49]  Sensor LS685 () is Hi.  (BDL16 #43, DS13; DS54/64 #86, AuxC/A3)
+19:08:30.807: [Rx - B2 16 56 0D]  Sensor LS1581 () is Hi.  (BDL16 #99, DS13; DS54/64 #198, AuxC/A3)
+19:08:30.814: [Rx - B2 56 72 69]  Sensor LS686 () is Hi.  (BDL16 #43, DS14; DS54/64 #86, SwiC/S3)
+19:08:30.820: [Rx - B2 13 5D 03]  Sensor LS3367 () is Hi.  (BDL16 #211, DS7; DS54/64 #421, AuxD/A4)
+19:08:30.829: [Rx - B2 56 59 42]  Sensor LS2477 () is Hi.  (BDL16 #155, DS13; DS54/64 #310, AuxC/A3)
+19:08:30.830: [Rx - B2 16 76 2D]  Sensor LS1582 () is Hi.  (BDL16 #99, DS14; DS54/64 #198, SwiC/S3)
+19:08:30.838: [Rx - B2 56 79 62]  Sensor LS2478 () is Hi.  (BDL16 #155, DS14; DS54/64 #310, SwiC/S3)
+19:08:30.839: [Rx - B2 13 7D 23]  Sensor LS3368 () is Hi.  (BDL16 #211, DS8; DS54/64 #421, SwiD/S4)
+19:08:30.844: [Rx - B2 17 56 0C]  Sensor LS1583 () is Hi.  (BDL16 #99, DS15; DS54/64 #198, AuxD/A4)
+19:08:30.847: [Rx - B2 14 5D 04]  Sensor LS3369 () is Hi.  (BDL16 #211, DS9; DS54/64 #422, AuxA/A1)
+19:08:30.866: [Rx - B2 14 7D 24]  Sensor LS3370 () is Hi.  (BDL16 #211, DS10; DS54/64 #422, SwiA/S1)
+19:08:30.877: [Rx - B2 57 59 43]  Sensor LS2479 () is Hi.  (BDL16 #155, DS15; DS54/64 #310, AuxD/A4)
+19:08:30.878: [Rx - B2 57 52 48]  Sensor LS687 () is Hi.  (BDL16 #43, DS15; DS54/64 #86, AuxD/A4)
+19:08:30.889: [Rx - B2 57 79 63]  Sensor LS2480 () is Hi.  (BDL16 #155, DS16; DS54/64 #310, SwiD/S4)
+19:08:30.890: [Rx - B2 57 72 68]  Sensor LS688 () is Hi.  (BDL16 #43, DS16; DS54/64 #86, SwiD/S4)
+19:08:30.898: [Rx - B2 17 76 2C]  Sensor LS1584 () is Hi.  (BDL16 #99, DS16; DS54/64 #198, SwiD/S4)
+19:08:30.898: [Rx - B2 15 5D 05]  Sensor LS3371 () is Hi.  (BDL16 #211, DS11; DS54/64 #422, AuxB/A2)
+19:08:30.908: [Rx - B2 15 7D 25]  Sensor LS3372 () is Hi.  (BDL16 #211, DS12; DS54/64 #422, SwiB/S2)
+19:08:30.919: [Rx - B2 16 5D 06]  Sensor LS3373 () is Hi.  (BDL16 #211, DS13; DS54/64 #422, AuxC/A3)
+19:08:30.929: [Rx - B2 16 7D 26]  Sensor LS3374 () is Hi.  (BDL16 #211, DS14; DS54/64 #422, SwiC/S3)
+19:08:30.949: [Rx - B2 17 5D 07]  Sensor LS3375 () is Hi.  (BDL16 #211, DS15; DS54/64 #422, AuxD/A4)
+19:08:30.961: [Rx - B2 17 7D 27]  Sensor LS3376 () is Hi.  (BDL16 #211, DS16; DS54/64 #422, SwiD/S4)
+19:08:31.344: [Rx - B0 7B 07 33]  Interrogate LocoNet Turnouts/Sensors with bits a/c/b of 0/1/1; addresses...
+	25-32, 89-96, 153-160, 217-224, 281-288, 345-352, 409-416, 473-480,
+	537-544, 601-608, 665-672, 729-736, 793-800, 857-864, 921-928, 985-992,
+	1049-1056, 1113-1120, 1177-1184, 1241-1248, 1305-1312, 1369-1376, 1433-1440, 1497-1504,
+	1561-1568, 1625-1632, 1689-1696, 1753-1760, 1817-1824, 1881-1888, 1945-1952, 2009-2016
+19:08:31.593: [Rx - B2 58 52 47]  Sensor LS689 () is Hi.  (BDL16 #44, DS1; DS54/64 #87, AuxA/A1)
+19:08:31.600: [Rx - B2 58 59 4C]  Sensor LS2481 () is Hi.  (BDL16 #156, DS1; DS54/64 #311, AuxA/A1)
+19:08:31.609: [Rx - B2 18 5D 08]  Sensor LS3377 () is Hi.  (BDL16 #212, DS1; DS54/64 #423, AuxA/A1)
+19:08:31.610: [Rx - B2 58 79 6C]  Sensor LS2482 () is Hi.  (BDL16 #156, DS2; DS54/64 #311, SwiA/S1)
+19:08:31.615: [Rx - B2 58 72 67]  Sensor LS690 () is Hi.  (BDL16 #44, DS2; DS54/64 #87, SwiA/S1)
+19:08:31.620: [Rx - B2 59 59 4D]  Sensor LS2483 () is Hi.  (BDL16 #156, DS3; DS54/64 #311, AuxB/A2)
+19:08:31.629: [Rx - B2 18 7D 28]  Sensor LS3378 () is Hi.  (BDL16 #212, DS2; DS54/64 #423, SwiA/S1)
+19:08:31.630: [Rx - B2 59 52 46]  Sensor LS691 () is Hi.  (BDL16 #44, DS3; DS54/64 #87, AuxB/A2)
+19:08:31.642: [Rx - B2 59 72 66]  Sensor LS692 () is Hi.  (BDL16 #44, DS4; DS54/64 #87, SwiB/S2)
+19:08:31.647: [Rx - B2 59 79 6D]  Sensor LS2484 () is Hi.  (BDL16 #156, DS4; DS54/64 #311, SwiB/S2)
+19:08:31.653: [Rx - B2 5A 52 45]  Sensor LS693 () is Hi.  (BDL16 #44, DS5; DS54/64 #87, AuxC/A3)
+19:08:31.659: [Rx - B2 19 5D 09]  Sensor LS3379 () is Hi.  (BDL16 #212, DS3; DS54/64 #423, AuxB/A2)
+19:08:31.664: [Rx - B2 5A 59 4E]  Sensor LS2485 () is Hi.  (BDL16 #156, DS5; DS54/64 #311, AuxC/A3)
+19:08:31.686: [Rx - B2 5A 72 65]  Sensor LS694 () is Hi.  (BDL16 #44, DS6; DS54/64 #87, SwiC/S3)
+19:08:31.687: [Rx - B2 19 7D 29]  Sensor LS3380 () is Hi.  (BDL16 #212, DS4; DS54/64 #423, SwiB/S2)
+19:08:31.688: [Rx - B2 5A 79 6E]  Sensor LS2486 () is Hi.  (BDL16 #156, DS6; DS54/64 #311, SwiC/S3)
+19:08:31.689: [Rx - B2 1A 5D 0A]  Sensor LS3381 () is Hi.  (BDL16 #212, DS5; DS54/64 #423, AuxC/A3)
+19:08:31.691: [Rx - B2 5B 52 44]  Sensor LS695 () is Hi.  (BDL16 #44, DS7; DS54/64 #87, AuxD/A4)
+19:08:31.696: [Rx - B2 5B 59 4F]  Sensor LS2487 () is Hi.  (BDL16 #156, DS7; DS54/64 #311, AuxD/A4)
+19:08:31.700: [Rx - B2 1A 7D 2A]  Sensor LS3382 () is Hi.  (BDL16 #212, DS6; DS54/64 #423, SwiC/S3)
+19:08:31.714: [Rx - B2 5B 79 6F]  Sensor LS2488 () is Hi.  (BDL16 #156, DS8; DS54/64 #311, SwiD/S4)
+19:08:31.721: [Rx - A0 02 00 5D]  Set speed of loco in slot 2 to 0.
+19:08:31.722: [Rx - B2 1B 5D 0B]  Sensor LS3383 () is Hi.  (BDL16 #212, DS7; DS54/64 #423, AuxD/A4)
+19:08:31.724: [Rx - B2 5C 59 48]  Sensor LS2489 () is Hi.  (BDL16 #156, DS9; DS54/64 #312, AuxA/A1)
+19:08:31.726: [Rx - B2 5B 72 64]  Sensor LS696 () is Hi.  (BDL16 #44, DS8; DS54/64 #87, SwiD/S4)
+19:08:31.735: [Rx - B2 1B 7D 2B]  Sensor LS3384 () is Hi.  (BDL16 #212, DS8; DS54/64 #423, SwiD/S4)
+19:08:31.737: [Rx - B2 5C 79 68]  Sensor LS2490 () is Hi.  (BDL16 #156, DS10; DS54/64 #312, SwiA/S1)
+19:08:31.746: [Rx - B2 1C 5D 0C]  Sensor LS3385 () is Hi.  (BDL16 #212, DS9; DS54/64 #424, AuxA/A1)
+19:08:31.757: [Rx - B2 5D 59 49]  Sensor LS2491 () is Hi.  (BDL16 #156, DS11; DS54/64 #312, AuxB/A2)
+19:08:31.757: [Rx - B2 5C 52 43]  Sensor LS697 () is Hi.  (BDL16 #44, DS9; DS54/64 #88, AuxA/A1)
+19:08:31.760: [Rx - B2 1C 7D 2C]  Sensor LS3386 () is Hi.  (BDL16 #212, DS10; DS54/64 #424, SwiA/S1)
+19:08:31.769: [Rx - B2 5D 79 69]  Sensor LS2492 () is Hi.  (BDL16 #156, DS12; DS54/64 #312, SwiB/S2)
+19:08:31.777: [Rx - B2 5C 72 63]  Sensor LS698 () is Hi.  (BDL16 #44, DS10; DS54/64 #88, SwiA/S1)
+19:08:31.779: [Rx - B2 1D 5D 0D]  Sensor LS3387 () is Hi.  (BDL16 #212, DS11; DS54/64 #424, AuxB/A2)
+19:08:31.788: [Rx - B2 5E 59 4A]  Sensor LS2493 () is Hi.  (BDL16 #156, DS13; DS54/64 #312, AuxC/A3)
+19:08:31.792: [Rx - B2 5D 52 42]  Sensor LS699 () is Hi.  (BDL16 #44, DS11; DS54/64 #88, AuxB/A2)
+19:08:31.800: [Rx - B2 1D 7D 2D]  Sensor LS3388 () is Hi.  (BDL16 #212, DS12; DS54/64 #424, SwiB/S2)
+19:08:31.804: [Rx - B2 5D 72 62]  Sensor LS700 () is Hi.  (BDL16 #44, DS12; DS54/64 #88, SwiB/S2)
+19:08:31.808: [Rx - B2 5E 79 6A]  Sensor LS2494 () is Hi.  (BDL16 #156, DS14; DS54/64 #312, SwiC/S3)
+19:08:31.811: [Rx - B2 1E 5D 0E]  Sensor LS3389 () is Hi.  (BDL16 #212, DS13; DS54/64 #424, AuxC/A3)
+19:08:31.816: [Rx - B2 5E 52 41]  Sensor LS701 () is Hi.  (BDL16 #44, DS13; DS54/64 #88, AuxC/A3)
+19:08:31.821: [Rx - B2 5F 59 4B]  Sensor LS2495 () is Hi.  (BDL16 #156, DS15; DS54/64 #312, AuxD/A4)
+19:08:31.836: [Rx - B2 1E 7D 2E]  Sensor LS3390 () is Hi.  (BDL16 #212, DS14; DS54/64 #424, SwiC/S3)
+19:08:31.837: [Rx - B2 5E 72 61]  Sensor LS702 () is Hi.  (BDL16 #44, DS14; DS54/64 #88, SwiC/S3)
+19:08:31.838: [Rx - B2 5F 79 6B]  Sensor LS2496 () is Hi.  (BDL16 #156, DS16; DS54/64 #312, SwiD/S4)
+19:08:31.841: [Rx - B2 1F 5D 0F]  Sensor LS3391 () is Hi.  (BDL16 #212, DS15; DS54/64 #424, AuxD/A4)
+19:08:31.846: [Rx - B2 5F 52 40]  Sensor LS703 () is Hi.  (BDL16 #44, DS15; DS54/64 #88, AuxD/A4)
+19:08:31.856: [Rx - B2 1F 7D 2F]  Sensor LS3392 () is Hi.  (BDL16 #212, DS16; DS54/64 #424, SwiD/S4)
+19:08:31.862: [Rx - B2 5F 72 60]  Sensor LS704 () is Hi.  (BDL16 #44, DS16; DS54/64 #88, SwiD/S4)
+19:08:31.900: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:34.514: [Rx - A0 01 06 58]  Set speed of loco in slot 1 to 6.
+19:08:42.877: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
+19:08:46.471: [Rx - A0 01 03 5D]  Set speed of loco in slot 1 to 3.
+19:08:46.667: [Rx - A0 01 00 5E]  Set speed of loco in slot 1 to 0.
+19:08:59.603: [Rx - A0 01 00 5E]  Set speed of loco in slot 1 to 0.
+19:09:07.967: [Rx - A0 02 03 5E]  Set speed of loco in slot 2 to 3.
