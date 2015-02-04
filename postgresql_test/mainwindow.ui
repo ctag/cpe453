@@ -22,6 +22,9 @@
      <layout class="QFormLayout" name="formLayout_2">
       <item row="0" column="0">
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
           <item>
@@ -34,7 +37,7 @@
           <item alignment="Qt::AlignLeft">
            <widget class="QLineEdit" name="lineEdit_hostname">
             <property name="text">
-             <string>berocs.com</string>
+             <string>chargertrains.club</string>
             </property>
            </widget>
           </item>
