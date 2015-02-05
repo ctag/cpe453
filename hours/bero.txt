@@ -2,8 +2,9 @@
 # Sprint 2
 3-2-2015 3hr
 	Migrating server to chargertrains.club
-4-2-2015 3hr
+4-2-2015 6hr
 	Class and design session for locoPacket
+	2200-2400 Building locoHex class
 
 # Sprint 1
 12-1-2015 1hr

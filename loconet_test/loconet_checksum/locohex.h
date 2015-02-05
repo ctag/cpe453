@@ -1,5 +1,5 @@
-#ifndef LOCOPACKET_H
-#define LOCOPACKET_H
+#ifndef LOCOHEX_H
+#define LOCOHEX_H
 
 #include <QString>
 
@@ -10,20 +10,31 @@
  */
 
 namespace std {
-class LocoPacket;
+class LocoHex;
 }
 
-class LocoPacket
+class LocoHex
 {
 public:
-    LocoPacket();
-    ~LocoPacket();
+    LocoHex();
+    LocoHex(QString _hex);
+    ~LocoHex();
 
 private:
-    bool H1[8];
-    bool H2[8];
+    bool nyble_1[8];
+    bool nyble_2[8];
     QString hex;
-    void genBinary();
+    QString binary;
+    bool isOP;
+    bool numArgs;
+
+    void hexToBits();
+    void binaryToBits();
+    void bitsToHex();
+    void bitsToBinary();
+    QString getBinary();
+    QString getHex();
+
 };
 
-#endif // LOCOPACKET_H
+#endif // LOCOHEX_H

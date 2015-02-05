@@ -1,12 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "locopacket.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    LocoHex locoHex("AB");
+
+    ui->textBrowser_console->append(usbPorts.availablePorts().first().portName().toLatin1());
+    ui->textBrowser_console->append(usbPorts.description());
 
     ui->lineEdit_opcode->setInputMask("HH");
     ui->lineEdit_arg1->setInputMask("hh");
@@ -27,7 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboBox_opcodes->insertItem(2, "Global IDLE");
     ui->comboBox_opcodes->insertItem(3, "Master Busy");
 
-    ui->textBrowser_output->append("Program loaded! :3");
+    ui->textBrowser_console->append("Program loaded! :3");
 }
 
 void MainWindow::loadOPCode(int index)
@@ -47,7 +51,7 @@ void MainWindow::loadOPCode(int index)
             ui->lineEdit_opcode->setText("81"); /* MASTER busy */
         break;
         default:
-            ui->textBrowser_output->append("Whoops, error loading the OP code (-_-)");
+            ui->textBrowser_console->append("Whoops, error loading the OP code (-_-)");
             ui->lineEdit_opcode->setText("00"); /* General Error */
         break;
     }
@@ -56,7 +60,7 @@ void MainWindow::loadOPCode(int index)
 QBitArray MainWindow::genBitArray(QByteArray bytes)
 {
     QBitArray bits(bytes.count()*8);
-    //ui->textBrowser_output->append("Array bytes: " + bytes.count());
+    //ui->textBrowser_console->append("Array bytes: " + bytes.count());
     for (int i = 0; i < bytes.count(); i++)
     {
         for (int b = 0; b < 8; b++)
@@ -66,7 +70,7 @@ QBitArray MainWindow::genBitArray(QByteArray bytes)
     }
     QString textOutput = "BitArray Generated (^_^) ";
     textOutput.append(bytes.toHex());
-    ui->textBrowser_output->append(textOutput);
+    ui->textBrowser_console->append(textOutput);
     return(bits);
 }
 
@@ -74,7 +78,7 @@ QBitArray MainWindow::doXor(QBitArray ar1, QBitArray ar2)
 {
     if (ar1.size() != ar2.size())
     {
-        ui->textBrowser_output->append("bitarray size doesn't match, exiting doXor.");
+        ui->textBrowser_console->append("bitarray size doesn't match, exiting doXor.");
         QBitArray youlose(0);
         return youlose;
     }
@@ -83,7 +87,7 @@ QBitArray MainWindow::doXor(QBitArray ar1, QBitArray ar2)
     {
             result.setBit(i, ar1[i]^ar2[i]);
     }
-    ui->textBrowser_output->append("BitArray XOR'ed x) ");
+    ui->textBrowser_console->append("BitArray XOR'ed x) ");
     return result;
 }
 
@@ -105,10 +109,10 @@ void MainWindow::genChecksum()
 
     if (ui->lineEdit_opcode->hasAcceptableInput())
     {
-        ui->textBrowser_output->append("opcode is valid :D");
+        ui->textBrowser_console->append("opcode is valid :D");
         packet_len++;
     } else {
-        ui->textBrowser_output->append("opcode is not valid :C");
+        ui->textBrowser_console->append("opcode is not valid :C");
         return;
     }
 
@@ -174,7 +178,7 @@ void MainWindow::genChecksum()
     }
     finalPacket.append(checksum_bytes.toHex());
 
-    ui->textBrowser_output->append(finalPacket);
+    ui->textBrowser_console->append(finalPacket);
 
 }
 

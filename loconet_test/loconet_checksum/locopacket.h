@@ -10,10 +10,6 @@
  *
  * locohex: holds one byte of hex
  * locopacket: holds representation of one loconet packet
- *
- * locousb: ?
- * locowireless: ?
- * locoSQL: ?
  */
 
 namespace std {
@@ -27,10 +23,7 @@ public:
     ~LocoPacket();
 
 private:
-    bool H1[8];
-    bool H2[8];
-    QString hex;
-    void genBinary();
+
 };
 
 #endif // LOCOPACKET_H

@@ -4,11 +4,13 @@
 #include <QMainWindow>
 #include <QtNetwork>
 #include <QSerialPort>
+#include <QSerialPortInfo>
 #include <QDebug>
 #include <QByteArray>
 #include <QVariant>
 #include <QComboBox>
 #include "locopacket.h"
+#include "locohex.h"
 
 namespace Ui {
 class MainWindow;
@@ -33,6 +35,9 @@ private:
     QBitArray genBitArray(QByteArray bytes);
     QBitArray doXor(QBitArray ar1, QBitArray ar2);
     LocoPacket _locopacket;
+    LocoHex locoHex;
+    QSerialPort usbBuffer;
+    QSerialPortInfo usbPorts;
 };
 
 #endif // MAINWINDOW_H
