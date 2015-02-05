@@ -8,6 +8,7 @@
 #include <QByteArray>
 #include <QVariant>
 #include <QComboBox>
+#include "locopacket.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,6 +32,7 @@ private:
     //void genBitArray(QByteArray bytes, QBitArray* bits);
     QBitArray genBitArray(QByteArray bytes);
     QBitArray doXor(QBitArray ar1, QBitArray ar2);
+    LocoPacket _locopacket;
 };
 
 #endif // MAINWINDOW_H

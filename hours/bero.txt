@@ -1,4 +1,10 @@
 
+# Sprint 2
+3-2-2015 3hr
+	Migrating server to chargertrains.club
+4-2-2015 3hr
+	Class and design session for locoPacket
+
 # Sprint 1
 12-1-2015 1hr
 25-1-2015 3hr
@@ -14,5 +20,7 @@
 	2000-2400 - Working on SQL ICD
 31-1-2015 6hr
 	1200-1800 - Working on loconet usb buffer
+
+
 
 
