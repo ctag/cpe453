@@ -7,7 +7,7 @@
  * By: Christopher Bero [csb0019@uah.edu]
  */
 
-static bool debug = false;
+static bool debug = true;
 
 LocoPacket::LocoPacket()
 {
@@ -31,7 +31,11 @@ LocoPacket::LocoPacket(QString _hex)
     for (int _packet = 0; _packet < packet_length; ++_packet)
     {
         locohex_array[_packet].defineByHex(_hex.mid((_packet * 2),2));
+        qDebug() << "New packet: " << locohex_array[_packet].getHex() << " " << locohex_array[_packet].getBinary();
     }
+
+    //qDebug() << "Test: " << doXor(locohex_array[0], locohex_array[1]).getBinary();
+    qDebug() << "Test: " << validPacket();
 }
 
 LocoPacket::~LocoPacket()
@@ -42,13 +46,13 @@ LocoPacket::~LocoPacket()
 bool LocoPacket::validPacket()
 {
     LocoHex _hexHolder;
-    _hexHolder.defineByHex("00");
     for (int _hexIndex = 0; _hexIndex < packet_length; ++_hexIndex)
     {
+        if (debug) qDebug() << "hexIndex: " << _hexIndex;
         if (debug) qDebug() << "validPacket: working: " << locohex_array[_hexIndex].getHex() << " : " << locohex_array[_hexIndex].getBinary() << " and: " << _hexHolder.getHex() << " : " << _hexHolder.getBinary();
-        _hexHolder = doXor(_hexHolder, locohex_array[_hexIndex]);
+        LocoHex tmp = _hexHolder;
+        _hexHolder.defineByHex(doXor(tmp, locohex_array[_hexIndex]));
     }
-    if (debug) qDebug() << "Xor result: " << _hexHolder.getHex();
     if (_hexHolder.getHex() == "FF")
     {
         return(true);
@@ -56,15 +60,15 @@ bool LocoPacket::validPacket()
     return(false);
 }
 
-LocoHex LocoPacket::doXor(LocoHex _byte1, LocoHex _byte2)
+QString LocoPacket::doXor(LocoHex _byte1, LocoHex _byte2)
 {
     if (debug) qDebug() << "doXor() ";
-    LocoHex _result = LocoHex();
+    LocoHex _result;
     for (short unsigned int _bit = 0; _bit < 8; ++_bit)
     {
-        if (debug) qDebug() << "doxor: " << _byte1.getBit(_bit) << " : " << _byte2.getBit(_bit);
-        if (_byte1.getBit(_bit) == 0 && _byte2.getBit(_bit) == 1)
-        {
+        if (debug) qDebug() << "doxor: " << _bit << " - " << _byte1.getBit(_bit) << " : " << _byte2.getBit(_bit);
+
+        if (_byte1.getBit(_bit) == 0 && _byte2.getBit(_bit) == 1) {
             _result.setBit(_bit, 1);
         } else if (_byte1.getBit(_bit) == 1 && _byte2.getBit(_bit) == 0) {
             _result.setBit(_bit, 1);
@@ -75,7 +79,7 @@ LocoHex LocoPacket::doXor(LocoHex _byte1, LocoHex _byte2)
         }
     }
     if (debug) qDebug() << "end doXor: hex: " << _result.getHex();
-    return (_result);
+    return (_result.getHex());
 }
 
 void LocoPacket::genChecksum()

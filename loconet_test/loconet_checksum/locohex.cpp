@@ -42,7 +42,7 @@ LocoHex::LocoHex()
 
 LocoHex::~LocoHex()
 {
-    delete [] byte;
+    // Let QT take care of it, but learning how to dealloc the pointers is a good idea
 }
 
 void LocoHex::defineByHex (QString _hex)

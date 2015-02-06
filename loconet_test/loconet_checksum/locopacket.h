@@ -27,7 +27,7 @@ public:
     bool validPacket();
     void genChecksum();
     void stringToArray();
-    LocoHex doXor(LocoHex _byte1, LocoHex _byte2);
+    QString doXor(LocoHex _byte1, LocoHex _byte2);
 
 protected:
 
