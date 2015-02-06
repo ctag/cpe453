@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    LocoHex locoHex("AB");
+    locopacket = new LocoPacket("01FE");
 
     ui->textBrowser_console->append(usbPorts.availablePorts().first().portName().toLatin1());
     ui->textBrowser_console->append(usbPorts.description());

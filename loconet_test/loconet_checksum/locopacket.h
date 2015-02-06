@@ -2,6 +2,8 @@
 #define LOCOPACKET_H
 
 #include <QString>
+#include <QDebug>
+#include "locohex.h"
 
 /*
  * TODO:
@@ -20,9 +22,23 @@ class LocoPacket
 {
 public:
     LocoPacket();
+    LocoPacket(QString _hex);
     ~LocoPacket();
+    bool validPacket();
+    void genChecksum();
+    void stringToArray();
+    LocoHex doXor(LocoHex _byte1, LocoHex _byte2);
+
+protected:
 
 private:
+    QString packet_text_hex;
+    QString packet_text_binary;
+    QString packet_text_desc;
+    LocoHex * locohex_array;
+    int numArgs;
+    short unsigned int packet_length;
+
 
 };
 
