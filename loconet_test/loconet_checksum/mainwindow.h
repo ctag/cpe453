@@ -24,15 +24,12 @@ public:
     ~MainWindow();
 
 protected slots:
-    void genChecksum();
-    void loadOPCode(int index);
+    void enableArgs();
+    void genPacket();
 
 private:
     Ui::MainWindow *ui;
-    QSerialPort *loconet;
-    //void genBitArray(QByteArray bytes, QBitArray* bits);
-    QBitArray genBitArray(QByteArray bytes);
-    QBitArray doXor(QBitArray ar1, QBitArray ar2);
+    QSerialPort * loconet;
     LocoPacket * locopacket;
     QSerialPort usbBuffer;
     QSerialPortInfo usbPorts;

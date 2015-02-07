@@ -24,20 +24,25 @@ public:
     LocoPacket();
     LocoPacket(QString _hex);
     ~LocoPacket();
-    bool validPacket();
+    bool validChecksum();
+    bool validOPcode();
     void genChecksum();
-    void stringToArray();
-    QString doXor(LocoHex _byte1, LocoHex _byte2);
+    QString getPacket();
+    int numArgs();
 
 protected:
+    QString doXor(LocoHex _byte1, LocoHex _byte2);
 
 private:
     QString packet_text_hex;
     QString packet_text_binary;
     QString packet_text_desc;
     LocoHex * locohex_array;
-    int numArgs;
     short unsigned int packet_length;
+    static bool debug;
+    static LocoHex opcodes_hex[];
+    static QString opcodes_name[];
+    static int opcodes_args[];
 
 
 };

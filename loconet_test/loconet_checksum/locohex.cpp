@@ -9,12 +9,28 @@
  * By: Christopher Bero [csb0019@uah.edu]
  */
 
-static bool debug = false;
+bool LocoHex::debug = false;
 
 /*
  * Don't use this
  */
 LocoHex::LocoHex()
+{
+    createEmpty();
+}
+
+LocoHex::LocoHex(QString _hex)
+{
+    createEmpty();
+    defineByHex(_hex);
+}
+
+LocoHex::~LocoHex()
+{
+    // Let QT take care of it, but learning how to dealloc the pointers is a good idea
+}
+
+void LocoHex::createEmpty()
 {
     if (debug) qDebug() << "Creating new empty locohex object";
     byte = new bool * [2]; // MSByte is 0
@@ -30,19 +46,6 @@ LocoHex::LocoHex()
     binary = "00000000";
     hex = "00";
     isOPcode = false;
-    numArgs = 0;
-}
-
-/* Nyble, nable
- * So much babble
- *
- * Bibble bit
- * This code's a hit
- */
-
-LocoHex::~LocoHex()
-{
-    // Let QT take care of it, but learning how to dealloc the pointers is a good idea
 }
 
 void LocoHex::defineByHex (QString _hex)
@@ -58,13 +61,6 @@ void LocoHex::defineByHex (QString _hex)
     hexToBits(hex.mid(1,1), 1);
 
     bitsToBinary();
-
-    if (isOPcode)
-    {
-        numArgs = 1;
-    } else {
-        numArgs = 0; // FIX THIS
-    }
 
     if (debug) qDebug() << functionName << " end";
 }
@@ -204,12 +200,13 @@ short unsigned int LocoHex::getNumArgs()
 
 void LocoHex::debugBits()
 {
-    if (debug) qDebug() << "Debugging bits.";
+    qDebug() << "Debugging bits.";
     for (int _nyble = 0; _nyble < 2; ++_nyble)
     {
+        qDebug() << "Nyble: " << _nyble;
         for (int _bit = 0; _bit < 4; ++_bit)
         {
-            if (debug) qDebug() << "Nyble: " << _nyble << " bit: " << _bit << " value: " << byte[_nyble][_bit];
+            qDebug() << " bit: " << _bit << " value: " << byte[_nyble][_bit];
         }
     }
 }
@@ -217,11 +214,6 @@ void LocoHex::debugBits()
 void LocoHex::genComplement()
 {
     if (debug) qDebug() << "genComplement byte: " << getHex();
-    if (isOPcode == 1)
-    {
-        if (debug) qDebug() << "LocoHex::genComplement(): Asked me to generate the complement of an OP code :C something's wrong.";
-        return;
-    }
     for (int _nyble = 0; _nyble < 2; ++_nyble)
     {
         for (int _bit = 0; _bit < 4; ++_bit)
@@ -239,7 +231,12 @@ void LocoHex::runDriver()
     qDebug() << "LocoHex:runDriver is not to be used in normal operation!";
 }
 
-
+/* Nyble, nable
+ * So much babble
+ *
+ * Bibble bit
+ * This code's a hit
+ */
 
 
 

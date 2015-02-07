@@ -63,6 +63,9 @@
           </item>
           <item row="2" column="1">
            <widget class="QLineEdit" name="lineEdit_arg1">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>00</string>
             </property>
@@ -80,6 +83,9 @@
           </item>
           <item row="3" column="1">
            <widget class="QLineEdit" name="lineEdit_arg2">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>00</string>
             </property>
@@ -89,9 +95,9 @@
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QPushButton" name="pushButton_genChk">
+           <widget class="QPushButton" name="pushButton_genPacket">
             <property name="text">
-             <string>Create Chksum</string>
+             <string>Create Packet</string>
             </property>
            </widget>
           </item>
