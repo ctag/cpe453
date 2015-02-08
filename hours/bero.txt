@@ -5,6 +5,10 @@
 4-2-2015 6hr
 	Class and design session for locoPacket
 	2200-2400 Building locoHex class
+6-2-2015 5hr
+	1900-2400 Finishing initial redesign of loconet classes
+7-2-2015 6hr
+	1600-2200 Working checksum generator
 
 # Sprint 1
 12-1-2015 1hr

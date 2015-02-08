@@ -8,16 +8,14 @@
  */
 
 bool LocoPacket::debug = false;
-
-LocoHex LocoPacket::opcodes_hex[16] = {LocoHex("85"), LocoHex("83"), LocoHex("82"), LocoHex("BF"), LocoHex("BD"), LocoHex("BC"), LocoHex("BB"), LocoHex("BA"), LocoHex("B9"), LocoHex("B8"), LocoHex("B6"), LocoHex("B5"), LocoHex("B4"), LocoHex("B2"), LocoHex("B1"), LocoHex("B0")};
-QString LocoPacket::opcodes_name[16] = {"Global IDLE", "Global ON", "Global OFF", "OPC_LOCO_ADR", "OPC_SW_ACK", "OPC_SW_STATE", "OPC_RQ_SL_DATA", "OPC_MOVE_SLOTS", "OPC_LINK_SLOTS", "OPC_UNLINK_SLOTS", "OPC_CONSIST_FUNCT", "OPC_SLOT_STAT1", "OPC_LONG_ACK", "OPC_INPUT_REP", "OPC_SQ_REP", "OPC_SW_REQ"};
-int LocoPacket::opcodes_args[16] = {0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
+QVector<LocoHex> LocoPacket::opcodes_hex;
+QVector<QString> LocoPacket::opcodes_name;
+QVector<QString> LocoPacket::opcodes_desc;
+QVector<int> LocoPacket::opcodes_args;
 
 LocoPacket::LocoPacket()
 {
-    QString _hex = "83"; // Global Power On
-    locohex_array = new LocoHex();
-    locohex_array->defineByHex(_hex);
+    locohex_array.clear();
 }
 
 LocoPacket::LocoPacket(QString _hex)
@@ -31,10 +29,39 @@ LocoPacket::LocoPacket(QString _hex)
         return;
     }
     packet_length = (_hex.count() / 2);
-    locohex_array = new LocoHex[packet_length];
+    locohex_array.clear();
     for (int _packet = 0; _packet < packet_length; ++_packet)
     {
-        locohex_array[_packet].defineByHex(_hex.mid((_packet * 2),2));
+        LocoHex _tmp_locohex(_hex.mid((_packet * 2),2));
+        locohex_array.append(_tmp_locohex);
+        qDebug() << "New packet: " << locohex_array[_packet].getHex() << " " << locohex_array[_packet].getBinary();
+    }
+    if (validOPcode())
+    {
+        qDebug() << "Valid OP code x)";
+    }
+    if (validChecksum())
+    {
+        qDebug() << "Valid Checksum x)";
+    }
+}
+
+void LocoPacket::define(QString _hex)
+{
+    _hex = _hex.remove(" ");
+    _hex = _hex.remove(":");
+
+    if ((_hex.count()%2) != 0)
+    {
+        if (debug) qDebug() << "Hex packet is malformed! D:";
+        return;
+    }
+    packet_length = (_hex.count() / 2);
+    locohex_array.clear();
+    for (int _packet = 0; _packet < packet_length; ++_packet)
+    {
+        LocoHex _tmp_locohex(_hex.mid((_packet * 2),2));
+        locohex_array.append(_tmp_locohex);
         qDebug() << "New packet: " << locohex_array[_packet].getHex() << " " << locohex_array[_packet].getBinary();
     }
     if (validOPcode())
@@ -71,14 +98,9 @@ bool LocoPacket::validChecksum()
 
 bool LocoPacket::validOPcode()
 {
-    if (debug) qDebug() << "validOPcode()";
-    short unsigned int _arr_size = (sizeof(opcodes_args)/sizeof(*opcodes_args));
-    QString _hex = locohex_array[0].getHex();
-
-    for (int _index = 0; _index < _arr_size; ++_index)
+    for (int _index = 0; _index < opcodes_hex.size(); ++_index)
     {
-        if (_hex == opcodes_hex[_index].getHex())
-        {
+        if (opcodes_hex[_index].getHex() == locohex_array[0].getHex()) {
             return(true);
         }
     }
@@ -122,15 +144,7 @@ void LocoPacket::genChecksum()
         _checksum.defineByHex(doXor(_checksum, locohex_array[_index]));
     }
     _checksum.genComplement();
-    LocoHex * tmp_array;
-    tmp_array = new LocoHex[(packet_length + 1)];
-    for (int _index = 0; _index < packet_length; ++_index)
-    {
-        tmp_array[_index] = locohex_array[_index];
-    }
-    tmp_array[packet_length].defineByHex(_checksum.getHex());
-    delete [] locohex_array;
-    locohex_array = tmp_array;
+    locohex_array.append(_checksum);
     packet_length++;
 }
 
@@ -146,16 +160,43 @@ QString LocoPacket::getPacket()
 
 int LocoPacket::numArgs()
 {
-    short unsigned int _arr_size = (sizeof(opcodes_args)/sizeof(*opcodes_args));
-    for (int _index = 0; _index < _arr_size; ++_index)
+    for (int _index = 0; _index < opcodes_hex.size(); ++_index)
     {
-        if (locohex_array[0].getHex() == opcodes_hex[_index].getHex())
-        {
+        if (opcodes_hex[_index].getHex() == locohex_array[0].getHex()) {
             return(opcodes_args[_index]);
         }
     }
+    return(0);
 }
 
+void LocoPacket::addOPcode(QString _hex, QString _name, QString _desc, int _numArgs)
+{
+    for (int _index = 0; _index < opcodes_hex.size(); ++_index)
+    {
+        if (opcodes_hex[_index].getHex() == _hex) {
+            return;
+        }
+    }
+    opcodes_hex.append(LocoHex(_hex));
+    opcodes_name.append(_name);
+    opcodes_desc.append(_desc);
+    opcodes_args.append(_numArgs);
+}
+
+int LocoPacket::numOPcode()
+{
+    return(opcodes_hex.size());
+}
+
+QString LocoPacket::getOPcodeName(int _index)
+{
+    return(opcodes_name[_index]);
+}
+
+QString LocoPacket::getOPcodeHex(int _index)
+{
+    return(opcodes_hex[_index].getHex());
+}
 
 
 

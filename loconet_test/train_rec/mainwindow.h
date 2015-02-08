@@ -23,14 +23,20 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    void initOPcodes(LocoPacket);
+    void loadOPcodeComboBox();
+
 protected slots:
     void enableArgs();
     void genPacket();
+    void updateOPcodeFromComboBox();
+    void listSerialPorts();
 
 private:
     Ui::MainWindow *ui;
     QSerialPort * loconet;
-    LocoPacket * locopacket;
+    LocoPacket locopacket;
     QSerialPort usbBuffer;
     QSerialPortInfo usbPorts;
 };
