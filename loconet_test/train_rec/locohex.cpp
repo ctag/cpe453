@@ -12,25 +12,35 @@
 bool LocoHex::debug = false;
 
 /*
- * Don't use this
+ * Default Contructor
  */
 LocoHex::LocoHex()
 {
-    createEmpty();
+    do_createEmpty();
 }
 
+/*
+ * Loaded Contstructor
+ */
 LocoHex::LocoHex(QString _hex)
 {
-    createEmpty();
-    defineByHex(_hex);
+    do_createEmpty();
+    set_allFromHex(_hex);
 }
 
+/*
+ * Default Destructor
+ */
 LocoHex::~LocoHex()
 {
     // Let QT take care of it, but learning how to dealloc the pointers is a good idea
 }
 
-void LocoHex::createEmpty()
+/*
+ * Initialize all member variables.
+ * Do not call except on object creation.
+ */
+void LocoHex::do_createEmpty()
 {
     if (debug) qDebug() << "Creating new empty locohex object";
     byte = new bool * [2]; // MSByte is 0
@@ -48,7 +58,11 @@ void LocoHex::createEmpty()
     isOPcode = false;
 }
 
-void LocoHex::defineByHex (QString _hex)
+/*
+ * defineByHex
+ * Will re-generate an object to match the input string
+ */
+void LocoHex::set_allFromHex (QString _hex)
 {
     QString functionName = "defineByHex()";
     if (debug) qDebug() << functionName;
@@ -57,19 +71,20 @@ void LocoHex::defineByHex (QString _hex)
 
     if (debug) qDebug() << functionName << " nybles: 0-" << hex.mid(0,1) << " 1-" << hex.mid(1,1);
 
-    hexToBits(hex.mid(0,1), 0);
-    hexToBits(hex.mid(1,1), 1);
+    set_bitsFromHex(hex.mid(0,1), 0);
+    set_bitsFromHex(hex.mid(1,1), 1);
 
-    bitsToBinary();
+    set_binaryFromBits();
 
     if (debug) qDebug() << functionName << " end";
 }
 
-/*
+/* hexToBits()
+ *
  * Take an initial hex character as a QString and generate the array of bits it represents
  * Only works with one nyble (4 bits) at a time
  */
-void LocoHex::hexToBits(QString _hex, int _index)
+void LocoHex::set_bitsFromHex(QString _hex, int _index)
 {
     if (debug) qDebug() << "hexToBits()";
     if (_hex == "1" || _hex == "3" || _hex == "5" || _hex == "7" || _hex == "9" || _hex == "B" || _hex == "D" || _hex == "F") {
@@ -103,11 +118,12 @@ void LocoHex::hexToBits(QString _hex, int _index)
     if (debug) qDebug() << "end hexToBits()";
 }
 
-/*
+/* bitsToBinary()
+ *
  * Convert bits in dynamic array to a binary representation in a QString
  * Works with an entire byte (8 bits) at once
  */
-void LocoHex::bitsToBinary()
+void LocoHex::set_binaryFromBits()
 {
     if (debug) qDebug() << "bitsToBinary()";
     binary = "";
@@ -127,9 +143,13 @@ void LocoHex::bitsToBinary()
     if (debug) qDebug() << "end bitsToBinary()";
 }
 
-void LocoHex::bitsToHex()
+/* bitsToHex()
+ *
+ * Converts the bits member array to the hex string
+ */
+void LocoHex::set_hexFromBits()
 {
-    if (debug) qDebug() << "bitsToHex() " << getBinary();
+    if (debug) qDebug() << "bitsToHex() " << get_binary();
     int _decimal[2] = {0, 0};
     QChar _hexArray[2] = {'0', '0'};
 
@@ -155,50 +175,66 @@ void LocoHex::bitsToHex()
     if (debug) qDebug() << "end bitsToHex()";
 }
 
-QString LocoHex::getBinary()
+/* getBinary()
+ *
+ * Return the binary string
+ */
+QString LocoHex::get_binary()
 {
     return(binary);
 }
 
-QString LocoHex::getHex()
+/* getHex()
+ *
+ * Return the hex string
+ */
+QString LocoHex::get_hex()
 {
     if (debug) qDebug() << "getHex(): " << " : " << binary;
     return(hex);
 }
 
-/*
+/* getBit()
+ *
  * Accepts values 0-7
  * Most Sig. Bit: 0
  */
-bool LocoHex::getBit(int _bit)
+bool LocoHex::get_oneBit(int _bit)
 {
     int _nyble = (_bit / 4); // Which nyble are we looking at?
     _bit = (_bit - (_nyble*4)); // Which bit in the nyble?
     return(byte[_nyble][_bit]); // Fire away
 }
 
-void LocoHex::setBit(int _bit, bool _value)
+/* setBit()
+ *
+ * Accepts a bit position and value, then regenerates the object to match the new binary value
+ */
+void LocoHex::set_oneBit(int _bit, bool _value)
 {
     if (debug) qDebug() << "setBit() bit: " << _bit << " value: " << _value;
     int _nyble = (_bit / 4); // Which nyble are we looking at?
     _bit = (_bit - (_nyble*4)); // Which bit in the nyble?
     byte[_nyble][_bit] = _value; // Fire away
-    bitsToHex();
-    bitsToBinary();
+    set_hexFromBits();
+    set_binaryFromBits();
     if (debug) qDebug() << "end setBit()";
 }
 
-bool LocoHex::isOP()
+/* isOP()
+ *
+ * Returns a boolean value if the hex is an OPcode or not
+ */
+bool LocoHex::get_isOP()
 {
     return(isOPcode);
 }
 
-short unsigned int LocoHex::getNumArgs()
-{
-    return(numArgs);
-}
-
-void LocoHex::debugBits()
+/* debugBits()
+ *
+ * Check the status of the bits in the raw nyble arrays
+ */
+void LocoHex::do_debugBits()
 {
     qDebug() << "Debugging bits.";
     for (int _nyble = 0; _nyble < 2; ++_nyble)
@@ -211,9 +247,13 @@ void LocoHex::debugBits()
     }
 }
 
-void LocoHex::genComplement()
+/* genComplement()
+ *
+ * Generate the hex's complement and then save it as the object
+ */
+void LocoHex::do_genComplement()
 {
-    if (debug) qDebug() << "genComplement byte: " << getHex();
+    if (debug) qDebug() << "genComplement byte: " << get_hex();
     for (int _nyble = 0; _nyble < 2; ++_nyble)
     {
         for (int _bit = 0; _bit < 4; ++_bit)
@@ -221,12 +261,16 @@ void LocoHex::genComplement()
             byte[_nyble][_bit] = !byte[_nyble][_bit]; // Flip each bit on the array
         }
     }
-    bitsToBinary();
-    bitsToHex();
+    set_binaryFromBits();
+    set_hexFromBits();
     if (debug) qDebug() << "end genComplement()";
 }
 
-void LocoHex::runDriver()
+/* runDriver()
+ *
+ * Run a test driver. Not yet implemented.
+ */
+void LocoHex::do_testDriver()
 {
     qDebug() << "LocoHex:runDriver is not to be used in normal operation!";
 }
