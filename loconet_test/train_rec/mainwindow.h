@@ -24,14 +24,14 @@ public:
     ~MainWindow();
 
 protected:
-    void initOPcodes(LocoPacket);
-    void loadOPcodeComboBox();
+    void do_initStaticOP(LocoPacket);
+    void do_loadOPComboBox();
 
 protected slots:
-    void enableArgs();
-    void genPacket();
-    void updateOPcodeFromComboBox();
-    void listSerialPorts();
+    void do_enableArgs();
+    void do_genPacket();
+    void do_OPfromComboBox();
+    void do_listPorts();
 
 private:
     Ui::MainWindow *ui;

@@ -24,8 +24,10 @@ public:
     ~LocoHex();
     QString get_binary();
     QString get_hex();
-    bool get_isOP();
     bool get_oneBit(int _bit);
+    bool get_isOP();
+    short unsigned int get_numArgs();
+    void set_allFromBinary(QString _binary);
     void set_allFromHex(QString _hex);
     void set_oneBit(int _bit, bool _value);
     void do_genComplement();

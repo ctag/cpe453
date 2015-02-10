@@ -55,7 +55,7 @@ void LocoHex::do_createEmpty()
     }
     binary = "00000000";
     hex = "00";
-    isOPcode = false;
+    OPcode = false;
 }
 
 /*
@@ -113,7 +113,7 @@ void LocoHex::set_bitsFromHex(QString _hex, int _index)
 
     if (_index == 0)
     {
-        isOPcode = byte[_index][0];
+        OPcode = byte[_index][0];
     }
     if (debug) qDebug() << "end hexToBits()";
 }
@@ -227,7 +227,7 @@ void LocoHex::set_oneBit(int _bit, bool _value)
  */
 bool LocoHex::get_isOP()
 {
-    return(isOPcode);
+    return(OPcode);
 }
 
 /* debugBits()

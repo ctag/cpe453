@@ -7,10 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    locopacket.define("00");
-    initOPcodes(locopacket);
-
-
+    locopacket.set_allFromHex("00");
+    do_initStaticOP(locopacket);
 
     ui->lineEdit_opcode->setInputMask("hh");
     ui->lineEdit_arg1->setInputMask("hh");
@@ -21,15 +19,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     loconet = new QSerialPort;
 
-    connect(ui->pushButton_genPacket, SIGNAL(clicked()), this, SLOT(genPacket()));
-    connect(ui->lineEdit_opcode, SIGNAL(returnPressed()), this, SLOT(enableArgs()));
-    connect(ui->comboBox_opcodes, SIGNAL(currentIndexChanged(int)), this, SLOT(updateOPcodeFromComboBox()));
+    connect(ui->pushButton_genPacket, SIGNAL(clicked()), this, SLOT(do_genPacket()));
+    connect(ui->lineEdit_opcode, SIGNAL(returnPressed()), this, SLOT(do_enableArgs()));
+    connect(ui->comboBox_opcodes, SIGNAL(currentIndexChanged(int)), this, SLOT(do_OPfromComboBox()));
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
 
-    loadOPcodeComboBox();
-    listSerialPorts();
+    do_loadOPComboBox();
+    do_listPorts();
 
     ui->textBrowser_console->append("Program loaded! :3");
 }
@@ -39,10 +37,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::enableArgs()
+void MainWindow::do_enableArgs()
 {
     LocoPacket _packet(ui->lineEdit_opcode->text());
-    int _args = _packet.numArgs();
+    int _args = _packet.get_numArgs();
     if (_args > 0) {
         ui->lineEdit_arg1->setEnabled(true);
     } else {
@@ -57,11 +55,11 @@ void MainWindow::enableArgs()
     }
 }
 
-void MainWindow::genPacket()
+void MainWindow::do_genPacket()
 {
     QString _hex = "";
-    locopacket.define(ui->lineEdit_opcode->text());
-    int _numArgs = locopacket.numArgs();
+    locopacket.set_allFromHex(ui->lineEdit_opcode->text());
+    int _numArgs = locopacket.get_numArgs();
     LocoPacket * _packet;
     _hex.append(ui->lineEdit_opcode->text());
     if (_numArgs > 0) {
@@ -73,58 +71,58 @@ void MainWindow::genPacket()
     if (ui->lineEdit_chk->text() == "")
     {
         _packet = new LocoPacket(_hex);
-        _packet->genChecksum();
+        _packet->do_genChecksum();
         //ui->lineEdit_chk->setText(_packet->getPacket());
     } else {
         _hex.append(ui->lineEdit_chk->text());
         _packet = new LocoPacket(_hex);
     }
 
-    ui->textBrowser_packets->append(_packet->getPacket());
-    ui->lineEdit_packet->setText(_packet->getPacket());
-    ui->comboBox_packetHistory->addItem(_packet->getPacket());
+    ui->textBrowser_packets->append(_packet->get_packet());
+    ui->lineEdit_packet->setText(_packet->get_packet());
+    ui->comboBox_packetHistory->addItem(_packet->get_packet());
 }
 
 //LocoHex("B5"), LocoHex("B4"), LocoHex("B2"), LocoHex("B1"), LocoHex("B0")};
 //", "OPC_LONG_ACK", "OPC_INPUT_REP", "OPC_SQ_REP", "OPC_SW_REQ"};
 //int LocoPacket::opcodes_args[16] = {0, 0, 0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2};
 
-void MainWindow::initOPcodes(LocoPacket _locopacket)
+void MainWindow::do_initStaticOP(LocoPacket _locopacket)
 {
-    _locopacket.addOPcode("85", "Global IDLE", "", 0);
-    _locopacket.addOPcode("83", "Global ON", "", 0);
-    _locopacket.addOPcode("82", "Global OFF", "", 0);
-    _locopacket.addOPcode("BF", "OPC_LOCO_ADR", "", 2);
-    _locopacket.addOPcode("BD", "OPC_SW_ACK", "", 2);
-    _locopacket.addOPcode("BC", "OPC_SW_STATE", "", 2);
-    _locopacket.addOPcode("BB", "OPC_RQ_SL_DATA", "", 2);
-    _locopacket.addOPcode("BA", "OPC_MOVE_SLOTS", "", 2);
-    _locopacket.addOPcode("B9", "OPC_LINK_SLOTS", "", 2);
-    _locopacket.addOPcode("B8", "OPC_UNLINK_SLOTS", "", 2);
-    _locopacket.addOPcode("B6", "OPC_CONSIST_FUNT", "", 2);
-    _locopacket.addOPcode("B5", "OPC_SLOT_STAT1", "", 2);
-    _locopacket.addOPcode("B4", "OPC_LONG_ACK", "", 2);
-    _locopacket.addOPcode("B2", "OPC_INPUT_REP", "", 2);
-    _locopacket.addOPcode("B1", "OPC_SW_REP", "", 2);
-    _locopacket.addOPcode("B0", "OPC_SW_REQ", "", 2);
+    _locopacket.do_addStaticOP("85", "Global IDLE", "", 0);
+    _locopacket.do_addStaticOP("83", "Global ON", "", 0);
+    _locopacket.do_addStaticOP("82", "Global OFF", "", 0);
+    _locopacket.do_addStaticOP("BF", "OPC_LOCO_ADR", "", 2);
+    _locopacket.do_addStaticOP("BD", "OPC_SW_ACK", "", 2);
+    _locopacket.do_addStaticOP("BC", "OPC_SW_STATE", "", 2);
+    _locopacket.do_addStaticOP("BB", "OPC_RQ_SL_DATA", "", 2);
+    _locopacket.do_addStaticOP("BA", "OPC_MOVE_SLOTS", "", 2);
+    _locopacket.do_addStaticOP("B9", "OPC_LINK_SLOTS", "", 2);
+    _locopacket.do_addStaticOP("B8", "OPC_UNLINK_SLOTS", "", 2);
+    _locopacket.do_addStaticOP("B6", "OPC_CONSIST_FUNT", "", 2);
+    _locopacket.do_addStaticOP("B5", "OPC_SLOT_STAT1", "", 2);
+    _locopacket.do_addStaticOP("B4", "OPC_LONG_ACK", "", 2);
+    _locopacket.do_addStaticOP("B2", "OPC_INPUT_REP", "", 2);
+    _locopacket.do_addStaticOP("B1", "OPC_SW_REP", "", 2);
+    _locopacket.do_addStaticOP("B0", "OPC_SW_REQ", "", 2);
 }
 
-void MainWindow::loadOPcodeComboBox()
+void MainWindow::do_loadOPComboBox()
 {
-    for (int _index = 0; _index < locopacket.numOPcode(); ++_index)
+    for (int _index = 0; _index < locopacket.get_numStaticOP(); ++_index)
     {
-        ui->comboBox_opcodes->insertItem(_index, locopacket.getOPcodeName(_index));
+        ui->comboBox_opcodes->insertItem(_index, locopacket.get_staticOPname(_index));
     }
 }
 
-void MainWindow::updateOPcodeFromComboBox()
+void MainWindow::do_OPfromComboBox()
 {
-    QString _hex = locopacket.getOPcodeHex(ui->comboBox_opcodes->currentIndex());
+    QString _hex = locopacket.get_staticOPhex(ui->comboBox_opcodes->currentIndex());
     ui->lineEdit_opcode->setText(_hex);
-    enableArgs();
+    do_enableArgs();
 }
 
-void MainWindow::listSerialPorts()
+void MainWindow::do_listPorts()
 {
     QList<QSerialPortInfo> _ports = usbPorts.availablePorts();
     int _index = _ports.count();
