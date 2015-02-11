@@ -14,7 +14,6 @@ bool LocoPacket::debug = false;
 QVector<LocoHex> LocoPacket::opcodes_hex;
 QVector<QString> LocoPacket::opcodes_name;
 QVector<QString> LocoPacket::opcodes_desc;
-QVector<int> LocoPacket::opcodes_args;
 
 /*
  * Default Contructor
@@ -149,12 +148,14 @@ QString LocoPacket::do_xor(LocoHex _byte1, LocoHex _byte2)
     return (_result.get_hex());
 }
 
-void LocoPacket::do_genChecksum()
+QString LocoPacket::do_genChecksum()
 {
     if (get_validChk() && get_validOP())
     {
         qDebug() << "Not generating a checksum for an already valid packet :C";
-        return;
+        QString _chk = "";
+        _chk.append(locohex_array[packet_length-1].get_hex());
+        return(_chk);
     }
     LocoHex _checksum;
     for (int _index = 0; _index < packet_length; ++_index)
@@ -166,6 +167,7 @@ void LocoPacket::do_genChecksum()
     _checksum.do_genComplement();
     locohex_array.append(_checksum);
     packet_length++;
+    return(_checksum.get_hex());
 }
 
 QString LocoPacket::get_packet()
@@ -180,16 +182,20 @@ QString LocoPacket::get_packet()
 
 int LocoPacket::get_numArgs()
 {
+    int _result = -1;
     for (int _index = 0; _index < opcodes_hex.size(); ++_index)
     {
-        if (opcodes_hex[_index].get_hex() == locohex_array[0].get_hex()) {
-            return(opcodes_args[_index]);
+        if (opcodes_hex[_index].get_hex() == locohex_array[0].get_hex() && locohex_array[0].get_isOP()) {
+            _result = (locohex_array[0].get_packetLength() - 2);
+            if (_result < 0) {
+                _result = (locohex_array[1].get_packetLength() - 2);
+            }
         }
     }
-    return(0);
+    return(_result);
 }
 
-void LocoPacket::do_addStaticOP(QString _hex, QString _name, QString _desc, int _numArgs)
+void LocoPacket::do_addStaticOP(QString _hex, QString _name, QString _desc)
 {
     for (int _index = 0; _index < opcodes_hex.size(); ++_index)
     {
@@ -200,10 +206,9 @@ void LocoPacket::do_addStaticOP(QString _hex, QString _name, QString _desc, int 
     opcodes_hex.append(LocoHex(_hex));
     opcodes_name.append(_name);
     opcodes_desc.append(_desc);
-    opcodes_args.append(_numArgs);
 }
 
-int LocoPacket::get_numStaticOP()
+int LocoPacket::get_staticOPsize()
 {
     return(opcodes_hex.size());
 }
@@ -216,6 +221,11 @@ QString LocoPacket::get_staticOPname(int _index)
 QString LocoPacket::get_staticOPhex(int _index)
 {
     return(opcodes_hex[_index].get_hex());
+}
+
+bool LocoPacket::get_followOnMsg ()
+{
+    return (locohex_array[0].get_followOnMsg());
 }
 
 /* Sometimes I wonder /

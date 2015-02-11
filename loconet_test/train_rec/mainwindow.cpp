@@ -89,27 +89,30 @@ void MainWindow::do_genPacket()
 
 void MainWindow::do_initStaticOP(LocoPacket _locopacket)
 {
-    _locopacket.do_addStaticOP("85", "Global IDLE", "", 0);
-    _locopacket.do_addStaticOP("83", "Global ON", "", 0);
-    _locopacket.do_addStaticOP("82", "Global OFF", "", 0);
-    _locopacket.do_addStaticOP("BF", "OPC_LOCO_ADR", "", 2);
-    _locopacket.do_addStaticOP("BD", "OPC_SW_ACK", "", 2);
-    _locopacket.do_addStaticOP("BC", "OPC_SW_STATE", "", 2);
-    _locopacket.do_addStaticOP("BB", "OPC_RQ_SL_DATA", "", 2);
-    _locopacket.do_addStaticOP("BA", "OPC_MOVE_SLOTS", "", 2);
-    _locopacket.do_addStaticOP("B9", "OPC_LINK_SLOTS", "", 2);
-    _locopacket.do_addStaticOP("B8", "OPC_UNLINK_SLOTS", "", 2);
-    _locopacket.do_addStaticOP("B6", "OPC_CONSIST_FUNT", "", 2);
-    _locopacket.do_addStaticOP("B5", "OPC_SLOT_STAT1", "", 2);
-    _locopacket.do_addStaticOP("B4", "OPC_LONG_ACK", "", 2);
-    _locopacket.do_addStaticOP("B2", "OPC_INPUT_REP", "", 2);
-    _locopacket.do_addStaticOP("B1", "OPC_SW_REP", "", 2);
-    _locopacket.do_addStaticOP("B0", "OPC_SW_REQ", "", 2);
+    _locopacket.do_addStaticOP("85", "Global IDLE", "Put track into IDLE mode.");
+    _locopacket.do_addStaticOP("83", "Global ON", "Put track into ON mode.");
+    _locopacket.do_addStaticOP("82", "Global OFF", "Put track into OFF mode.");
+    _locopacket.do_addStaticOP("BF", "OPC_LOCO_ADR", "");
+    _locopacket.do_addStaticOP("BD", "OPC_SW_ACK", "");
+    _locopacket.do_addStaticOP("BC", "OPC_SW_STATE", "");
+    _locopacket.do_addStaticOP("BB", "OPC_RQ_SL_DATA", "");
+    _locopacket.do_addStaticOP("BA", "OPC_MOVE_SLOTS", "");
+    _locopacket.do_addStaticOP("B9", "OPC_LINK_SLOTS", "");
+    _locopacket.do_addStaticOP("B8", "OPC_UNLINK_SLOTS", "");
+    _locopacket.do_addStaticOP("B6", "OPC_CONSIST_FUNT", "");
+    _locopacket.do_addStaticOP("B5", "OPC_SLOT_STAT1", "");
+    _locopacket.do_addStaticOP("B4", "OPC_LONG_ACK", "");
+    _locopacket.do_addStaticOP("B2", "OPC_INPUT_REP", "");
+    _locopacket.do_addStaticOP("B1", "OPC_SW_REP", "");
+    _locopacket.do_addStaticOP("B0", "OPC_SW_REQ", "Request switch function.");
+    _locopacket.do_addStaticOP("A2", "OPC_LOCO_SND", "Set SLOT sound functions.");
+    _locopacket.do_addStaticOP("A1", "OPC_LOCO_DIRF", "Set SLOT direction, F0-4 state.");
+    _locopacket.do_addStaticOP("A0", "OPC_LOCO_SPD", "Set SLOT speed");
 }
 
 void MainWindow::do_loadOPComboBox()
 {
-    for (int _index = 0; _index < locopacket.get_numStaticOP(); ++_index)
+    for (int _index = 0; _index < locopacket.get_staticOPsize(); ++_index)
     {
         ui->comboBox_opcodes->insertItem(_index, locopacket.get_staticOPname(_index));
     }
