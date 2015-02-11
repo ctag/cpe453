@@ -1,10 +1,11 @@
 #include "locopacket.h"
 
-/*
- * Class: LocoPacket
+/* Class: LocoPacket
+ *
  * For creating, manipulating, and extracting LocoNet Packets
  *
- * By: Christopher Bero [csb0019@uah.edu]
+ * Christopher Bero [csb0019@uah.edu]
+ * Team 4A
  */
 
 
@@ -106,7 +107,7 @@ bool LocoPacket::get_validChk()
         if (debug) qDebug() << "hexIndex: " << _hexIndex;
         if (debug) qDebug() << "validPacket: working: " << locohex_array[_hexIndex].get_hex() << " : " << locohex_array[_hexIndex].get_binary() << " and: " << _hexHolder.get_hex() << " : " << _hexHolder.get_binary();
         LocoHex tmp = _hexHolder;
-        _hexHolder.set_allFromHex(do_xor(tmp, locohex_array[_hexIndex]));
+        _hexHolder.set_fromHex(do_xor(tmp, locohex_array[_hexIndex]));
     }
     if (_hexHolder.get_hex() == "FF")
     {
@@ -160,7 +161,7 @@ void LocoPacket::do_genChecksum()
     {
         if (debug) qDebug() << "hexIndex: " << _index;
         if (debug) qDebug() << "genChecksum: " << locohex_array[_index].get_hex() << " : " << locohex_array[_index].get_binary() << " and: " << _checksum.get_hex() << " : " << _checksum.get_binary();
-        _checksum.set_allFromHex(do_xor(_checksum, locohex_array[_index]));
+        _checksum.set_fromHex(do_xor(_checksum, locohex_array[_index]));
     }
     _checksum.do_genComplement();
     locohex_array.append(_checksum);
@@ -217,7 +218,10 @@ QString LocoPacket::get_staticOPhex(int _index)
     return(opcodes_hex[_index].get_hex());
 }
 
-
+/* Sometimes I wonder /
+ * Whether my code should wander /
+ * Those tretcherous glades /
+ */
 
 
 

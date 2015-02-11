@@ -133,7 +133,7 @@ void MainWindow::do_listPorts()
 }
 
 /* Flippity Bit
- * That code was stale as .
+ * That code was .
  */
 
 

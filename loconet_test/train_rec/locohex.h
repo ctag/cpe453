@@ -3,14 +3,8 @@
 
 #include <QString>
 #include <QDebug>
-#include <cmath>
 #include <QChar>
-
-/*
- * TODO:
- * Determine correct namespace to use
- * work out object goals/workflow
- */
+#include <cmath>
 
 namespace std {
 class LocoHex;
@@ -26,19 +20,21 @@ public:
     QString get_hex();
     bool get_oneBit(int _bit);
     bool get_isOP();
-    short unsigned int get_numArgs();
-    void set_allFromBinary(QString _binary);
-    void set_allFromHex(QString _hex);
+    short unsigned int get_packetLength();
+    bool get_followOnMsg();
+    void set_fromBinary(QString _binary);
+    void set_fromHex(QString _hex);
     void set_oneBit(int _bit, bool _value);
     void do_genComplement();
     void do_testDriver();
     void do_debugBits();
 
 protected:
-    void set_bitsFromHex(QString _hex, int index);
-    void set_hexFromBits();
-    void set_binaryFromBits();
-    void do_createEmpty();
+    void bitsFromHex(QString _hex, int _nyble);
+    void hexFromBits();
+    void binaryFromBits();
+    void bitsFromBinary();
+    void createEmpty();
 
 private:
     bool ** byte; // Divided into nyble arrays
@@ -46,7 +42,6 @@ private:
     QString binary; // Eight 0/1 characters representing binary
     bool OPcode; // Represents whether the hex is an OPcode or not
     static bool debug; // Set in main cpp
-
 };
 
 #endif // LOCOHEX_H
