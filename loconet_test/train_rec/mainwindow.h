@@ -9,6 +9,7 @@
 #include <QByteArray>
 #include <QVariant>
 #include <QComboBox>
+#include <QIODevice>
 #include "locopacket.h"
 
 namespace Ui {
@@ -33,12 +34,12 @@ protected slots:
     void do_OPfromComboBox();
     void do_serialRefreshList();
     void do_serialConnect();
+    void readSerial();
 
 private:
     Ui::MainWindow *ui;
-    QSerialPort * loconet;
     LocoPacket locopacket;
-    QSerialPort usbBuffer;
+    QSerialPort * usbBuffer;
     QSerialPortInfo usbPorts;
 };
 

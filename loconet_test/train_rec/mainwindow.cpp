@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->lineEdit_chk->setEnabled(false);
 
-    loconet = new QSerialPort;
+    usbBuffer = new QSerialPort;
 
     connect(ui->pushButton_genPacket, SIGNAL(clicked()), this, SLOT(do_genPacket()));
     connect(ui->lineEdit_opcode, SIGNAL(returnPressed()), this, SLOT(do_enableArgs()));
@@ -152,20 +152,36 @@ void MainWindow::do_serialRefreshList()
 void MainWindow::do_serialConnect()
 {
     int _portIndex = ui->comboBox_serialList->currentIndex();
-    //QSerialPort _serialPort(usbPorts.availablePorts().at(_portIndex));
-    usbBuffer.setPort(usbPorts.availablePorts().at(_portIndex));
-    usbBuffer.setBaudRate(57600);
-    usbBuffer.open(QIODevice::ReadWrite);
-    if (usbBuffer.isOpen())
+    usbBuffer->setPort(usbPorts.availablePorts().at(_portIndex));
+    usbBuffer->setBaudRate(57600);
+    usbBuffer->open(QIODevice::ReadWrite);
+    if (usbBuffer->isOpen())
     {
         ui->textBrowser_console->append("Serial port open :D");
+        connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(readSerial()));
     } else {
-        ui->textBrowser_console->append("Serial port not open xC");
+        ui->textBrowser_console->append("Serial port not open xC [" + usbBuffer->errorString() + "]");
+    }
+}
+
+void MainWindow::readSerial()
+{
+    if (!usbBuffer->isOpen())
+    {
+        qDebug() << "Serial port suddenly isn't open x.x";
+        return;
+    }
+    QByteArray _data;
+    while(usbBuffer->waitForReadyRead(20))
+    {
+        qDebug() << "Reading serial: ";
+        _data = usbBuffer->read(1);
+        ui->textBrowser_console->append(_data.toHex());
     }
 }
 
 /* Flippity Bit
- * That code was .
+ * That code was shi<malloc_error>
  */
 
 
