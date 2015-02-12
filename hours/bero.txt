@@ -9,6 +9,12 @@
 	1900-2400 Finishing initial redesign of loconet classes
 7-2-2015 6hr
 	1600-2200 Working checksum generator
+10-2 3hr
+	Meeting with team4B ICD
+11-2 4hr
+	Cleaning up LocoHex class
+12-2 5hr
+	Creating serial support for program
 
 # Sprint 1
 12-1-2015 1hr
