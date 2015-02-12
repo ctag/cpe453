@@ -1,6 +1,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+/* Conventions:
+ *
+ * Underscores indicate a local variable to a function
+ *
+ * set_ to change a member variable
+ * get_ to retrieve a member variable
+ * do_ to complete a task
+ * is_ to query a state of the object
+ */
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -22,12 +32,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_genPacket, SIGNAL(clicked()), this, SLOT(do_genPacket()));
     connect(ui->lineEdit_opcode, SIGNAL(returnPressed()), this, SLOT(do_enableArgs()));
     connect(ui->comboBox_opcodes, SIGNAL(currentIndexChanged(int)), this, SLOT(do_OPfromComboBox()));
+    connect(ui->pushButton_serialRefreshList, SIGNAL(clicked()), this, SLOT(do_serialRefreshList()));
+    connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_serialConnect()));
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
 
     do_loadOPComboBox();
-    do_listPorts();
+    do_serialRefreshList();
 
     ui->textBrowser_console->append("Program loaded! :3");
 }
@@ -40,7 +52,7 @@ MainWindow::~MainWindow()
 void MainWindow::do_enableArgs()
 {
     LocoPacket _packet(ui->lineEdit_opcode->text());
-    int _args = _packet.get_numArgs();
+    int _args = _packet.get_packetLen() - 2;
     if (_args > 0) {
         ui->lineEdit_arg1->setEnabled(true);
     } else {
@@ -59,7 +71,7 @@ void MainWindow::do_genPacket()
 {
     QString _hex = "";
     locopacket.set_allFromHex(ui->lineEdit_opcode->text());
-    int _numArgs = locopacket.get_numArgs();
+    int _numArgs = locopacket.get_packetLen();
     LocoPacket * _packet;
     _hex.append(ui->lineEdit_opcode->text());
     if (_numArgs > 0) {
@@ -125,13 +137,30 @@ void MainWindow::do_OPfromComboBox()
     do_enableArgs();
 }
 
-void MainWindow::do_listPorts()
+void MainWindow::do_serialRefreshList()
 {
     QList<QSerialPortInfo> _ports = usbPorts.availablePorts();
     int _index = _ports.count();
+    ui->comboBox_serialList->clear();
     for (int i = 0; i < _index; ++i)
     {
+        ui->comboBox_serialList->insertItem(i, _ports.at(i).portName());
         ui->textBrowser_console->append(_ports.at(i).portName());
+    }
+}
+
+void MainWindow::do_serialConnect()
+{
+    int _portIndex = ui->comboBox_serialList->currentIndex();
+    //QSerialPort _serialPort(usbPorts.availablePorts().at(_portIndex));
+    usbBuffer.setPort(usbPorts.availablePorts().at(_portIndex));
+    usbBuffer.setBaudRate(57600);
+    usbBuffer.open(QIODevice::ReadWrite);
+    if (usbBuffer.isOpen())
+    {
+        ui->textBrowser_console->append("Serial port open :D");
+    } else {
+        ui->textBrowser_console->append("Serial port not open xC");
     }
 }
 

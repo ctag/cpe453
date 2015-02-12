@@ -24,16 +24,17 @@ public:
     LocoPacket(QString _hex);
     ~LocoPacket();
     int get_staticOPsize();
-    bool get_validChk();
-    bool get_validOP();
-    bool get_followOnMsg();
     QString get_staticOPname(int);
     QString get_staticOPhex(int);
     QString get_packet();
-    int get_numArgs();
+    int get_packetLen();
     void set_allFromHex(QString _hex);
     void do_addStaticOP(QString _hex, QString _name, QString _desc);
     QString do_genChecksum();
+    void do_appendByte(QString _byte);
+    bool is_validChk();
+    bool is_validOP();
+    bool is_followOnMsg();
 
 protected:
     QString do_xor(LocoHex _byte1, LocoHex _byte2);

@@ -31,7 +31,8 @@ protected slots:
     void do_enableArgs();
     void do_genPacket();
     void do_OPfromComboBox();
-    void do_listPorts();
+    void do_serialRefreshList();
+    void do_serialConnect();
 
 private:
     Ui::MainWindow *ui;

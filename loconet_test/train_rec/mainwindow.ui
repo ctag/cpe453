@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_packets">
        <attribute name="title">
@@ -184,6 +184,55 @@
        <attribute name="title">
         <string>Serial Port</string>
        </attribute>
+       <widget class="QGroupBox" name="groupBox_serial">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>20</y>
+          <width>281</width>
+          <height>101</height>
+         </rect>
+        </property>
+        <property name="title">
+         <string>Connect</string>
+        </property>
+        <widget class="QComboBox" name="comboBox_serialList">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>60</y>
+           <width>171</width>
+           <height>22</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_serialConnect">
+         <property name="geometry">
+          <rect>
+           <x>190</x>
+           <y>60</y>
+           <width>81</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Connect</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_serialRefreshList">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>30</y>
+           <width>81</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Refresh</string>
+         </property>
+        </widget>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_console">
        <attribute name="title">
