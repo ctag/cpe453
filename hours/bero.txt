@@ -15,6 +15,7 @@
 	Cleaning up LocoHex class
 12-2 5hr
 	Creating serial support for program
+	Serial support ready, needs testing
 
 # Sprint 1
 12-1-2015 1hr

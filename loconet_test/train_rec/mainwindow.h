@@ -34,11 +34,14 @@ protected slots:
     void do_OPfromComboBox();
     void do_serialRefreshList();
     void do_serialConnect();
+    void do_serialDisconnect();
     void readSerial();
+    void sendSerial();
 
 private:
     Ui::MainWindow *ui;
-    LocoPacket locopacket;
+    LocoPacket outgoingPacket;
+    LocoPacket incomingPacket;
     QSerialPort * usbBuffer;
     QSerialPortInfo usbPorts;
 };

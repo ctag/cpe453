@@ -232,6 +232,22 @@
           <string>Refresh</string>
          </property>
         </widget>
+        <widget class="QPushButton" name="pushButton_serialDisconnect">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>110</x>
+           <y>30</y>
+           <width>81</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Disconnect</string>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_console">
