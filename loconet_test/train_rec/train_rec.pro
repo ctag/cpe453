@@ -14,11 +14,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    locopacket.cpp \
-    locohex.cpp
+	locopacket.cpp \
+    locobyte.cpp
 
 HEADERS  += mainwindow.h \
-    locopacket.h \
-    locohex.h
+	locopacket.h \
+    locobyte.h
 
 FORMS    += mainwindow.ui

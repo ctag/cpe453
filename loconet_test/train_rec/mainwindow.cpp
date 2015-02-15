@@ -44,6 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
     do_loadOPComboBox();
     do_serialRefreshList();
 
+    packetTimer = new QTimer(this);
+    connect(packetTimer, SIGNAL(timeout()), this, SLOT(do_packetTimer()));
+    connect(ui->pushButton_timerToggle, SIGNAL(clicked()), this, SLOT(do_timerToggle()));
+
     ui->textBrowser_console->append("Program loaded! :3");
 }
 
@@ -189,18 +193,24 @@ void MainWindow::do_serialDisconnect()
 
 void MainWindow::sendSerial()
 {
+    outgoingPacket.set_allFromHex("837C");
     if (!outgoingPacket.is_validChk())
     {
         qDebug() << "Packet isn't right `_`";
         return;
     }
     ui->textBrowser_packets->append(outgoingPacket.get_packet().toLatin1());
-    if (!usbBuffer->isOpen())
+
+    /*if (!usbBuffer->isOpen())
     {
         qDebug() << "Serial isn't open...";
         return;
-    }
-    usbBuffer->write(outgoingPacket.get_packet().toLatin1());
+    }*/
+
+    //usbBuffer->write(outgoingPacket.get_packet());
+    //usbBuffer->write(outgoingPacket.get_packet().toLatin1());
+    qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
+    qDebug() << outgoingPacket.get_raw();
 }
 
 void MainWindow::readSerial()
@@ -217,12 +227,34 @@ void MainWindow::readSerial()
         qDebug() << "Reading serial ^_^";
         _data = usbBuffer->read(1);
 
+        qDebug() << _data.toHex();
         if (incomingPacket.is_validChk()) {
             ui->textBrowser_console->append(incomingPacket.get_packet());
-            incomingPacket.set_allFromHex(_data.toHex());
+            incomingPacket.set_allFromHex(_data.toHex().mid(0,_data.size()));
         }
-        incomingPacket.do_appendByte(_data.toHex());
+        incomingPacket.do_appendByte(static_cast<QString>(_data.toHex().mid(0,_data.size())));
+        qDebug() << incomingPacket.get_packet();
     }
+}
+
+void MainWindow::do_packetTimer()
+{
+    QString _hex = ui->lineEdit_timerPacket->text();
+    LocoPacket _packet(_hex);
+    usbBuffer->write(_packet.get_packet().toLatin1());
+}
+
+void MainWindow::do_timerToggle()
+{
+    if (packetTimer->isActive())
+    {
+        packetTimer->stop();
+        ui->pushButton_timerToggle->setText("Start Timer");
+        return;
+    }
+    int _period = ui->spinBox_timerPeriod->value();
+    packetTimer->start(_period);
+    ui->pushButton_timerToggle->setText("Stop Timer");
 }
 
 /* Flippity Bit

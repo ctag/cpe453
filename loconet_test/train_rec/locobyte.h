@@ -1,27 +1,29 @@
-#ifndef LOCOHEX_H
-#define LOCOHEX_H
+#ifndef LOCOBYTE_H
+#define LOCOBYTE_H
 
 #include <QString>
 #include <QDebug>
 #include <QChar>
+#include <QBitArray>
 #include <cmath>
 
 namespace std {
-class LocoHex;
+class LocoByte;
 }
 
-class LocoHex
+class LocoByte
 {
 public:
-    LocoHex();
-    LocoHex(QString _hex);
-    ~LocoHex();
+    LocoByte();
+    LocoByte(QString _hex);
+    ~LocoByte();
     QString get_binary();
     QString get_hex();
     bool get_oneBit(int _bit);
     bool get_isOP();
     short unsigned int get_packetLength();
     bool get_followOnMsg();
+    char get_nybleAsChar(int _nyble);
     void set_fromBinary(QString _binary);
     void set_fromHex(QString _hex);
     void set_oneBit(int _bit, bool _value);
@@ -37,14 +39,16 @@ protected:
     void createEmpty();
 
 private:
-    bool ** byte; // Divided into nyble arrays
+    //bool ** byte; // Divided into nyble arrays
+    QBitArray byte;
+    QChar byteCharArray[2];
     QString hex; // Two characters representing hex
     QString binary; // Eight 0/1 characters representing binary
     bool OPcode; // Represents whether the hex is an OPcode or not
     static bool debug; // Set in main cpp
 };
 
-#endif // LOCOHEX_H
+#endif // LOCOBYTE_H
 
 
 

@@ -4,7 +4,8 @@
 #include <QString>
 #include <QDebug>
 #include <QVector>
-#include "locohex.h"
+#include <QByteArray>
+#include "locobyte.h"
 
 /* LocoPacket()
  *
@@ -27,6 +28,7 @@ public:
     QString get_staticOPname(int);
     QString get_staticOPhex(int);
     QString get_packet();
+    QByteArray get_raw();
     int get_packetLen();
     void set_allFromHex(QString _hex);
     void do_addStaticOP(QString _hex, QString _name, QString _desc);
@@ -37,16 +39,15 @@ public:
     bool is_followOnMsg();
 
 protected:
-    QString do_xor(LocoHex _byte1, LocoHex _byte2);
+    QString do_xor(LocoByte _byte1, LocoByte _byte2);
 
 private:
     QString packet_text_hex;
     QString packet_text_binary;
     QString packet_text_desc;
-    QVector<LocoHex> locohex_array;
-    short unsigned int packet_length;
+    QVector<LocoByte> locobyte_array;
     static bool debug;
-    static QVector<LocoHex> opcodes_hex;
+    static QVector<LocoByte> opcodes_hex;
     static QVector<QString> opcodes_name;
     static QVector<QString> opcodes_desc;
 };
