@@ -10,7 +10,7 @@
  * Team 4A
  */
 
-bool LocoByte::debug = false;
+bool LocoByte::debug = true;
 
 /*
  * Default Contructor
@@ -71,9 +71,9 @@ void LocoByte::bitsFromBinary()
             QString _test = binary.mid(_pos, 1);
             if (_test == "1")
             {
-                byte[_nyble+_bit] = 1;
+                byte[_pos] = 1;
             } else {
-                byte[_nyble+_bit] = 0;
+                byte[_pos] = 0;
             }
         }
     }
@@ -97,7 +97,7 @@ void LocoByte::hexFromBits()
         for (int _bit = 0; _bit < 4; ++_bit)
         {
             int power = (3 - _bit);
-            _decimal[_nyble] += pow(2, power) * byte[_nyble+_bit];
+            _decimal[_nyble] += pow(2, power) * byte[(_nyble*4)+_bit];
         }
         if (debug) qDebug() << "_decimal[" << _nyble << "]: " << _decimal[_nyble];
         if (_decimal[_nyble] <= 9 && _decimal[_nyble] >= 0) {
@@ -121,13 +121,13 @@ void LocoByte::hexFromBits()
  */
 void LocoByte::binaryFromBits()
 {
-    if (debug) qDebug() << "bitsToBinary()";
+    if (debug) qDebug() << "bitsToBinary()" << byte;
     binary = "";
     for (int _nyble = 0; _nyble < 2; ++_nyble)
     {
         for (int _bit = 0; _bit < 4; ++_bit)
         {
-            if (byte[_nyble+_bit])
+            if (byte[(_nyble*4)+_bit] == 1)
             {
                 binary.append("1");
             } else {
@@ -146,7 +146,8 @@ void LocoByte::binaryFromBits()
  */
 void LocoByte::bitsFromHex(QString _hex, int _nyble)
 {
-    if (debug) qDebug() << "hexToBits()";
+    if (debug) qDebug() << "bitsFromHex()";
+    _nyble = (_nyble*4);
     if (_hex == "1" || _hex == "3" || _hex == "5" || _hex == "7" || _hex == "9" || _hex == "B" || _hex == "D" || _hex == "F") {
         byte[_nyble+3] = 1;
     } else {
@@ -173,7 +174,7 @@ void LocoByte::bitsFromHex(QString _hex, int _nyble)
 
     if (_nyble == 0)
     {
-        OPcode = byte[_nyble];
+        OPcode = byte[0];
     }
     if (debug) qDebug() << "end hexToBits()";
 }
@@ -225,9 +226,9 @@ QString LocoByte::get_hex()
  */
 bool LocoByte::get_oneBit(int _bit)
 {
-    int _nyble = (_bit / 4); // Which nyble are we looking at?
-    _bit = (_bit - (_nyble*4)); // Which bit in the nyble?
-    return(byte[_nyble+_bit]); // Fire away
+    //int _nyble = (_bit / 4); // Which nyble are we looking at?
+    //_bit = (_bit - (_nyble*4)); // Which bit in the nyble?
+    return(byte[_bit]); // Fire away
 } /* end get_oneBit */
 
 /* set_oneBit()
@@ -237,9 +238,9 @@ bool LocoByte::get_oneBit(int _bit)
 void LocoByte::set_oneBit(int _bit, bool _value)
 {
     if (debug) qDebug() << "setBit() bit: " << _bit << " value: " << _value;
-    int _nyble = (_bit / 4); // Which nyble are we looking at?
-    _bit = (_bit - (_nyble*4)); // Which bit in the nyble?
-    byte[_nyble+_bit] = _value; // Fire away
+    //int _nyble = (_bit / 4); // Which nyble are we looking at?
+    //_bit = (_bit - (_nyble*4)); // Which bit in the nyble?
+    byte[_bit] = _value; // Fire away
     hexFromBits();
     binaryFromBits();
     if (debug) qDebug() << "end setBit()";
@@ -263,14 +264,14 @@ short unsigned int LocoByte::get_packetLength()
             for (int _bit = 0; _bit < 4; ++_bit)
             {
                 int _pos = ((_nyble*4)+_bit);
-                _len += (byte[_nyble+_bit] * pow(2, (7 - _pos)));
+                _len += (byte[_pos] * pow(2, (7 - _pos)));
             }
         }
         return(_len);
     }
 
-    bool _bit1 = byte[0+1];
-    bool _bit2 = byte[0+2];
+    bool _bit1 = byte[1];
+    bool _bit2 = byte[2];
 
     if (!_bit1 && !_bit2) {
         return(2);
@@ -310,7 +311,7 @@ void LocoByte::do_debugBits()
         qDebug() << "Nyble: " << _nyble;
         for (int _bit = 0; _bit < 4; ++_bit)
         {
-            qDebug() << " bit: " << _bit << " value: " << byte[_nyble+_bit];
+            qDebug() << " bit: " << _bit << " value: " << byte[(_nyble*4)+_bit];
         }
     }
 }
@@ -322,13 +323,13 @@ void LocoByte::do_debugBits()
 void LocoByte::do_genComplement()
 {
     if (debug) qDebug() << "genComplement byte: " << get_hex();
-    for (int _nyble = 0; _nyble < 2; ++_nyble)
+    /*
+    for (int _bit = 0; _bit < 8; ++_bit)
     {
-        for (int _bit = 0; _bit < 4; ++_bit)
-        {
-            byte[_nyble+_bit] = !byte[_nyble+_bit]; // Flip each bit on the array
-        }
+        byte[_bit] = !byte[_bit]; // Flip each bit on the array
     }
+    */
+    byte = ~byte;
     binaryFromBits();
     hexFromBits();
     if (debug) qDebug() << "end genComplement()";

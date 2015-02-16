@@ -119,7 +119,6 @@ int LocoPacket::get_packetLen()
     return(_result);
 }
 
-
 int LocoPacket::get_staticOPsize()
 {
     return(opcodes_hex.size());
