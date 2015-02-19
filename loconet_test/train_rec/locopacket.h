@@ -28,12 +28,14 @@ public:
     QString get_staticOPname(int);
     QString get_staticOPhex(int);
     QString get_packet();
-    QByteArray get_raw();
+    QByteArray get_QByteArray();
+    QBitArray get_QBitArray();
     int get_packetLen();
     void set_allFromHex(QString _hex);
     void do_addStaticOP(QString _hex, QString _name, QString _desc);
     QString do_genChecksum();
     void do_appendByte(QString _byte);
+    void do_appendByteArray(QByteArray _byteArray);
     bool is_validChk();
     bool is_validOP();
     bool is_followOnMsg();

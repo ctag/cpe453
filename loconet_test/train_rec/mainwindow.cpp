@@ -193,7 +193,8 @@ void MainWindow::do_serialDisconnect()
 
 void MainWindow::sendSerial()
 {
-    outgoingPacket.set_allFromHex("837C");
+    //outgoingPacket.set_allFromHex("837C");
+    outgoingPacket.set_allFromHex(ui->lineEdit_packet->text());
     if (!outgoingPacket.is_validChk())
     {
         qDebug() << "Packet isn't right `_`";
@@ -207,10 +208,9 @@ void MainWindow::sendSerial()
         return;
     }*/
 
-    //usbBuffer->write(outgoingPacket.get_packet());
-    //usbBuffer->write(outgoingPacket.get_packet().toLatin1());
+    //usbBuffer->write(outgoingPacket.get_QByteArray());
     qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
-    qDebug() << outgoingPacket.get_raw();
+    qDebug() << outgoingPacket.get_QByteArray();
 }
 
 void MainWindow::readSerial()
@@ -232,7 +232,7 @@ void MainWindow::readSerial()
             ui->textBrowser_console->append(incomingPacket.get_packet());
             incomingPacket.set_allFromHex(_data.toHex().mid(0,_data.size()));
         }
-        incomingPacket.do_appendByte(static_cast<QString>(_data.toHex().mid(0,_data.size())));
+        incomingPacket.do_appendByteArray(_data);
         qDebug() << incomingPacket.get_packet();
     }
 }

@@ -207,6 +207,20 @@ void LocoPacket::do_appendByte(QString _byte)
     }
 }
 
+void LocoPacket::do_appendByteArray(QByteArray _byteArray)
+{
+    for (int _index = 0; _index < _byteArray.count(); ++_index)
+    {
+        LocoByte _newByte;
+        _newByte.set_fromByteArray(_byteArray);
+        if (is_validChk())
+        {
+            locobyte_array.removeLast();
+        }
+        locobyte_array.append(_newByte);
+    }
+}
+
 /* get_validChk()
  *
  * Returns whether the packet has a valid OP code
@@ -244,10 +258,39 @@ bool LocoPacket::is_followOnMsg ()
     return (locobyte_array[0].get_followOnMsg());
 }
 
-QByteArray LocoPacket::get_raw()
+QBitArray LocoPacket::get_QBitArray()
 {
-    //QVector<QChar> _packetChars;
+    int _bytes = locobyte_array.count();
+    QBitArray _bitArray = QBitArray(_bytes*8);
+    for (int _byteIndex = 0; _byteIndex < _bytes; ++_byteIndex)
+    {
+        for (int _bitIndex = 0; _bitIndex < 8; ++_bitIndex)
+        {
+            int _pos = (_byteIndex*8)+_bitIndex;
+            _bitArray[_pos] = locobyte_array[_byteIndex].get_oneBit(_bitIndex);
+        }
+    }
+    return _bitArray;
+}
+
+QByteArray LocoPacket::get_QByteArray()
+{
     QByteArray _byteArray;
+    QBitArray _bitArray = get_QBitArray();
+    short unsigned int _bytes = locobyte_array.count();
+    for (int _byteIndex = 0; _byteIndex < _bytes; ++_byteIndex)
+    {
+        for (int _bitIndex = 0; _bitIndex < 8; ++_bitIndex)
+        {
+            int _pos = (_byteIndex*8)+_bitIndex;
+            _byteArray[_byteIndex] = (_byteArray[_byteIndex] | (_bitArray[_pos]?1:0)<<(_pos%8));
+        }
+    }
+    return (_byteArray);
+
+    /*
+    //QVector<QChar> _packetChars;
+
     for (int _index = 0; _index < locobyte_array.size(); ++_index)
     {
         for (int _nyble = 0; _nyble < 2; ++_nyble)
@@ -259,6 +302,7 @@ QByteArray LocoPacket::get_raw()
     }
     qDebug() << "get_raw: " << _byteArray << ", " << _byteArray.toHex();
     return(_byteArray);
+    */
 }
 
 /* Sometimes I wonder /

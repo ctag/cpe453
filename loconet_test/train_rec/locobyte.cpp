@@ -10,7 +10,7 @@
  * Team 4A
  */
 
-bool LocoByte::debug = true;
+bool LocoByte::debug = false;
 
 /*
  * Default Contructor
@@ -352,6 +352,28 @@ void LocoByte::set_fromBinary(QString _binary)
     binary = _binary;
     bitsFromBinary();
     hexFromBits();
+}
+
+// http://qt-project.org/wiki/WorkingWithRawData
+void LocoByte::set_fromByteArray(QByteArray _bytearr)
+{
+    byte = QBitArray(_bytearr.count()*8);
+    for (int _byte = 0; _byte < _bytearr.count(); ++_byte)
+    {
+        for (int _bit = 0; _bit < 8; ++_bit)
+        {
+            short unsigned int _pos = (_byte*8)+_bit;
+            bool _val = _bytearr.at(_byte)&(1<<(7-_bit));
+            byte.setBit(_pos, _val);
+        }
+    }
+    hexFromBits();
+    binaryFromBits();
+}
+
+QBitArray LocoByte::get_qBitArray()
+{
+    return(byte);
 }
 
 /* Nyble, nable
