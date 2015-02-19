@@ -19,7 +19,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
-    if (event->buttons() & Qt::LeftButton)
+    /*if (event->buttons() & Qt::LeftButton)
     {
         if (!inDrawing)
         {
@@ -34,6 +34,11 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         }
 
         inDrawing = !inDrawing;
+    }*/
+    if (event->buttons() & Qt::LeftButton)
+    {
+        inDrawing = true;
+        startPos = event->pos();
     }
 }
 
@@ -42,7 +47,21 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event)
     if (inDrawing)
     {
         endPos = event->pos();
-        update();
+        //update();
+        repaint();
+    }
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *event)
+{
+    //according to QT help, event->Buttons will not operate on the triggering button in a mouse release event.
+    //therefore, QT::LeftButton should be false.
+    if (event->buttons() & !Qt::LeftButton)
+    {
+        inDrawing = false;
+        endPos = event->pos();
+        QLine line = new QLine(startPos, event->pos());
+        lines.append(line);
     }
 }
 
@@ -63,4 +82,5 @@ void MainWindow::paintEvent(QPaintEvent *event)
     pen.setWidth(5);
     p.setPen(pen);
     drawLines(&p);
+    p.end();
 }
