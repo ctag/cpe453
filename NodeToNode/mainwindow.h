@@ -30,10 +30,11 @@ private:
         QPoint startPos;
         QPoint endPos;
         bool inDrawing;
-        QVector<QLine> lines;
+        QVector<QLine> *lines;
 public:
         void  mousePressEvent(QMouseEvent *event);
         void mouseMoveEvent(QMouseEvent *event);
+        void mouseReleaseEvent(QMouseEvent *event);
 
         //void  drawLines(QPainter *p);
         void  paintEvent(QPaintEvent *event);
