@@ -119,6 +119,11 @@ int LocoPacket::get_packetLen()
     return(_result);
 }
 
+int LocoPacket::get_numBytes ()
+{
+    return(locobyte_array.count());
+}
+
 int LocoPacket::get_staticOPsize()
 {
     return(opcodes_hex.size());
@@ -235,6 +240,7 @@ bool LocoPacket::is_validChk()
         LocoByte tmp = _hexHolder;
         _hexHolder.set_fromHex(do_xor(tmp, locobyte_array[_hexIndex]));
     }
+    //qDebug() << "checksum: " << _hexHolder.get_hex();
     if (_hexHolder.get_hex() == "FF")
     {
         return(true);
@@ -244,6 +250,12 @@ bool LocoPacket::is_validChk()
 
 bool LocoPacket::is_validOP()
 {
+    int _len = locobyte_array.count();
+    if (_len == 0)
+    {
+        qDebug() << "No bytes in packet, skipping OP check.";
+        return true;
+    }
     for (int _index = 0; _index < opcodes_hex.size(); ++_index)
     {
         if (opcodes_hex[_index].get_hex() == locobyte_array[0].get_hex()) {
@@ -282,27 +294,11 @@ QByteArray LocoPacket::get_QByteArray()
     {
         for (int _bitIndex = 0; _bitIndex < 8; ++_bitIndex)
         {
-            int _pos = (_byteIndex*8)+_bitIndex;
-            _byteArray[_byteIndex] = (_byteArray[_byteIndex] | (_bitArray[_pos]?1:0)<<(_pos%8));
+            int _pos = (_byteIndex*8)+(7-_bitIndex); // This is disgusting :|
+            _byteArray[_byteIndex] = (_byteArray[_byteIndex] | (_bitArray[_pos]?1:0)<<(_bitIndex));
         }
     }
     return (_byteArray);
-
-    /*
-    //QVector<QChar> _packetChars;
-
-    for (int _index = 0; _index < locobyte_array.size(); ++_index)
-    {
-        for (int _nyble = 0; _nyble < 2; ++_nyble)
-        {
-            //_packetChars.append(locohex_array[_index].get_nybleAsChar(_nyble));
-            _byteArray.append(locobyte_array[_index].get_nybleAsChar(_nyble));
-            qDebug() << locobyte_array[_index].get_nybleAsChar(_nyble);
-        }
-    }
-    qDebug() << "get_raw: " << _byteArray << ", " << _byteArray.toHex();
-    return(_byteArray);
-    */
 }
 
 /* Sometimes I wonder /

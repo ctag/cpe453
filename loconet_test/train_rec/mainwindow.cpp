@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_serialConnect()));
     connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), this, SLOT(do_serialDisconnect()));
     connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(readSerial()));
+    connect(ui->pushButton_serialForceRead, SIGNAL(clicked()), this, SLOT(readSerial()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(sendSerial()));
 
     ui->comboBox_opcodes->setEditable(false);
@@ -208,9 +209,14 @@ void MainWindow::sendSerial()
         return;
     }*/
 
+    QByteArray _packet = outgoingPacket.get_QByteArray();
+
+    //for (int _bit = 0; _bit < _packet.count()*8)
+
     //usbBuffer->write(outgoingPacket.get_QByteArray());
+    dumpQByteArray(outgoingPacket.get_QByteArray());
     qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
-    qDebug() << outgoingPacket.get_QByteArray();
+    qDebug() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
 }
 
 void MainWindow::readSerial()
@@ -222,19 +228,35 @@ void MainWindow::readSerial()
         return;
     }
     QByteArray _data;
-    while(usbBuffer->waitForReadyRead(50))
+    while(usbBuffer->bytesAvailable() > 1)
     {
         qDebug() << "Reading serial ^_^";
         _data = usbBuffer->read(1);
 
         qDebug() << _data.toHex();
-        if (incomingPacket.is_validChk()) {
-            ui->textBrowser_console->append(incomingPacket.get_packet());
-            incomingPacket.set_allFromHex(_data.toHex().mid(0,_data.size()));
+
+        if (!incomingPacket.is_validOP() && (incomingPacket.get_numBytes() > 1))
+        {
+            incomingPacket = LocoPacket();
+            return;
         }
-        incomingPacket.do_appendByteArray(_data);
+         else if (incomingPacket.is_validChk()) {
+            qDebug() << "Valid checksum! Need to move this packet out of the way.";
+            ui->textBrowser_console->append(incomingPacket.get_packet());
+            incomingPacket.set_allFromHex(_data.toHex());
+        } else {
+            incomingPacket.do_appendByteArray(_data);
+        }
         qDebug() << incomingPacket.get_packet();
     }
+}
+
+void MainWindow::dumpQByteArray(QByteArray _packet)
+{
+    LocoPacket _localPacket = LocoPacket(_packet.toHex());
+    qDebug() << _packet.toHex();
+    ui->textBrowser_console->append(incomingPacket.get_packet());
+    qDebug() << _localPacket.get_packet();
 }
 
 void MainWindow::do_packetTimer()

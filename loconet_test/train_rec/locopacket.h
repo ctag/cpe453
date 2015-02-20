@@ -31,6 +31,7 @@ public:
     QByteArray get_QByteArray();
     QBitArray get_QBitArray();
     int get_packetLen();
+    int get_numBytes();
     void set_allFromHex(QString _hex);
     void do_addStaticOP(QString _hex, QString _name, QString _desc);
     QString do_genChecksum();
