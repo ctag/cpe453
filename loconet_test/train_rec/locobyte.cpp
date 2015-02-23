@@ -53,91 +53,7 @@ void LocoByte::createEmpty()
             byte[(nyble*4)+bit] = 0;
         }
     }
-    //binary = "00000000";
-    //OPcode = false;
 }
-
-/*
-void LocoByte::bitsFromBinary()
-{
-    for (int _nyble = 0; _nyble < 2; ++_nyble)
-    {
-        for (int _bit = 0; _bit < 4; ++_bit)
-        {
-            int _pos = ((_nyble*4)+_bit);
-            QString _test = binary.mid(_pos, 1);
-            if (_test == "1")
-            {
-                byte[_pos] = 1;
-            } else {
-                byte[_pos] = 0;
-            }
-        }
-    }
-}
-*/
-
-/* hexFromBits()
- *
- * Converts the bits member array to the hex string
- */
-/*
-QString LocoByte::hexFromBits()
-{
-    if (debug) qDebug() << "hexFromBits() " << get_binary();
-    int _decimal[2] = {0, 0};
-    //QChar _hexArray[2] = {'0', '0'};
-
-    byteCharArray[0] = '0';
-    byteCharArray[1] = '0';
-
-    for (int _nyble = 0; _nyble < 2; ++_nyble)
-    {
-        for (int _bit = 0; _bit < 4; ++_bit)
-        {
-            int power = (3 - _bit);
-            _decimal[_nyble] += pow(2, power) * byte[(_nyble*4)+_bit];
-        }
-        if (debug) qDebug() << "_decimal[" << _nyble << "]: " << _decimal[_nyble];
-        if (_decimal[_nyble] <= 9 && _decimal[_nyble] >= 0) {
-            _decimal[_nyble] += 48;
-        } else {
-            _decimal[_nyble] += 55;
-        }
-        byteCharArray[_nyble] = static_cast<char>(_decimal[_nyble]);
-    }
-    QString _hex = QString(byteCharArray, 2);
-    if (debug) qDebug() << "hexFromBits:" << _hex;
-    if (debug) qDebug() << "Generated hex from bits: " << _hex << " integers: " << _decimal[0] << " " << _decimal[1];
-    if (debug) qDebug() << "end hexFromBits()";
-    return (_hex);
-} /* end hexFromBits() */
-
-/* binaryFromBits()
- *
- * Convert bits in dynamic array to a binary representation in a QString
- * Works with an entire byte (8 bits) at once
- */
-/*
-void LocoByte::binaryFromBits()
-{
-    if (debug) qDebug() << "bitsToBinary()" << byte;
-    binary = "";
-    for (int _nyble = 0; _nyble < 2; ++_nyble)
-    {
-        for (int _bit = 0; _bit < 4; ++_bit)
-        {
-            if (byte[(_nyble*4)+_bit] == 1)
-            {
-                binary.append("1");
-            } else {
-                binary.append("0");
-            }
-        }
-    }
-    if (debug) qDebug() << "Created binary string: " << binary;
-    if (debug) qDebug() << "end bitsToBinary()";
-} /* end binaryFromBits() */
 
 /* bitsFromHex()
  *
@@ -225,9 +141,6 @@ QString LocoByte::get_hex()
     int _decimal[2] = {0, 0};
     QChar _hexArray[2] = {'0', '0'};
 
-    //byteCharArray[0] = '0';
-    //byteCharArray[1] = '0';
-
     for (int _nyble = 0; _nyble < 2; ++_nyble)
     {
         for (int _bit = 0; _bit < 4; ++_bit)
@@ -267,11 +180,7 @@ bool LocoByte::get_oneBit(int _bit)
 void LocoByte::set_oneBit(int _bit, bool _value)
 {
     if (debug) qDebug() << "setBit() bit: " << _bit << " value: " << _value;
-    //int _nyble = (_bit / 4); // Which nyble are we looking at?
-    //_bit = (_bit - (_nyble*4)); // Which bit in the nyble?
-    byte[_bit] = _value; // Fire away
-    //hexFromBits();
-    //binaryFromBits();
+    byte[_bit] = _value;
     if (debug) qDebug() << "end setBit()";
 } /* end set_oneBit */
 
@@ -323,13 +232,6 @@ bool LocoByte::get_followOnMsg()
     return(false);
 }
 
-/*
-char LocoByte::get_nybleAsChar(int _nyble)
-{
-    return(byteCharArray[_nyble].toLatin1());
-}
-*/
-
 /* do_debugBits()
  *
  * Check the status of the bits in the raw nyble arrays
@@ -354,15 +256,7 @@ void LocoByte::do_debugBits()
 void LocoByte::do_genComplement()
 {
     if (debug) qDebug() << "genComplement byte: " << get_hex();
-    /*
-    for (int _bit = 0; _bit < 8; ++_bit)
-    {
-        byte[_bit] = !byte[_bit]; // Flip each bit on the array
-    }
-    */
     byte = ~byte;
-    //binaryFromBits();
-    //hexFromBits();
     if (debug) qDebug() << "end genComplement()";
 }
 
@@ -380,9 +274,6 @@ void LocoByte::do_testDriver()
  */
 void LocoByte::set_fromBinary(QString _binary)
 {
-    /*binary = _binary;
-    bitsFromBinary();
-    hexFromBits();*/
     for (int _nyble = 0; _nyble < 2; ++_nyble)
     {
         for (int _bit = 0; _bit < 4; ++_bit)
@@ -412,8 +303,6 @@ void LocoByte::set_fromByteArray(QByteArray _bytearr)
             byte.setBit(_pos, _val);
         }
     }
-    //hexFromBits();
-    //binaryFromBits();
 }
 
 QBitArray LocoByte::get_qBitArray()
