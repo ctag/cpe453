@@ -27,7 +27,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->lineEdit_chk->setEnabled(false);
 
-    usbBuffer = new QSerialPort;
+    //usbBuffer = new QSerialPort;
 
     connect(ui->pushButton_genPacket, SIGNAL(clicked()), this, SLOT(do_genPacket()));
     connect(ui->lineEdit_opcode, SIGNAL(returnPressed()), this, SLOT(do_enableArgs()));
@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_serialRefreshList, SIGNAL(clicked()), this, SLOT(do_serialRefreshList()));
     connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_serialConnect()));
     connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), this, SLOT(do_serialDisconnect()));
-    connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(readSerial()));
+    //connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(readSerial()));
     connect(ui->pushButton_serialForceRead, SIGNAL(clicked()), this, SLOT(readSerial()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(sendSerial()));
 
@@ -165,11 +165,15 @@ void MainWindow::do_serialRefreshList()
 void MainWindow::do_serialConnect()
 {
     int _portIndex = ui->comboBox_serialList->currentIndex();
+    QSerialPortInfo _device = usbPorts.availablePorts().at(_portIndex);
+    loconet.do_serialOpen(_device);
+    /* Deprecated
     usbBuffer->setPort(usbPorts.availablePorts().at(_portIndex));
     usbBuffer->setBaudRate(57600);
     usbBuffer->setFlowControl(QSerialPort::HardwareControl);
     usbBuffer->open(QIODevice::ReadWrite);
-    if (usbBuffer->isOpen())
+    */
+    if (loconet.get_serialOpen())
     {
         ui->textBrowser_console->append("Serial port open :D");
         ui->pushButton_serialConnect->setEnabled(false);
@@ -177,14 +181,14 @@ void MainWindow::do_serialConnect()
         ui->comboBox_serialList->setEnabled(false);
         ui->pushButton_serialRefreshList->setEnabled(false);
     } else {
-        ui->textBrowser_console->append("Serial port not open xC [" + usbBuffer->errorString() + "]");
+        ui->textBrowser_console->append("Serial port not open xC");
     }
 }
 
 void MainWindow::do_serialDisconnect()
 {
-    if (usbBuffer->isOpen()) {
-        usbBuffer->close();
+    if (loconet.get_serialOpen()) {
+        loconet.do_serialClose();
     }
     ui->textBrowser_console->append("Serial port closed :D");
     ui->pushButton_serialConnect->setEnabled(true);
@@ -210,16 +214,20 @@ void MainWindow::sendSerial()
         return;
     }*/
 
-    QByteArray _packet = outgoingPacket.get_QByteArray();
+    //QByteArray _packet = outgoingPacket.get_QByteArray();
 
     //for (int _bit = 0; _bit < _packet.count()*8)
 
-    usbBuffer->write(outgoingPacket.get_QByteArray());
+    //usbBuffer->write(outgoingPacket.get_QByteArray());
+
+    loconet.do_serialWrite(outgoingPacket);
+
     dumpQByteArray(outgoingPacket.get_QByteArray());
     qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
     qDebug() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
 }
 
+/*
 void MainWindow::readSerial()
 {
     if (!usbBuffer->isOpen())
@@ -253,6 +261,7 @@ void MainWindow::readSerial()
         qDebug() << incomingPacket.get_packet();
     }
 }
+*/
 
 void MainWindow::dumpQByteArray(QByteArray _packet)
 {

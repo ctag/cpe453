@@ -11,7 +11,7 @@
 #include <QComboBox>
 #include <QIODevice>
 #include <QTimer>
-#include "locopacket.h"
+#include "loconet.h"
 
 namespace Ui {
 class MainWindow;
@@ -36,7 +36,7 @@ protected slots:
     void do_serialRefreshList();
     void do_serialConnect();
     void do_serialDisconnect();
-    void readSerial();
+    //void readSerial();
     void dumpQByteArray(QByteArray _data);
     void sendSerial();
     void do_packetTimer();
@@ -46,7 +46,8 @@ private:
     Ui::MainWindow *ui;
     LocoPacket outgoingPacket;
     LocoPacket incomingPacket;
-    QSerialPort * usbBuffer;
+    //QSerialPort * usbBuffer;
+    LocoNet loconet;
     QSerialPortInfo usbPorts;
     QTimer * packetTimer;
 };

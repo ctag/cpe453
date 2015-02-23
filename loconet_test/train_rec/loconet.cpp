@@ -4,8 +4,6 @@ bool LocoNet::debug = false;
 
 LocoNet::LocoNet ()
 {
-    connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(do_serialRead()));
-
     incomingPacket = LocoPacket();
 }
 
@@ -26,12 +24,14 @@ QVector<LocoTrain> LocoNet::get_trains ()
 
 bool LocoNet::do_serialOpen (QSerialPortInfo _port)
 {
+    usbBuffer = new QSerialPort;
     usbBuffer->setPort(_port);
     usbBuffer->setBaudRate(57600);
     usbBuffer->setFlowControl(QSerialPort::HardwareControl);
     usbBuffer->open(QIODevice::ReadWrite);
     if (usbBuffer->isOpen())
     {
+        connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(do_serialRead()));
         return(true);
     }
     usbBuffer->close();
@@ -42,7 +42,9 @@ void LocoNet::do_serialClose ()
 {
     if (usbBuffer->isOpen())
     {
+        disconnect(usbBuffer, 0, 0, 0);
         usbBuffer->close();
+        delete usbBuffer;
     }
 }
 
@@ -114,7 +116,7 @@ void LocoNet::do_serialWrite (QString _hex)
     usbBuffer->write(_packet.get_QByteArray());
 }
 
-QString LocoNet::parsePacket (LocoPacket _packet)
+QString LocoNet::do_parsePacket (LocoPacket _packet)
 {
     QString _opCode = (_packet.get_OPcode());
 

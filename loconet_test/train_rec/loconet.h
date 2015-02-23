@@ -30,13 +30,13 @@ public:
     bool get_serialOpen();
     QVector<LocoTrain> get_trains();
     bool do_serialOpen(QSerialPortInfo _port);
-    void do_serialClose();
     void do_findTrains();
     void do_serialWrite(LocoPacket _packet);
     void do_serialWrite(QString _hex);
 
 public slots:
-    QString parsePacket(LocoPacket _packet);
+    QString do_parsePacket(LocoPacket _packet);
+    void do_serialClose();
 
 signals:
     void newPacket(LocoPacket _packet);
