@@ -31,10 +31,15 @@ private:
 
         QPoint startPos;
         QPoint endPos;
+<<<<<<< HEAD
         bool leftDown;
         bool rightDown;
         bool connectsToPrevious;
         QVector<QLine> lines;
+=======
+        bool inDrawing;
+        QVector<QLine> *lines;
+>>>>>>> origin/master
 public:
         void mousePressEvent(QMouseEvent *event);
         void mouseMoveEvent(QMouseEvent *event);

@@ -37,6 +37,7 @@ protected slots:
     void do_serialConnect();
     void do_serialDisconnect();
     void readSerial();
+    void dumpQByteArray(QByteArray _data);
     void sendSerial();
     void do_packetTimer();
     void do_timerToggle();

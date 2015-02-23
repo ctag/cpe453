@@ -8,17 +8,21 @@ QT       += core gui sql network serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = loconet_checksum
+TARGET = train_rec
 TEMPLATE = app
 
 
 SOURCES += main.cpp\
         mainwindow.cpp \
 	locopacket.cpp \
-    locobyte.cpp
+    locobyte.cpp \
+    locotrain.cpp \
+    loconet.cpp
 
 HEADERS  += mainwindow.h \
 	locopacket.h \
-    locobyte.h
+    locobyte.h \
+    locotrain.h \
+    loconet.h
 
 FORMS    += mainwindow.ui
