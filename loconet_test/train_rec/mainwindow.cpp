@@ -167,6 +167,7 @@ void MainWindow::do_serialConnect()
     int _portIndex = ui->comboBox_serialList->currentIndex();
     usbBuffer->setPort(usbPorts.availablePorts().at(_portIndex));
     usbBuffer->setBaudRate(57600);
+    usbBuffer->setFlowControl(QSerialPort::HardwareControl);
     usbBuffer->open(QIODevice::ReadWrite);
     if (usbBuffer->isOpen())
     {
@@ -213,7 +214,7 @@ void MainWindow::sendSerial()
 
     //for (int _bit = 0; _bit < _packet.count()*8)
 
-    //usbBuffer->write(outgoingPacket.get_QByteArray());
+    usbBuffer->write(outgoingPacket.get_QByteArray());
     dumpQByteArray(outgoingPacket.get_QByteArray());
     qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
     qDebug() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
@@ -228,7 +229,7 @@ void MainWindow::readSerial()
         return;
     }
     QByteArray _data;
-    while(usbBuffer->bytesAvailable() > 1)
+    while(usbBuffer->bytesAvailable() > 0)
     {
         qDebug() << "Reading serial ^_^";
         _data = usbBuffer->read(1);
@@ -242,7 +243,9 @@ void MainWindow::readSerial()
         }
          else if (incomingPacket.is_validChk()) {
             qDebug() << "Valid checksum! Need to move this packet out of the way.";
+            //filter packet from UI
             ui->textBrowser_console->append(incomingPacket.get_packet());
+            //
             incomingPacket.set_allFromHex(_data.toHex());
         } else {
             incomingPacket.do_appendByteArray(_data);
@@ -261,9 +264,10 @@ void MainWindow::dumpQByteArray(QByteArray _packet)
 
 void MainWindow::do_packetTimer()
 {
-    QString _hex = ui->lineEdit_timerPacket->text();
-    LocoPacket _packet(_hex);
-    usbBuffer->write(_packet.get_packet().toLatin1());
+    sendSerial();
+    //QString _hex = ui->lineEdit_timerPacket->text();
+    //LocoPacket _packet(_hex);
+    //usbBuffer->write(_packet.get_packet().toLatin1());
 }
 
 void MainWindow::do_timerToggle()
@@ -275,7 +279,7 @@ void MainWindow::do_timerToggle()
         return;
     }
     int _period = ui->spinBox_timerPeriod->value();
-    packetTimer->start(_period);
+    packetTimer->start(_period*1000);
     ui->pushButton_timerToggle->setText("Stop Timer");
 }
 
