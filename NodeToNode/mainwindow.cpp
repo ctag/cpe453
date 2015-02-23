@@ -20,7 +20,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-<<<<<<< HEAD
+
 
 
 
@@ -33,11 +33,6 @@ MainWindow::~MainWindow()
 //click
 void MainWindow::mousePressEvent(QMouseEvent *event){
     if (event->buttons() & Qt::LeftButton)
-=======
-void MainWindow::mousePressEvent(QMouseEvent *event)
-{
-    /*if (event->buttons() & Qt::LeftButton)
->>>>>>> origin/master
     {
         if(!connectsToPrevious){
             QLine line = QLine(startPos, endPos);
@@ -50,17 +45,8 @@ void MainWindow::mousePressEvent(QMouseEvent *event)
         leftDown = true;
     }
 
-<<<<<<< HEAD
     else if (event->buttons() & Qt::RightButton){
         rightDown = true;
-=======
-        inDrawing = !inDrawing;
-    }*/
-    if (event->buttons() & Qt::LeftButton)
-    {
-        inDrawing = true;
-        startPos = event->pos();
->>>>>>> origin/master
     }
 }
 
