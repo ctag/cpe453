@@ -3,6 +3,11 @@
 total: 
 19-2 4hr
 	Bringing classes up to date with qbitarray
+21-2 2hr
+	cleaning classes
+22-2 6hr
+	Designing new locotrain and loconet classes
+
 
 # Sprint 2
 total: 41hr
