@@ -11,6 +11,8 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QDebug>
+#include <QRect>
+
 namespace Ui {
 class MainWindow;
 }
@@ -29,14 +31,17 @@ private:
 
         QPoint startPos;
         QPoint endPos;
-        bool inDrawing;
+        bool leftDown;
+        bool rightDown;
+        bool connectsToPrevious;
         QVector<QLine> lines;
 public:
-        void  mousePressEvent(QMouseEvent *event);
+        void mousePressEvent(QMouseEvent *event);
         void mouseMoveEvent(QMouseEvent *event);
+        void mouseReleaseEvent(QMouseEvent *event);
 
         //void  drawLines(QPainter *p);
-        void  paintEvent(QPaintEvent *event);
+        void paintEvent(QPaintEvent *paintEvent);
 
 
 };

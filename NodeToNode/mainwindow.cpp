@@ -8,7 +8,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
         startPos = QPoint();
         endPos = QPoint();
-        inDrawing = false;
+        leftDown = false;
+        rightDown = false;
+        connectsToPrevious = false;
+        setCentralWidget(ui->centralWidget);
         setMouseTracking(true);
 }
 
@@ -17,34 +20,92 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::mousePressEvent(QMouseEvent *event)
-{
+
+
+
+
+
+
+
+
+
+//click
+void MainWindow::mousePressEvent(QMouseEvent *event){
     if (event->buttons() & Qt::LeftButton)
     {
-        if (!inDrawing)
-        {
-            startPos = event->pos();
-        }
-        else
-        {
-            endPos = event->pos();
-
-            QLine line = QLine(startPos, event->pos());
+        if(!connectsToPrevious){
+            QLine line = QLine(startPos, endPos);
             lines.append(line);
-        }
+            startPos = event->pos();
+            endPos = event->pos();
+            update();
 
-        inDrawing = !inDrawing;
+        }
+        leftDown = true;
+    }
+
+    else if (event->buttons() & Qt::RightButton){
+        rightDown = true;
     }
 }
 
-void MainWindow::mouseMoveEvent(QMouseEvent *event)
-{
-    if (inDrawing)
+
+//click & drag
+void MainWindow::mouseMoveEvent(QMouseEvent *event){
+    if (leftDown & connectsToPrevious)
     {
         endPos = event->pos();
         update();
     }
+    else if (connectsToPrevious)
+    {
+        endPos = event->pos();
+        update();
+    }
+    else if (leftDown){
+        startPos = event->pos();
+        endPos = event->pos();
+        update();
+    }
 }
+
+
+//release
+void MainWindow::mouseReleaseEvent(QMouseEvent *event){
+    if (leftDown){
+        leftDown = !leftDown;
+        endPos = event->pos();
+        QLine line = QLine(startPos, event->pos());
+        lines.append(line);
+
+        //begin next line
+        startPos = event->pos();
+        endPos = event->pos();
+        connectsToPrevious = true;
+
+    }
+    else if(rightDown){
+        //clear selection
+        rightDown = !rightDown;
+        endPos = startPos;
+        connectsToPrevious = false;
+    }
+    update();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 void MainWindow::drawLines(QPainter *p)
 {
@@ -52,7 +113,7 @@ void MainWindow::drawLines(QPainter *p)
     {
         p->drawLine(startPos, endPos);
     }
-
+    p->setRenderHint(QPainter::Antialiasing, true);
     p->drawLines(lines);
 }
 void MainWindow::paintEvent(QPaintEvent *event)
@@ -60,7 +121,21 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QPainter p(this);
     QPen pen;
     pen.setColor(Qt::black);
-    pen.setWidth(5);
+    pen.setWidth(4);
     p.setPen(pen);
     drawLines(&p);
 }
+
+/*
+void MainWindow::createNode(double xPos, double yPos){
+    //node->QCircle.setScale(0f);
+    QPainter p(this);
+    QPen pen;
+    pen.setColor(Qt::black);
+    pen.setWidth(4);
+    p.setPen(pen);
+    drawLines(&p);
+    QRect nodeRec = QRect(xPos, yPos, 12, 12);
+}
+*/
+

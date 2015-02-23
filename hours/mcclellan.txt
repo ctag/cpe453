@@ -1,0 +1,3 @@
+feb-21-2015 6hr
+	Recreated NodeToNode program prototype, added continuous drawing, anti-aliasing,
+	and right click to terminate. Researched graphic implementations for node points.
