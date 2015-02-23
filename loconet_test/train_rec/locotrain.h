@@ -1,0 +1,48 @@
+#ifndef LOCOTRAIN_H
+#define LOCOTRAIN_H
+
+#include <QString>
+#include <QDebug>
+#include <QChar>
+#include <QBitArray>
+#include "locobyte.h"
+
+namespace std {
+class LocoTrain;
+}
+
+class LocoTrain
+{
+public:
+    LocoTrain();
+    ~LocoTrain();
+    void set_name(QString _name);
+    void set_adr(LocoByte _adr);
+    void set_slot(LocoByte _slot);
+    void set_direction(bool _forward);
+    void set_speed(LocoByte _speed);
+    LocoByte get_adr();
+    LocoByte get_slot();
+    LocoByte get_speed();
+    bool get_direction();
+
+protected:
+
+private:
+    QString name;
+    LocoByte adr;
+    LocoByte slot;
+    bool direction; // 1 = forward
+    LocoByte speed;
+    static bool debug;
+
+};
+
+#endif // LOCOTRAIN_H
+
+
+
+
+
+
+
