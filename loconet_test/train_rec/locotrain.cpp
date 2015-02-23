@@ -16,6 +16,11 @@ LocoTrain::~LocoTrain ()
 
 }
 
+bool LocoTrain::operator ==(LocoTrain _arg)
+{
+    return((this->get_adr() == _arg.get_adr()) && (this->get_slot() == _arg.get_slot()));
+}
+
 void LocoTrain::set_name (QString _name)
 {
     name = _name;

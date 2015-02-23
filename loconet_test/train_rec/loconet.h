@@ -31,17 +31,21 @@ public:
     QVector<LocoTrain> get_trains();
     bool do_serialOpen(QSerialPortInfo _port);
     void do_serialClose();
-    void do_serialSend(LocoPacket _packet);
     void do_findTrains();
+    void do_serialWrite(LocoPacket _packet);
+    void do_serialWrite(QString _hex);
 
-//public slots:
-
-protected:
-    void do_serialRead();
-    void do_serialWrite();
+public slots:
+    QString parsePacket(LocoPacket _packet);
 
 signals:
     void newPacket(LocoPacket _packet);
+
+protected:
+    QString handle_E7(LocoPacket _packet);
+
+protected slots:
+    void do_serialRead();
 
 private:
     QVector<LocoTrain> trains;

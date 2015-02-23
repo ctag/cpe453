@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QVector>
 #include <QByteArray>
+#include <QBitArray>
 #include "locobyte.h"
 
 /* LocoPacket()
@@ -24,6 +25,7 @@ public:
     LocoPacket();
     LocoPacket(QString _hex);
     ~LocoPacket();
+    bool operator==(LocoPacket _arg);
     int get_staticOPsize();
     QString get_staticOPname(int);
     QString get_staticOPhex(int);
@@ -32,6 +34,8 @@ public:
     QBitArray get_QBitArray();
     int get_packetLen();
     int get_numBytes();
+    QString get_OPcode();
+    LocoByte get_locobyte(int _byte);
     void set_allFromHex(QString _hex);
     void do_addStaticOP(QString _hex, QString _name, QString _desc);
     QString do_genChecksum();

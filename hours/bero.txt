@@ -1,6 +1,8 @@
 
 # Sprint 3
 total: 
+23-2 2.3hr
+	Updating loconet class, adding overloaded comparators
 19-2 4hr
 	Bringing classes up to date with qbitarray
 21-2 2hr

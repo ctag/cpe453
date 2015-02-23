@@ -37,6 +37,11 @@ LocoByte::~LocoByte()
     // Let QT take care of it
 }
 
+bool LocoByte::operator ==(LocoByte _arg)
+{
+    return(byte == _arg.get_qBitArray());
+}
+
 /* createEmpty()
  *
  * Initialize all member variables.

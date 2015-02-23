@@ -93,6 +93,11 @@ LocoPacket::~LocoPacket()
     //delete [] locohex_array;
 }
 
+bool LocoPacket::operator ==(LocoPacket _arg)
+{
+    return(this->get_QByteArray() == _arg.get_QByteArray());
+}
+
 QString LocoPacket::get_packet()
 {
     QString _result = "";
@@ -139,6 +144,24 @@ QString LocoPacket::get_staticOPhex(int _index)
     return(opcodes_hex[_index].get_hex());
 }
 
+QString LocoPacket::get_OPcode ()
+{
+    if (locobyte_array.count() < 1)
+    {
+        return("00");
+    }
+    LocoByte _opcode = locobyte_array[0];
+    return(_opcode.get_hex());
+}
+
+LocoByte LocoPacket::get_locobyte (int _byte)
+{
+    if (_byte >= locobyte_array.count())
+    {
+        return LocoByte("00");
+    }
+    return locobyte_array[_byte];
+}
 
 QString LocoPacket::do_xor(LocoByte _byte1, LocoByte _byte2)
 {

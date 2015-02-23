@@ -16,6 +16,7 @@ class LocoTrain
 public:
     LocoTrain();
     ~LocoTrain();
+    bool operator==(LocoTrain _arg);
     void set_name(QString _name);
     void set_adr(LocoByte _adr);
     void set_slot(LocoByte _slot);
@@ -35,6 +36,9 @@ private:
     bool direction; // 1 = forward
     LocoByte speed;
     static bool debug;
+    bool active;
+    bool lighting;
+    LocoByte sound;
 
 };
 

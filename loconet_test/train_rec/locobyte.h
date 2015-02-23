@@ -17,6 +17,7 @@ public:
     LocoByte();
     LocoByte(QString _hex);
     ~LocoByte();
+    bool operator==(LocoByte _arg);
     QString get_binary();
     QString get_hex();
     bool get_oneBit(int _bit);
