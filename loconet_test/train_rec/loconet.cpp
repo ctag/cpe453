@@ -1,6 +1,6 @@
 #include "loconet.h"
 
-bool LocoNet::debug = false;
+bool LocoNet::debug = true;
 
 LocoNet::LocoNet ()
 {

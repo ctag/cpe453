@@ -39,7 +39,8 @@ public slots:
     void do_serialClose();
 
 signals:
-    void newPacket(LocoPacket _packet);
+    void newPacket(LocoPacket);
+    void trainUpdated(LocoTrain);
 
 protected:
     QString handle_E7(LocoPacket _packet);

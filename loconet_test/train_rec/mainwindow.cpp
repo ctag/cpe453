@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(readSerial()));
     connect(ui->pushButton_serialForceRead, SIGNAL(clicked()), this, SLOT(readSerial()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(sendSerial()));
+    connect(&loconet, &LocoNet::newPacket, this, &MainWindow::displayPacket); // QT-5 style works
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
@@ -225,6 +226,12 @@ void MainWindow::sendSerial()
     dumpQByteArray(outgoingPacket.get_QByteArray());
     qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
     qDebug() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
+}
+
+void MainWindow::displayPacket(LocoPacket _packet)
+{
+    qDebug() << "Reading packet to text browser.";
+    ui->textBrowser_console->append(_packet.get_packet());
 }
 
 /*

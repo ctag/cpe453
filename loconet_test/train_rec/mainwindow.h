@@ -42,6 +42,9 @@ protected slots:
     void do_packetTimer();
     void do_timerToggle();
 
+public slots:
+    void displayPacket(LocoPacket);
+
 private:
     Ui::MainWindow *ui;
     LocoPacket outgoingPacket;
