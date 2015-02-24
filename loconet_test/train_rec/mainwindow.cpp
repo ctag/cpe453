@@ -27,15 +27,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->lineEdit_chk->setEnabled(false);
 
-    //usbBuffer = new QSerialPort;
-
     connect(ui->pushButton_genPacket, SIGNAL(clicked()), this, SLOT(do_genPacket()));
     connect(ui->lineEdit_opcode, SIGNAL(returnPressed()), this, SLOT(do_enableArgs()));
     connect(ui->comboBox_opcodes, SIGNAL(currentIndexChanged(int)), this, SLOT(do_OPfromComboBox()));
     connect(ui->pushButton_serialRefreshList, SIGNAL(clicked()), this, SLOT(do_serialRefreshList()));
     connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_serialConnect()));
     connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), this, SLOT(do_serialDisconnect()));
-    //connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(readSerial()));
     connect(ui->pushButton_serialForceRead, SIGNAL(clicked()), this, SLOT(readSerial()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(sendSerial()));
     connect(&loconet, &LocoNet::newPacket, this, &MainWindow::displayPacket); // QT-5 style works
@@ -169,12 +166,7 @@ void MainWindow::do_serialConnect()
     int _portIndex = ui->comboBox_serialList->currentIndex();
     QSerialPortInfo _device = usbPorts.availablePorts().at(_portIndex);
     loconet.do_serialOpen(_device);
-    /* Deprecated
-    usbBuffer->setPort(usbPorts.availablePorts().at(_portIndex));
-    usbBuffer->setBaudRate(57600);
-    usbBuffer->setFlowControl(QSerialPort::HardwareControl);
-    usbBuffer->open(QIODevice::ReadWrite);
-    */
+
     if (loconet.get_serialOpen())
     {
         ui->textBrowser_console->append("Serial port open :D");
@@ -201,7 +193,6 @@ void MainWindow::do_serialDisconnect()
 
 void MainWindow::sendSerial()
 {
-    //outgoingPacket.set_allFromHex("837C");
     outgoingPacket.set_allFromHex(ui->lineEdit_packet->text());
     if (!outgoingPacket.is_validChk())
     {
@@ -209,18 +200,6 @@ void MainWindow::sendSerial()
         return;
     }
     ui->textBrowser_packets->append(outgoingPacket.get_packet().toLatin1());
-
-    /*if (!usbBuffer->isOpen())
-    {
-        qDebug() << "Serial isn't open...";
-        return;
-    }*/
-
-    //QByteArray _packet = outgoingPacket.get_QByteArray();
-
-    //for (int _bit = 0; _bit < _packet.count()*8)
-
-    //usbBuffer->write(outgoingPacket.get_QByteArray());
 
     loconet.do_serialWrite(outgoingPacket);
 
@@ -232,44 +211,18 @@ void MainWindow::sendSerial()
 void MainWindow::displayPacket(LocoPacket _packet)
 {
     qDebug() << "Reading packet to text browser.";
-    ui->textBrowser_console->append(_packet.get_packet());
-}
-
-/*
-void MainWindow::readSerial()
-{
-    if (!usbBuffer->isOpen())
+    ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz") + " " + _packet.get_packet());
+    // Sort packets for easier reading
+    QString _op = _packet.get_OPcode();
+    if (_op == "B2")
     {
-        qDebug() << "Serial port suddenly isn't open x.x";
-        do_serialDisconnect();
-        return;
-    }
-    QByteArray _data;
-    while(usbBuffer->bytesAvailable() > 0)
-    {
-        qDebug() << "Reading serial ^_^";
-        _data = usbBuffer->read(1);
-
-        qDebug() << _data.toHex();
-
-        if (!incomingPacket.is_validOP() && (incomingPacket.get_numBytes() > 1))
-        {
-            incomingPacket = LocoPacket();
-            return;
-        }
-         else if (incomingPacket.is_validChk()) {
-            qDebug() << "Valid checksum! Need to move this packet out of the way.";
-            //filter packet from UI
-            ui->textBrowser_console->append(incomingPacket.get_packet());
-            //
-            incomingPacket.set_allFromHex(_data.toHex());
-        } else {
-            incomingPacket.do_appendByteArray(_data);
-        }
-        qDebug() << incomingPacket.get_packet();
+        ui->textBrowser_sorted_b2->append(_packet.get_packet());
+    } else if (_op == "A0") {
+        ui->textBrowser_sorted_a0->append(_packet.get_packet());
+    } else if (_op == "E7") {
+        ui->textBrowser_sorted_e7->append(_packet.get_packet());
     }
 }
-*/
 
 void MainWindow::dumpQByteArray(QByteArray _packet)
 {
@@ -282,9 +235,6 @@ void MainWindow::dumpQByteArray(QByteArray _packet)
 void MainWindow::do_packetTimer()
 {
     sendSerial();
-    //QString _hex = ui->lineEdit_timerPacket->text();
-    //LocoPacket _packet(_hex);
-    //usbBuffer->write(_packet.get_packet().toLatin1());
 }
 
 void MainWindow::do_timerToggle()

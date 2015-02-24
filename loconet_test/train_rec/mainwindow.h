@@ -11,6 +11,10 @@
 #include <QComboBox>
 #include <QIODevice>
 #include <QTimer>
+#include <QDateTime>
+#include <QDate>
+#include <QTime>
+
 #include "loconet.h"
 
 namespace Ui {
@@ -54,6 +58,7 @@ private:
     LocoNet loconet;
     QSerialPortInfo usbPorts;
     QTimer * packetTimer;
+    //QDateTime date;
 };
 
 #endif // MAINWINDOW_H
