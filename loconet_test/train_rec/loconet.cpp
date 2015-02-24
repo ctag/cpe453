@@ -5,6 +5,9 @@ bool LocoNet::debug = true;
 LocoNet::LocoNet ()
 {
     incomingPacket = LocoPacket();
+    trackTimer_period = 10;
+    trainTimer_period = 10;
+    switchTimer_period = 10;
 }
 
 LocoNet::~LocoNet ()
@@ -22,6 +25,69 @@ QVector<LocoTrain> LocoNet::get_trains ()
     return(trains);
 }
 
+QVector<LocoBlock> LocoNet::get_blocks ()
+{
+    return(blocks);
+}
+
+void LocoNet::set_trackUpdatePeriod (int _seconds)
+{
+    trackTimer_period = _seconds;
+}
+
+void LocoNet::set_switchUpdatePeriod (int _seconds)
+{
+    switchTimer_period = _seconds;
+}
+
+void LocoNet::set_trainUpdatePeriod (int _seconds)
+{
+    trainTimer_period = _seconds;
+}
+
+void LocoNet::set_timers ()
+{
+    trackTimer = new QTimer(this);
+    trainTimer = new QTimer(this);
+    //switchTimer = new QTimer(this);
+
+    connect(trackTimer, SIGNAL(timeout()), this, SLOT(update_track()));
+    connect(trainTimer, SIGNAL(timeout()), this, SLOT(update_trains()));
+
+    trackTimer->start(trackTimer_period*1000);
+    trainTimer->start(trainTimer_period*1000);
+}
+
+void LocoNet::unset_timers ()
+{
+    trackTimer->stop();
+    trainTimer->stop();
+
+    disconnect(trackTimer, 0, 0, 0);
+    disconnect(trainTimer, 0, 0, 0);
+
+    delete trackTimer;
+    delete trainTimer;
+}
+
+void LocoNet::update_track()
+{
+    //
+}
+
+void LocoNet::update_trains()
+{
+    QVector<LocoTrain> _trains = trains;
+
+    for (int _index = 0; _index < _trains.count(); ++_index)
+    {
+        LocoByte _adr = _trains[_index].get_adr();
+        QString _packet = "BF00";
+        _packet.append(_adr.get_hex());
+        do_serialWrite(_packet);
+    }
+}
+
 bool LocoNet::do_serialOpen (QSerialPortInfo _port)
 {
     usbBuffer = new QSerialPort;
@@ -31,6 +97,7 @@ bool LocoNet::do_serialOpen (QSerialPortInfo _port)
     usbBuffer->open(QIODevice::ReadWrite);
     if (usbBuffer->isOpen())
     {
+        set_timers();
         connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(do_serialRead()));
         return(true);
     }
@@ -42,6 +109,7 @@ void LocoNet::do_serialClose ()
 {
     if (usbBuffer->isOpen())
     {
+        unset_timers();
         disconnect(usbBuffer, 0, 0, 0);
         usbBuffer->close();
         delete usbBuffer;
@@ -103,6 +171,7 @@ void LocoNet::do_serialWrite (LocoPacket _packet)
 void LocoNet::do_serialWrite (QString _hex)
 {
     LocoPacket _packet(_hex);
+    _packet.do_genChecksum(); // in case the packet doesn't have a checksum already
     if (!_packet.is_validChk())
     {
         qDebug() << "Packet isn't right `_`";
@@ -122,7 +191,7 @@ QString LocoNet::do_parsePacket (LocoPacket _packet)
     QString _opCode = (_packet.get_OPcode());
 
     if (!_packet.is_validOP() || !_packet.is_validChk()) {
-        return("packet is malformed :c");
+        return("packet is malformed >.<");
     }
 
     if (_opCode == "E7") {
@@ -130,12 +199,12 @@ QString LocoNet::do_parsePacket (LocoPacket _packet)
     } if (_opCode == "B2") {
         return(handle_B2(_packet));
     }
-    return ("opcode doesn't match anything in parser :c");
+    return ("opcode [" + _opCode + "] doesn't match anything in parser :c");
 }
 
 QString LocoNet::handle_E7 (LocoPacket _packet)
 {
-    QString _description = "E7: ";
+    QString _description = "E7:";
     // Parse packet into usable variables
     bool _busy = _packet.get_locobyte(3).get_oneBit(2);
     bool _active = _packet.get_locobyte(3).get_oneBit(3);
@@ -146,7 +215,7 @@ QString LocoNet::handle_E7 (LocoPacket _packet)
 
     if (!_busy) // There is no train in the slot
     {
-        _description.append("Slot " + _slot.get_hex() + " is inactive. Trains associated with it have been deleted.");
+        _description.append(" Slot " + _slot.get_hex() + " is inactive. Trains associated with it have been deleted.");
         // Find trains assigned to the slot and delete them
         for (int _index = 0; _index < trains.count(); ++_index)
         {
@@ -169,45 +238,33 @@ QString LocoNet::handle_E7 (LocoPacket _packet)
                 _existingTrain = true;
                 trains[_index] = _newTrain;
                 emit trainUpdated(trains[_index]);
-                _description.append("Train["+QString::number(_index)+"] adr[" + trains[_index].get_adr().get_hex() + "]");
-                _description.append(" has been updated.\n");
+                _description.append(" Train["+QString::number(_index)+"] adr[" + trains[_index].get_adr().get_hex() + "]");
+                _description.append(" has been updated.");
             }
         }
         if (!_existingTrain)
         {
             trains.append(_newTrain);
             emit trainUpdated(trains.last());
-            _description.append("Train["+QString::number(trains.count()-1)+"] adr[" + trains.last().get_adr().get_hex() + "]");
-            _description.append(" has been added.\n");
+            _description.append(" Train["+QString::number(trains.count()-1)+"] adr[" + trains.last().get_adr().get_hex() + "]");
+            _description.append(" has been added.");
         }
-        _description.append("Speed: " + _speed.get_hex() + " Slot: " + _slot.get_hex() + " Direction: " + QString::number(_dir));
+        _description.append(" Speed: " + _speed.get_hex() + " Slot: " + _slot.get_hex() + " Direction: " + QString::number(_dir));
     }
 
-    if (_description == "E7: ") {
-        _description.append("No action taken?");
+    if (_description == "E7:") {
+        _description.append(" No action taken?");
     }
     return (_description);
 }
 
 QString LocoNet::handle_B2 (LocoPacket _packet)
 {
-    QString _description = "B2: ";
+    QString _description = "B2:";
     LocoByte _arg1 = _packet.get_locobyte(1);
     LocoByte _arg2 = _packet.get_locobyte(2);
     bool _aux = _arg2.get_qBitArray()[2];
     bool _occupied = _arg2.get_qBitArray()[3];
-
-    /*
-    QBitArray _adrBits;
-    _adrBits = _arg1.get_qBitArray(); // Load in 7 LS bits plus one 0
-    _adrBits.resize(11); // Make room for 4 MS bits
-    for (int _index = 0; _index < 8; ++_index) {
-        int _pos = (10-_index);
-        _adrBits.setBit(_pos,_adrBits[_pos-3]); // Shift the first bit over to make room for 4 MS bits
-    }
-    for (int _index = 0; _index < 4; ++_index) {
-        _adrBits[_index] = _arg2.get_qBitArray()[_index+4]; // Load in 4 MS bits
-    }*/
 
     QByteArray _adr;
     _adr.append(_arg2.get_hex().mid(0,1)); // Load MS byte of address
@@ -223,17 +280,17 @@ QString LocoNet::handle_B2 (LocoPacket _packet)
             _existing = true;
             blocks[_index] = _newBlock;
             emit blockUpdated(blocks[_index]);
-            _description.append("\nBlock[" + QString::fromLatin1(blocks[_index].get_adr()) + "] updated.");
+            _description.append(" Block[" + QString::fromLatin1(blocks[_index].get_adr()) + "] updated.");
         }
     }
     if (!_existing)
     {
         blocks.append(_newBlock);
         emit blockUpdated(blocks.last());
-        _description.append("\nBlock[" + QString::fromLatin1(_adr) + "] added.");
+        _description.append(" Block[" + QString::fromLatin1(_adr) + "] added.");
     }
 
-    _description.append("\nAUX: " + QString::number(_aux) + " OCC: " + QString::number(_occupied));
+    _description.append(" AUX: " + QString::number(_aux) + " OCC: " + QString::number(_occupied) + ".");
     return(_description);
 }
 

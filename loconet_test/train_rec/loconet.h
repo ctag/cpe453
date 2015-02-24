@@ -9,6 +9,7 @@
 #include <QSerialPort>
 #include <QSerialPortInfo>
 #include <QVector>
+#include <QTimer>
 #include <QObject>
 
 #include "locoblock.h"
@@ -30,6 +31,10 @@ public:
     ~LocoNet();
     bool get_serialOpen();
     QVector<LocoTrain> get_trains();
+    QVector<LocoBlock> get_blocks();
+    void set_trackUpdatePeriod(int _seconds);
+    void set_switchUpdatePeriod(int _seconds);
+    void set_trainUpdatePeriod(int _seconds);
     bool do_serialOpen(QSerialPortInfo _port);
     void do_findTrains();
     void do_serialWrite(LocoPacket _packet);
@@ -38,6 +43,9 @@ public:
 public slots:
     QString do_parsePacket(LocoPacket _packet);
     void do_serialClose();
+    void update_track();
+    void update_trains();
+    //void set_switches();
 
 signals:
     void newPacket(LocoPacket);
@@ -46,6 +54,8 @@ signals:
     void blockUpdated(LocoBlock);
 
 protected:
+    void set_timers();
+    void unset_timers();
     QString handle_E7(LocoPacket _packet);
     QString handle_B2(LocoPacket _packet);
 
@@ -58,6 +68,10 @@ private:
     QSerialPort * usbBuffer;
     LocoPacket incomingPacket;
     static bool debug;
+    QTimer * trackTimer;
+    QTimer * switchTimer;
+    QTimer * trainTimer;
+    int trackTimer_period, switchTimer_period, trainTimer_period;
 
 };
 
