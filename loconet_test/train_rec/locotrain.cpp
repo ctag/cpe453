@@ -8,7 +8,7 @@ LocoTrain::LocoTrain ()
     slot = LocoByte("00");
     adr = LocoByte("00");
     speed = LocoByte("00");
-    direction = 1;
+    reverse = 1;
 }
 
 LocoTrain::~LocoTrain ()
@@ -36,9 +36,9 @@ void LocoTrain::set_slot (LocoByte _slot)
     slot = _slot;
 }
 
-void LocoTrain::set_direction (bool _forward)
+void LocoTrain::set_reverse (bool _forward)
 {
-    direction = _forward;
+    reverse = _forward;
 }
 
 void LocoTrain::set_speed (LocoByte _speed)
@@ -63,5 +63,5 @@ LocoByte LocoTrain::get_speed ()
 
 bool LocoTrain::get_direction ()
 {
-    return(direction);
+    return(reverse);
 }

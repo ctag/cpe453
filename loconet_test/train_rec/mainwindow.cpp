@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_serialForceRead, SIGNAL(clicked()), this, SLOT(readSerial()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(sendSerial()));
     connect(&loconet, &LocoNet::newPacket, this, &MainWindow::displayPacket); // QT-5 style works
+    connect(&loconet, &LocoNet::newPacketDescription, this, &MainWindow::listTrains);
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
@@ -297,6 +298,14 @@ void MainWindow::do_timerToggle()
     int _period = ui->spinBox_timerPeriod->value();
     packetTimer->start(_period*1000);
     ui->pushButton_timerToggle->setText("Stop Timer");
+}
+
+void MainWindow::listTrains(QString description)
+{
+    ui->textBrowser_console->append(description);
+    if (description.mid(0,2) == "E7") {
+        ui->textBrowser_trains->append(description);
+    }
 }
 
 /* Flippity Bit

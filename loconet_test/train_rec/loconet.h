@@ -11,6 +11,7 @@
 #include <QVector>
 #include <QObject>
 
+#include "locoblock.h"
 #include "locobyte.h"
 #include "locotrain.h"
 #include "locopacket.h"
@@ -40,16 +41,20 @@ public slots:
 
 signals:
     void newPacket(LocoPacket);
+    void newPacketDescription(QString);
     void trainUpdated(LocoTrain);
+    void blockUpdated(LocoBlock);
 
 protected:
     QString handle_E7(LocoPacket _packet);
+    QString handle_B2(LocoPacket _packet);
 
 protected slots:
     void do_serialRead();
 
 private:
     QVector<LocoTrain> trains;
+    QVector<LocoBlock> blocks;
     QSerialPort * usbBuffer;
     LocoPacket incomingPacket;
     static bool debug;

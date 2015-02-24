@@ -29,6 +29,15 @@ LocoByte::LocoByte(QString _hex)
     set_fromHex(_hex);
 }
 
+LocoByte::LocoByte(QBitArray _bits)
+{
+    createEmpty();
+    if (_bits.count() == 8)
+    {
+        byte = _bits;
+    }
+}
+
 /*
  * Default Destructor
  */

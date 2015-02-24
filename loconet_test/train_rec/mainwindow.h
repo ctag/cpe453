@@ -44,6 +44,7 @@ protected slots:
 
 public slots:
     void displayPacket(LocoPacket);
+    void listTrains(QString);
 
 private:
     Ui::MainWindow *ui;

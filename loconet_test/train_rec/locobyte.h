@@ -16,6 +16,7 @@ class LocoByte
 public:
     LocoByte();
     LocoByte(QString _hex);
+    LocoByte(QBitArray _bits);
     ~LocoByte();
     bool operator==(LocoByte _arg);
     QString get_binary();
