@@ -1,6 +1,8 @@
 
 # Sprint 3
 total: 
+24-2 6.3hr
+	Wrote locoBlock, locoTrain, updated LocoNet. Building a testing interface to demo software.
 23-2 2.3hr
 	Updating loconet class, adding overloaded comparators
 19-2 4hr
