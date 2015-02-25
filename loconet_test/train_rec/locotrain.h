@@ -26,6 +26,7 @@ public:
     LocoByte get_slot();
     LocoByte get_speed();
     bool get_direction();
+    QString get_descrtiption();
 
 protected:
 

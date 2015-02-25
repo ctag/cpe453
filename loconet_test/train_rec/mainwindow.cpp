@@ -36,7 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_serialForceRead, SIGNAL(clicked()), this, SLOT(readSerial()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(sendSerial()));
     connect(&loconet, &LocoNet::newPacket, this, &MainWindow::displayPacket); // QT-5 style works
-    connect(&loconet, &LocoNet::newPacketDescription, this, &MainWindow::listTrains);
+    connect(&loconet, &LocoNet::newPacketDescription, this, &MainWindow::printDescriptions);
+    connect(&loconet, &LocoNet::trainUpdated, this, &MainWindow::updateTrains);
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
@@ -211,7 +212,7 @@ void MainWindow::sendSerial()
 void MainWindow::displayPacket(LocoPacket _packet)
 {
     qDebug() << "Reading packet to text browser.";
-    ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz") + " " + _packet.get_packet());
+    //ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz ") + _packet.get_packet());
     // Sort packets for easier reading
     QString _op = _packet.get_OPcode();
     if (_op == "B2")
@@ -250,11 +251,18 @@ void MainWindow::do_timerToggle()
     ui->pushButton_timerToggle->setText("Stop Timer");
 }
 
-void MainWindow::listTrains(QString description)
+void MainWindow::printDescriptions(QString description)
 {
-    ui->textBrowser_console->append(description);
-    if (description.mid(0,2) == "E7") {
-        ui->textBrowser_trains->append(description);
+    ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz ") + description);
+}
+
+void MainWindow::updateTrains (LocoTrain _train)
+{
+    QVector<LocoTrain> _trainList = loconet.get_trains();
+    ui->textBrowser_trains->clear();
+    for (int _index = 0; _index < _trainList.count(); ++_index)
+    {
+        ui->textBrowser_trains->append(_trainList[_index].get_descrtiption());
     }
 }
 

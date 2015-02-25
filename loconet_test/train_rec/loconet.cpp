@@ -207,7 +207,7 @@ QString LocoNet::handle_E7 (LocoPacket _packet)
     QString _description = "E7:";
     // Parse packet into usable variables
     bool _busy = _packet.get_locobyte(3).get_oneBit(2);
-    bool _active = _packet.get_locobyte(3).get_oneBit(3);
+    //bool _active = _packet.get_locobyte(3).get_oneBit(3);
     LocoByte _slot = _packet.get_locobyte(2);
     LocoByte _adr = _packet.get_locobyte(4);
     LocoByte _speed = _packet.get_locobyte(5);
@@ -267,7 +267,7 @@ QString LocoNet::handle_B2 (LocoPacket _packet)
     bool _occupied = _arg2.get_qBitArray()[3];
 
     QByteArray _adr;
-    _adr.append(_arg2.get_hex().mid(0,1)); // Load MS byte of address
+    _adr.append(_arg2.get_hex().mid(1,1)); // Load MS byte of address
     _adr.append(_arg1.get_hex()); // Load LS 2 bytes of address
 
     LocoBlock _newBlock(_adr, _aux, _occupied);

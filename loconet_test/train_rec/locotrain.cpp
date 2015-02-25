@@ -65,3 +65,12 @@ bool LocoTrain::get_direction ()
 {
     return(reverse);
 }
+
+QString LocoTrain::get_descrtiption ()
+{
+    QString _desc = "Train[" + adr.get_hex() + "]";
+    _desc.append(" Slot[" + slot.get_hex() + "]");
+    _desc.append(" Speed[" + speed.get_hex() + "]");
+    _desc.append(" Reverse[" + QString::number(reverse) + "]");
+    return(_desc);
+}
