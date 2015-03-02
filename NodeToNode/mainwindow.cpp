@@ -1,18 +1,22 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
-MainWindow::MainWindow(QWidget *parent) :
+ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-        startPos = QPoint();
-        endPos = QPoint();
-        leftDown = false;
-        rightDown = false;
-        connectsToPrevious = false;
-        setCentralWidget(ui->centralWidget);
-        setMouseTracking(true);
+
+          //GUI
+
+
+       ui->mytoolbox->setFixedWidth(220);
+        ui->horizontalLayout_2->setMargin(0);
+        ui->horizontalLayout_3->setMargin(0);
+    // ui->horizontalLayout_4->setMargin(0);
+      ui->tabWidget->setTabText(0,"Layout Options");
+    // ui->mytraintrack->setDisabled(true);
+       //connect(ui->rad_track_piece,SIGNAL(clicked()),this,SLOT(check_rad));
+       //connect(ui->mytraintrack,SIGNAL(request_rad_status(bool)),this, SLOT(check_rad()));
 }
 
 MainWindow::~MainWindow()
@@ -22,136 +26,4 @@ MainWindow::~MainWindow()
 
 
 
-
-
-
-
-
-
-
-
-//click
-void MainWindow::mousePressEvent(QMouseEvent *event){
-    if (event->buttons() & Qt::LeftButton)
-    {
-        if(!connectsToPrevious){
-            QLine line = QLine(startPos, endPos);
-            lines.append(line);
-            startPos = event->pos();
-            endPos = event->pos();
-            update();
-
-        }
-        leftDown = true;
-    }
-
-    else if (event->buttons() & Qt::RightButton){
-        rightDown = true;
-    }
-}
-
-
-//click & drag
-void MainWindow::mouseMoveEvent(QMouseEvent *event){
-    if (leftDown & connectsToPrevious)
-    {
-        endPos = event->pos();
-        //update();
-        repaint();
-    }
-}
-
-void MainWindow::mouseReleaseEvent(QMouseEvent *event)
-{
-    //according to QT help, event->Buttons will not operate on the triggering button in a mouse release event.
-    //therefore, QT::LeftButton should be false.
-    if (event->buttons() & !Qt::LeftButton)
-    {
-        inDrawing = false;
-        endPos = event->pos();
-        QLine line = new QLine(startPos, event->pos());
-        lines.append(line);
-    }
-    else if (connectsToPrevious)
-    {
-        endPos = event->pos();
-        update();
-    }
-    else if (leftDown){
-        startPos = event->pos();
-        endPos = event->pos();
-        update();
-    }
-}
-
-
-//release
-void MainWindow::mouseReleaseEvent(QMouseEvent *event){
-    if (leftDown){
-        leftDown = !leftDown;
-        endPos = event->pos();
-        QLine line = QLine(startPos, event->pos());
-        lines.append(line);
-
-        //begin next line
-        startPos = event->pos();
-        endPos = event->pos();
-        connectsToPrevious = true;
-
-    }
-    else if(rightDown){
-        //clear selection
-        rightDown = !rightDown;
-        endPos = startPos;
-        connectsToPrevious = false;
-    }
-    update();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-void MainWindow::drawLines(QPainter *p)
-{
-    if (!startPos.isNull() && !endPos.isNull())
-    {
-        p->drawLine(startPos, endPos);
-    }
-    p->setRenderHint(QPainter::Antialiasing, true);
-    p->drawLines(lines);
-}
-void MainWindow::paintEvent(QPaintEvent *event)
-{
-    QPainter p(this);
-    QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(4);
-    p.setPen(pen);
-    drawLines(&p);
-    p.end();
-}
-
-/*
-void MainWindow::createNode(double xPos, double yPos){
-    //node->QCircle.setScale(0f);
-    QPainter p(this);
-    QPen pen;
-    pen.setColor(Qt::black);
-    pen.setWidth(4);
-    p.setPen(pen);
-    drawLines(&p);
-    QRect nodeRec = QRect(xPos, yPos, 12, 12);
-}
-*/
 

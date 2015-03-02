@@ -4,7 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       +=  core gui
+
+INCLUDEPATH += $$PWD
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,8 +15,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    mywidget.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    mywidget.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+

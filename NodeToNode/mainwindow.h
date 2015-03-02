@@ -11,9 +11,13 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QDebug>
-#include <QRect>
+#include <QDialog>
+#include <QVBoxLayout>
+#include <QLabel>
+#include <QAction>
+#include <QRadioButton>
 
-namespace Ui {
+ namespace Ui {
 class MainWindow;
 }
 
@@ -25,26 +29,29 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    bool track_rad_state;
+    bool detection_rad_state;
+    bool switch_rad_state;
+
 private:
+
     Ui::MainWindow *ui;
-    void drawLines(QPainter *p);
 
-        QPoint startPos;
-        QPoint endPos;
-        bool leftDown;
-        bool rightDown;
-        bool connectsToPrevious;
-        QVector<QLine> lines;
+        //GUI
 
-public:
-        void mousePressEvent(QMouseEvent *event);
+
+protected:
+    /*    void mousePressEvent(QMouseEvent *event);
         void mouseMoveEvent(QMouseEvent *event);
-        void mouseReleaseEvent(QMouseEvent *event);
-
-        //void  drawLines(QPainter *p);
+        void mouseReleaseEvent(QMouseEvent *event);//added
         void paintEvent(QPaintEvent *paintEvent);
+        void drawLines(QPainter *p);
+*/
 
-
+ private slots:
+     //   void check_rad();
+ signals:
+        //void radstatus(bool);
 };
 
 #endif // MAINWINDOW_H
