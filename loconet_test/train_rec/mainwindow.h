@@ -14,6 +14,9 @@
 #include <QDateTime>
 #include <QDate>
 #include <QTime>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QtSql>
 
 #include "loconet.h"
 
@@ -45,6 +48,11 @@ protected slots:
     void sendSerial();
     void do_packetTimer();
     void do_timerToggle();
+    void connectDB();
+    void disconnectDB();
+    //void tableText();
+    //void queryModel();
+    void runQuery();
 
 public slots:
     void displayPacket(LocoPacket);
@@ -60,6 +68,8 @@ private:
     QSerialPortInfo usbPorts;
     QTimer * packetTimer;
     //QDateTime date;
+    QSqlDatabase db;
+    QSqlQuery dbQuery;
 };
 
 #endif // MAINWINDOW_H
