@@ -258,6 +258,76 @@ QString LocoNet::handle_E7 (LocoPacket _packet)
     return (_description);
 }
 
+QString LocoNet::handle_85 (LocoPacket _packet) {
+    QString _description = "85: Requesting track state IDLE / EMG STOP.";
+    return(_description);
+}
+
+QString LocoNet::handle_83 (LocoPacket _packet) {
+    QString _description = "83: Requesting track state ON.";
+    return(_description);
+}
+
+QString LocoNet::handle_82 (LocoPacket _packet) {
+    QString _description = "82: Requesting track state OFF.";
+    return(_description);
+}
+
+QString LocoNet::handle_81 (LocoPacket _packet) {
+    QString _description = "81: MASTER sent BUSY code.";
+    return(_description);
+}
+
+QString LocoNet::handle_BF (LocoPacket _packet) {
+    QString _description = "BF: Requesting locomotive address.";
+    return(_description);
+}
+
+QString LocoNet::handle_BD (LocoPacket _packet) {
+    QString _description = "BD: Requesting switch with LACK function."; // LACK - Long ACKnowledge
+    return(_description);
+}
+
+QString LocoNet::handle_BC (LocoPacket _packet) {
+    QString _description = "BC: Requesting state of switch.";
+    return(_description);
+}
+
+QString LocoNet::handle_BB (LocoPacket _packet) {
+    QString _description = "BB: Requesting SLOT data/status block.";
+    return(_description);
+}
+
+QString LocoNet::handle_BA (LocoPacket _packet) {
+    QString _description = "BA: Move slot SRC to DEST.";
+    return(_description);
+}
+
+QString LocoNet::handle_B9 (LocoPacket _packet) {
+    QString _description = "B9: Link slot ARG1 to slot ARG2.";
+    return(_description);
+}
+
+QString LocoNet::handle_B8 (LocoPacket _packet) {
+    QString _description = "B8: Unlink slot ARG1 from slot ARG2.";
+    return(_description);
+}
+
+QString LocoNet::handle_B6 (LocoPacket _packet) {
+    QString _description = "B6: Set FUNC bits in a CONSIST uplink element.";
+    return(_description);
+}
+
+QString LocoNet::handle_B5 (LocoPacket _packet) {
+    QString _description = "B5: Write slot stat1.";
+    return(_description);
+}
+
+QString LocoNet::handle_B4 (LocoPacket _packet) {
+    QString _description = "B4: Long Acknowledge - LACK.";
+    return(_description);
+}
+
 QString LocoNet::handle_B2 (LocoPacket _packet)
 {
     QString _description = "B2:";
@@ -293,4 +363,30 @@ QString LocoNet::handle_B2 (LocoPacket _packet)
     _description.append(" AUX: " + QString::number(_aux) + " OCC: " + QString::number(_occupied) + ".");
     return(_description);
 }
+
+QString LocoNet::handle_B1 (LocoPacket _packet) {
+    QString _description = "B1: Turnout sensor state report.";
+    return(_description);
+}
+
+QString LocoNet::handle_B0 (LocoPacket _packet) {
+    QString _description = "B0: Request switch function.";
+    return(_description);
+}
+
+QString LocoNet::handle_A2 (LocoPacket _packet) {
+    QString _description = "A2: Setting slot sound functions.";
+    return(_description);
+}
+
+QString LocoNet::handle_A1 (LocoPacket _packet) {
+    QString _description = "A1: Setting slot direction.";
+    return(_description);
+}
+
+QString LocoNet::handle_A0 (LocoPacket _packet) {
+    QString _description = "A0: Setting slot speed.";
+    return(_description);
+}
+
 

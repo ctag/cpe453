@@ -58,6 +58,25 @@ protected:
     void unset_timers();
     QString handle_E7(LocoPacket _packet);
     QString handle_B2(LocoPacket _packet);
+    QString handle_85(LocoPacket _packet);
+    QString handle_83(LocoPacket _packet);
+    QString handle_82(LocoPacket _packet);
+    QString handle_81(LocoPacket _packet);
+    QString handle_BF(LocoPacket _packet);
+    QString handle_BD(LocoPacket _packet);
+    QString handle_BC(LocoPacket _packet);
+    QString handle_BB(LocoPacket _packet);
+    QString handle_BA(LocoPacket _packet);
+    QString handle_B9(LocoPacket _packet);
+    QString handle_B8(LocoPacket _packet);
+    QString handle_B6(LocoPacket _packet);
+    QString handle_B5(LocoPacket _packet);
+    QString handle_B4(LocoPacket _packet);
+    QString handle_B1(LocoPacket _packet);
+    QString handle_B0(LocoPacket _packet);
+    QString handle_A2(LocoPacket _packet);
+    QString handle_A1(LocoPacket _packet);
+    QString handle_A0(LocoPacket _packet);
 
 protected slots:
     void do_serialRead();
