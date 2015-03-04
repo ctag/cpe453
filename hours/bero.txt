@@ -1,6 +1,8 @@
 
 # Sprint 3
 total: 
+03-3 5.3hr
+	Patching in SQL support to locotest
 24-2 6.3hr
 	Wrote locoBlock, locoTrain, updated LocoNet. Building a testing interface to demo software.
 23-2 2.3hr

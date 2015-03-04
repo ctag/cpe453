@@ -25,25 +25,24 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEdit_arg2->setInputMask("hh");
     ui->lineEdit_opcode->setText("");
 
-    ui->lineEdit_chk->setEnabled(false);
-
     connect(ui->pushButton_genPacket, SIGNAL(clicked()), this, SLOT(do_genPacket()));
     connect(ui->lineEdit_opcode, SIGNAL(returnPressed()), this, SLOT(do_enableArgs()));
     connect(ui->comboBox_opcodes, SIGNAL(currentIndexChanged(int)), this, SLOT(do_OPfromComboBox()));
     connect(ui->pushButton_serialRefreshList, SIGNAL(clicked()), this, SLOT(do_serialRefreshList()));
     connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_serialConnect()));
     connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), this, SLOT(do_serialDisconnect()));
-    connect(ui->pushButton_serialForceRead, SIGNAL(clicked()), this, SLOT(readSerial()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(sendSerial()));
     connect(&loconet, &LocoNet::newPacket, this, &MainWindow::displayPacket); // QT-5 style works
     connect(&loconet, &LocoNet::newPacketDescription, this, &MainWindow::printDescriptions);
     connect(&loconet, &LocoNet::trainUpdated, this, &MainWindow::updateTrains);
+    connect(ui->comboBox_packetHistory, SIGNAL(activated(int)), this, SLOT(loadFromPacketHistory(int)));
+    connect(ui->pushButton_resetTrack, SIGNAL(clicked()), this, SLOT(do_resetTrack()));
 
     connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(connectDB()));
     connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(disconnectDB()));
     //connect(ui->pushButton_tableText, SIGNAL(clicked()), this, SLOT(tableText()));
     //connect(ui->pushButton_queryModel, SIGNAL(clicked()), this, SLOT(queryModel()));
-    connect(ui->pushButton_runQuery, SIGNAL(clicked()), this, SLOT(runQuery()));
+    //connect(ui->pushButton_runQuery, SIGNAL(clicked()), this, SLOT(runQuery()));
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
@@ -57,6 +56,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     db = QSqlDatabase::addDatabase("QPSQL", "main");
     dbQuery = QSqlQuery(db);
+
+    // Added simply to speed up debugging process
+    do_serialConnect();
+    connectDB();
 
     ui->textBrowser_console->append("Program loaded! :3");
 }
@@ -96,21 +99,17 @@ void MainWindow::do_genPacket()
     } if (_numArgs > 1) {
         _hex.append(ui->lineEdit_arg2->text());
     }
-
-    if (ui->lineEdit_chk->text() == "")
-    {
-        _packet = new LocoPacket(_hex);
-        _packet->do_genChecksum();
-        //ui->lineEdit_chk->setText(_packet->getPacket());
-    } else {
-        _hex.append(ui->lineEdit_chk->text());
-        _packet = new LocoPacket(_hex);
-    }
+    _packet = new LocoPacket(_hex);
+    _packet->do_genChecksum();
 
     outgoingPacket = *_packet;
     ui->textBrowser_packets->append(_packet->get_packet());
     ui->lineEdit_packet->setText(_packet->get_packet());
-    ui->comboBox_packetHistory->addItem(_packet->get_packet());
+    QString _historyPacket = outgoingPacket.get_packet();
+    int _index = ui->comboBox_packetHistory->findText(_historyPacket);
+    if (_index == -1) {
+        ui->comboBox_packetHistory->addItem(_historyPacket);
+    }
 }
 
 void MainWindow::do_initStaticOP(LocoPacket _locopacket)
@@ -201,6 +200,13 @@ void MainWindow::do_serialDisconnect()
     ui->pushButton_serialRefreshList->setEnabled(true);
 }
 
+void MainWindow::loadFromPacketHistory(int _index)
+{
+    QString _packet = ui->comboBox_packetHistory->itemText(_index);
+    ui->lineEdit_packet->clear();
+    ui->lineEdit_packet->setText(_packet);
+}
+
 void MainWindow::sendSerial()
 {
     outgoingPacket.set_allFromHex(ui->lineEdit_packet->text());
@@ -209,6 +215,7 @@ void MainWindow::sendSerial()
         qDebug() << "Packet isn't right `_`";
         return;
     }
+
     ui->textBrowser_packets->append(outgoingPacket.get_packet().toLatin1());
 
     loconet.do_serialWrite(outgoingPacket);
@@ -273,6 +280,29 @@ void MainWindow::updateTrains (LocoTrain _train)
     {
         ui->textBrowser_trains->append(_trainList[_index].get_descrtiption());
     }
+    if (db.open()) {
+        QString _adr = _train.get_adr().get_hex();
+        QString _slot = _train.get_slot().get_hex();
+        QString _speed = _train.get_speed().get_hex();
+        QString _dir = QString::number(_train.get_direction());
+        QString _query = "SELECT * FROM public.track_trains;";// WHERE slot='";
+        //_query += _slot;
+        //_query += "';";
+        runQuery(_query);
+        return;
+        ui->textBrowser_sql->append(_query);
+        if (dbQuery.exec(_query)) {
+            ui->textBrowser_sql->append(QString::number(dbQuery.size()) + ", " + _query);
+            if (dbQuery.size() == 0) {
+                _query = "INSERT INTO public.track_trains (adr, slot, speed, dir)"
+                        "VALUES (:adr, :slot, :speed, :dir);";
+                dbQuery.exec(_query);
+                ui->textBrowser_sql->append(dbQuery.lastError().text());
+            }
+        } else {
+            ui->textBrowser_console->append(dbQuery.lastError().text());
+        }
+    }
 }
 
 void MainWindow::connectDB()
@@ -295,10 +325,12 @@ void MainWindow::connectDB()
     // Attempt to open database
     if (!db.open())
     {
-        ui->textBrowser_output->append("Opening postgresql database failed.");
-        ui->textBrowser_output->append(db.lastError().text());
+        ui->textBrowser_sql->append("Opening postgresql database failed D:");
+        ui->textBrowser_sql->append(db.lastError().text());
     } else {
-        ui->textBrowser_output->append("Database opened. Connection test appears successful :)");
+        ui->textBrowser_sql->append("Database opened. Connection test appears successful :)");
+        ui->textBrowser_sql->append(db.tables().join(",\n"));
+        /*
         QSqlQuery tmpq(db);
         if (!tmpq.exec("SELECT * FROM public.testsql"))
         {
@@ -309,6 +341,7 @@ void MainWindow::connectDB()
         {
             qDebug() << tmpq.value(0).toString();
         }
+        */
         ui->pushButton_connect->setEnabled(false);
         ui->pushButton_disconnect->setEnabled(true);
         ui->pushButton_tableText->setEnabled(true);
@@ -322,14 +355,14 @@ void MainWindow::disconnectDB()
 {
     if (!db.isOpen())
     {
-        ui->textBrowser_output->append("Database appears to already be closed? Wat do?!");
+        ui->textBrowser_sql->append("Database appears to already be closed? Wat do?!");
         return;
     } else {
-        ui->textBrowser_output->append("Trying to close the database.");
+        ui->textBrowser_sql->append("Trying to close the database.");
         db.close();
         if (!db.isOpen())
         {
-            ui->textBrowser_output->append("Database closed.");
+            ui->textBrowser_sql->append("Database closed.");
             ui->pushButton_connect->setEnabled(true);
             ui->pushButton_disconnect->setEnabled(false);
             ui->pushButton_tableText->setEnabled(false);
@@ -398,19 +431,19 @@ void MainWindow::queryModel()
 }
 */
 
-void MainWindow::runQuery()
+void MainWindow::runQuery(QString _query)
 {
-    QString queryString = ui->lineEdit_query->text(); /* Pull fresh query from the main interface */
+    QString queryString = _query; /* Pull fresh query from the main interface */
     if (!db.isOpen()) /* Check that the database is still open */
     {
-        ui->textBrowser_output->append("Database doesn't appear to be open :C");
+        ui->textBrowser_sql->append("Database doesn't appear to be open :C");
         return;
     } else if (dbQuery.exec(queryString)) /* Execute the query and check that it succeeds */
     {
-        ui->textBrowser_output->append("Query successful? :3");
+        ui->textBrowser_sql->append("Query successful? :3");
         if (dbQuery.isSelect()) /* A SELECT query was run */
         {
-            ui->textBrowser_output->append("Detected that the query is type SELECT.");
+            ui->textBrowser_sql->append("Detected that the query is type SELECT.");
             while (dbQuery.next()) /* Must prime the results by calling .next(); the first row is always null */
             {
                 int queryValue = 0;
@@ -423,16 +456,24 @@ void MainWindow::runQuery()
                     queryResults.append(dbQuery.value(queryValue).toString());
                     queryValue++; /* Go to next column in row */
                 }
-                ui->textBrowser_output->append(queryResults);
+                ui->textBrowser_sql->append(queryResults);
             }
         } else { /* Query was not type SELECT */
-            ui->textBrowser_output->append("Detected that the query is NOT type SELECT.");
-            ui->textBrowser_output->append("Number of rows affected: " + QString("%1").arg(dbQuery.numRowsAffected()));
+            ui->textBrowser_sql->append("Detected that the query is NOT type SELECT.");
+            ui->textBrowser_sql->append("Number of rows affected: " + QString("%1").arg(dbQuery.numRowsAffected()));
         }
     } else { /* The query was not successful */
-        ui->textBrowser_output->append("Dun goofed. This shouldn't happen.");
-        ui->textBrowser_output->append(dbQuery.lastError().text());
+        ui->textBrowser_sql->append("Dun goofed. This shouldn't happen.");
+        ui->textBrowser_sql->append(dbQuery.lastError().text());
     }
+}
+
+// It's a kludge, I'm sorry :c
+void MainWindow::do_resetTrack() {
+    ui->lineEdit_packet->setText("827D");
+    sendSerial();
+    ui->lineEdit_packet->setText("837D");
+    sendSerial();
 }
 
 /* Flippity Bit

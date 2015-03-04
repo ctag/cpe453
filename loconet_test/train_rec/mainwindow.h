@@ -52,7 +52,8 @@ protected slots:
     void disconnectDB();
     //void tableText();
     //void queryModel();
-    void runQuery();
+    void loadFromPacketHistory(int);
+    void do_resetTrack();
 
 public slots:
     void displayPacket(LocoPacket);
@@ -70,6 +71,7 @@ private:
     //QDateTime date;
     QSqlDatabase db;
     QSqlQuery dbQuery;
+    void runQuery(QString _query);
 };
 
 #endif // MAINWINDOW_H
