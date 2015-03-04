@@ -16,6 +16,8 @@
 #include <QLabel>
 #include <QAction>
 #include <QRadioButton>
+#include <QList>
+//#include "mainwindow.h"
   class mywidget : public QLabel
 {
     Q_OBJECT
@@ -33,6 +35,11 @@ private:
     bool connectsToPrevious;
     QVector<QLine> lines;
 
+    bool track_rad_state;
+    bool detection_rad_state;
+    bool switch_rad_state;
+    //QLinkedList<int> mypoints;
+
 protected:
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -41,9 +48,10 @@ protected:
     void drawLines(QPainter *p);
 
 public slots:
-  //  void rad_track_status();
+    void get_rad_track(bool status);
+    void get_det_track(bool status);
 signals:
-    void request_rad_status(bool);
+   // void request_rad_status(bool);
 
 };
 

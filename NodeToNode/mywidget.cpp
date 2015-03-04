@@ -1,4 +1,5 @@
 #include "mywidget.h"
+//#include "mainwindow.h"
 
 mywidget::mywidget(QWidget *parent):QLabel(parent)
 {
@@ -18,49 +19,61 @@ mywidget::~mywidget(){
 //click
 void mywidget::mousePressEvent(QMouseEvent *event){
 
+    if(track_rad_state==true){
     if (event->buttons() & Qt::LeftButton)
     {
         if(!connectsToPrevious){
                    QLine line = QLine(startPos, endPos);
                    lines.append(line);
                    startPos = event->pos();
+                   endPos = event->pos();
+                  update();
+                }
+            leftDown = true;
+          }
 
-           endPos = event->pos();
-         update();
-        }
-     leftDown = true;
-     }
-
-    else if (event->buttons() & Qt::RightButton){
+         else if (event->buttons() & Qt::RightButton){
             rightDown = true;
-        }
+         }
     }
 
+
+}
 
 
 //click & drag
 void mywidget::mouseMoveEvent(QMouseEvent *event){
 
-    if (leftDown & connectsToPrevious)
+    if(track_rad_state==true){
+        if (leftDown & connectsToPrevious)
+            {
+                endPos = event->pos();
+                update();
+            }
+        else if (connectsToPrevious)
+            {
+                endPos = event->pos();
+                update();
+            }
+        else if (leftDown){
+                startPos = event->pos();
+                endPos = event->pos();
+                update();
+            }
+        }
+
+    if(detection_rad_state==true)
     {
-        endPos = event->pos();
-        update();
+    //add code for NODES HERE
+
     }
-    else if (connectsToPrevious)
-        {
-            endPos = event->pos();
-            update();
-        }
-   else if (leftDown){
-            startPos = event->pos();
-            endPos = event->pos();
-            update();
-        }
+
 
 }
 
 //release
 void mywidget::mouseReleaseEvent(QMouseEvent *event){
+   if(track_rad_state==true){
 
     if (leftDown){
         leftDown = !leftDown;
@@ -81,28 +94,48 @@ void mywidget::mouseReleaseEvent(QMouseEvent *event){
         connectsToPrevious = false;
     }
     update();
-
+    }
 }
 
-void mywidget::drawLines(QPainter *p)
-{
+void mywidget::drawLines(QPainter *p){
+
+   if(track_rad_state==true){
     if (!startPos.isNull() && !endPos.isNull())
     { p->setRenderHint(QPainter::Antialiasing, true);//added
       p->drawLine(startPos, endPos);
     }
 
     p->drawLines(lines);
+    }
+
 }
-void mywidget::paintEvent(QPaintEvent *event)
-{
+void mywidget::paintEvent(QPaintEvent *event){  
+
+    if(track_rad_state==true){
     QPainter p(this);
 
     QPen pen;
     pen.setColor(Qt::black);
 
-    pen.setWidth(5);
+    pen.setWidth(3);
     p.setPen(pen);
     drawLines(&p);
+    }
 
+}
+
+void mywidget::get_rad_track(bool status){
+ track_rad_state=status;
+ detection_rad_state=false;
+ switch_rad_state=false;
+ qDebug() << detection_rad_state;
+
+}
+
+void mywidget::get_det_track(bool status){
+ detection_rad_state=status;
+ track_rad_state=false;
+ switch_rad_state=false;
+ qDebug() << detection_rad_state;
 }
 

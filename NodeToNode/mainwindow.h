@@ -16,7 +16,7 @@
 #include <QLabel>
 #include <QAction>
 #include <QRadioButton>
-
+#include "mywidget.h"
  namespace Ui {
 class MainWindow;
 }
@@ -29,12 +29,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    bool track_rad_state;
-    bool detection_rad_state;
-    bool switch_rad_state;
 
 private:
-
+    mywidget my;
     Ui::MainWindow *ui;
 
         //GUI
@@ -49,9 +46,11 @@ protected:
 */
 
  private slots:
-     //   void check_rad();
+        void check_rad();
  signals:
-        //void radstatus(bool);
+        void rad_track_status(bool status);
+        void rad_det_status(bool status);
+
 };
 
 #endif // MAINWINDOW_H
