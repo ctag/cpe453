@@ -189,7 +189,7 @@ QString LocoPacket::do_genChecksum()
 {
     if (is_validChk() && is_validOP())
     {
-        qDebug() << "Not generating a checksum for an already valid packet :C";
+        qDebug() << "Not generating a checksum for an already valid packet ^-^";
         QString _chk = "";
         _chk.append(locobyte_array[locobyte_array.size()-1].get_hex());
         return(_chk);
@@ -256,12 +256,12 @@ void LocoPacket::do_appendByteArray(QByteArray _byteArray)
 bool LocoPacket::is_validChk()
 {
     LocoByte _hexHolder;
-    for (int _hexIndex = 0; _hexIndex < locobyte_array.size(); ++_hexIndex)
+    for (int _index = 0; _index < locobyte_array.size(); ++_index)
     {
-        if (debug) qDebug() << "hexIndex: " << _hexIndex;
-        if (debug) qDebug() << "validPacket: working: " << locobyte_array[_hexIndex].get_hex() << " : " << locobyte_array[_hexIndex].get_binary() << " and: " << _hexHolder.get_hex() << " : " << _hexHolder.get_binary();
+        if (debug) qDebug() << "hexIndex: " << _index;
+        if (debug) qDebug() << "validPacket: working: " << locobyte_array[_index].get_hex() << " : " << locobyte_array[_index].get_binary() << " and: " << _hexHolder.get_hex() << " : " << _hexHolder.get_binary();
         LocoByte tmp = _hexHolder;
-        _hexHolder.set_fromHex(do_xor(tmp, locobyte_array[_hexIndex]));
+        _hexHolder.set_fromHex(do_xor(tmp, locobyte_array[_index]));
     }
     //qDebug() << "checksum: " << _hexHolder.get_hex();
     if (_hexHolder.get_hex() == "FF")
@@ -279,13 +279,22 @@ bool LocoPacket::is_validOP()
         qDebug() << "No bytes in packet, skipping OP check.";
         return true;
     }
+    // Begin at byte after OP and search for incorrectly placed OPs
+    for (int _index = 1; _index < locobyte_array.count(); ++_index)
+    {
+        if (locobyte_array[_index].get_isOP())
+        {
+            return(false); // There's an OP where there shouldn't be, packet is bad.
+        }
+    }
+    // This NEEDS to be fixed, what an awful idea...
     for (int _index = 0; _index < opcodes_hex.size(); ++_index)
     {
         if (opcodes_hex[_index].get_hex() == locobyte_array[0].get_hex()) {
-            return(true);
+            return(true); // So we're only reporting true if the OP is a KNOWN code.
         }
     }
-    return(false);
+    return(false); // First byte isn't a known op code.
 }
 
 bool LocoPacket::is_followOnMsg ()

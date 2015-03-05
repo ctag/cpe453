@@ -27,7 +27,32 @@ QVector<LocoBlock> LocoNet::get_blocks ()
     return(blocks);
 }
 
-void LocoNet::do_startPacketTimer (int _msec) {
+/*
+ * Timer related functions
+ */
+
+bool LocoNet::get_timerActive()
+{
+    return(packetTimer->isActive());
+}
+
+QVector<LocoPacket> LocoNet::get_timerPackets()
+{
+    return(packetTimerPackets);
+}
+
+int LocoNet::get_timerPacketInterval(LocoPacket _packet)
+{
+    for (int _index = 0; _index < packetTimerPackets.count(); ++_index)
+    {
+        if (packetTimerPackets[_index] == _packet) {
+            return(packetTimerPacketInterval[_index]);
+        }
+    }
+    return(-1);
+}
+
+void LocoNet::set_packetTimer (int _msec) {
     packetTimer = new QTimer(this);
     connect(packetTimer, SIGNAL(timeout()), this, SLOT(handle_packetTimer()));
     packetTimer->start(_msec);
@@ -35,12 +60,13 @@ void LocoNet::do_startPacketTimer (int _msec) {
 
 void LocoNet::do_addTimerPacket (LocoPacket _packet, int _interval)
 {
+    do_stopTimerPacket(_packet);
     packetTimerPackets.append(_packet);
     packetTimerPacketInterval.append(_interval);
     packetTimerPacketState.append(0);
 }
 
-void LocoNet::do_rmTimerPacket (LocoPacket _packet)
+void LocoNet::do_stopTimerPacket (LocoPacket _packet)
 {
     for (int _index = 0; _index < packetTimerPackets.count(); ++_index)
     {
@@ -76,6 +102,10 @@ void LocoNet::handle_packetTimer ()
     }
 }
 
+/*
+ * Serial Port related functions
+ */
+
 bool LocoNet::do_serialOpen (QSerialPortInfo _port)
 {
     usbBuffer = new QSerialPort;
@@ -102,37 +132,32 @@ void LocoNet::do_serialClose ()
     }
 }
 
-void LocoNet::do_findTrains ()
-{
-    //
-}
-
 void LocoNet::handle_serialRead ()
 {
+    // If the usb device isn't open, we're not reading anything...
     if (!usbBuffer->isOpen())
     {
         if (debug) qDebug() << "Serial port suddenly isn't open x.x";
         do_serialClose();
         return;
     }
-    QByteArray _data;
-    while(usbBuffer->waitForReadyRead(20) || usbBuffer->bytesAvailable() > 0)
+
+    // Either read immediately if data is available, or wait up to 10msec for another ready read signal to generate...
+    while(usbBuffer->waitForReadyRead(10) || usbBuffer->bytesAvailable() > 0)
     {
         if (debug) qDebug() << "Reading serial ^_^";
-        _data = usbBuffer->read(1);
-
-        if (!incomingPacket.is_validOP() && (incomingPacket.get_numBytes() > 1))
-        {
-            incomingPacket = LocoPacket();
-            continue;
+        incomingPacket.do_appendByteArray(usbBuffer->read(1)); // Load in a byte from the serial buffer
+        // Check to see if the packet has a valid OP code.
+        if (!incomingPacket.is_validOP()) {
+            incomingPacket = LocoPacket(); // Reset the packet, since the OP isn't valid.
+            continue; // Read in next byte from buffer. I'm sure this section could use some cleaner code.
         }
-         else if (incomingPacket.is_validChk()) {
+        // No point having an else-if when we break the while() above.
+        if (incomingPacket.is_validChk()) {
             if (debug) qDebug() << "Valid checksum! Need to move this packet out of the way.";
             emit newPacket(incomingPacket);
             emit newPacketDescription(handle_parsePacket(incomingPacket));
-            incomingPacket.set_allFromHex(_data.toHex());
-        } else {
-            incomingPacket.do_appendByteArray(_data);
+            incomingPacket = LocoPacket(); // Reset the packet.
         }
         if (debug) qDebug() << incomingPacket.get_packet();
     }
@@ -140,37 +165,24 @@ void LocoNet::handle_serialRead ()
 
 void LocoNet::do_serialWrite (LocoPacket _packet)
 {
-    if (!_packet.is_validChk())
-    {
-        qDebug() << "Packet isn't right `_`";
-        return;
-    }
+    _packet.do_genChecksum();
     if (!usbBuffer->isOpen())
     {
         qDebug() << "Serial isn't open...";
         return;
     }
-
     usbBuffer->write(_packet.get_QByteArray());
 }
 
 void LocoNet::do_serialWrite (QString _hex)
 {
-    LocoPacket _packet(_hex);
-    _packet.do_genChecksum(); // in case the packet doesn't have a checksum already
-    if (!_packet.is_validChk())
-    {
-        qDebug() << "Packet isn't right `_`";
-        return;
-    }
-    if (!usbBuffer->isOpen())
-    {
-        qDebug() << "Serial isn't open...";
-        return;
-    }
-
-    usbBuffer->write(_packet.get_QByteArray());
+    // That was easy enough. Just drop the hex into a new packet and call the 'real' serialWrite().
+    do_serialWrite(LocoPacket(_hex));
 }
+
+/*
+ * Packet related functions
+ */
 
 QString LocoNet::handle_parsePacket (LocoPacket _packet, bool _enable)
 {

@@ -9,6 +9,7 @@
  * get_ to retrieve a member variable
  * do_ to complete a task
  * is_ to query a state of the object
+ * handle_ to take care of a signal
  */
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -57,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent) :
     db = QSqlDatabase::addDatabase("QPSQL", "main");
     dbQuery = QSqlQuery(db);
 
-    // Added simply to speed up debugging process
+    // Added to speed up debugging process
     do_serialConnect();
     connectDB();
 
@@ -313,7 +314,6 @@ void MainWindow::connectDB()
     QString database = ui->lineEdit_database->text();
     QString username = ui->lineEdit_user->text();
     QString password = ui->lineEdit_password->text();
-    QString table = ui->lineEdit_table->text();
 
     // Load connection details
     db.setHostName(hostname);
@@ -329,19 +329,7 @@ void MainWindow::connectDB()
         ui->textBrowser_sql->append(db.lastError().text());
     } else {
         ui->textBrowser_sql->append("Database opened. Connection test appears successful :)");
-        ui->textBrowser_sql->append(db.tables().join(",\n"));
-        /*
-        QSqlQuery tmpq(db);
-        if (!tmpq.exec("SELECT * FROM public.testsql"))
-        {
-            qDebug() << tmpq.lastError();
-            return;
-        }
-        while (tmpq.next())
-        {
-            qDebug() << tmpq.value(0).toString();
-        }
-        */
+        ui->textBrowser_sql->append(db.tables().join(",\n")); // Get a list of tables in the database and display them.
         ui->pushButton_connect->setEnabled(false);
         ui->pushButton_disconnect->setEnabled(true);
         ui->pushButton_tableText->setEnabled(true);
@@ -475,17 +463,18 @@ void MainWindow::runQuery(QString _query)
     }
 }
 
-// It's a kludge, I'm sorry :c
 void MainWindow::do_resetTrack() {
     if (ui->lineEdit_packet->text() == "827D")
     {
         ui->lineEdit_opcode->setText("83");
         do_genPacket();
         sendSerial();
+        ui->pushButton_resetTrack->setText("Enable Track.");
     } else {
         ui->lineEdit_opcode->setText("82");
         do_genPacket();
         sendSerial();
+        ui->pushButton_resetTrack->setText("Disable Track.");
     }
 }
 

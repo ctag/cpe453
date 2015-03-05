@@ -30,18 +30,20 @@ public:
     LocoNet();
     ~LocoNet();
     bool get_serialOpen();
+    bool get_timerActive();
+    QVector<LocoPacket> get_timerPackets();
+    int get_timerPacketInterval(LocoPacket _packet);
     QVector<LocoTrain> get_trains();
     QVector<LocoBlock> get_blocks();
     void set_trackUpdatePeriod(int _seconds);
     void set_switchUpdatePeriod(int _seconds);
     void set_trainUpdatePeriod(int _seconds);
     bool do_serialOpen(QSerialPortInfo _port);
-    void do_findTrains();
     void do_serialWrite(LocoPacket _packet);
     void do_serialWrite(QString _hex);
-    void do_startPacketTimer(int _msec = 200);
+    void set_packetTimer(int _msec = 200);
     void do_addTimerPacket(LocoPacket _packet, int _interval = 1);
-    void do_rmTimerPacket(LocoPacket _packet);
+    void do_stopTimerPacket(LocoPacket _packet);
     void do_stopPacketTimer();
 
 public slots:
