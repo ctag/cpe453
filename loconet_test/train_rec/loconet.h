@@ -45,7 +45,7 @@ public:
     void do_stopPacketTimer();
 
 public slots:
-    QString handle_parsePacket(LocoPacket _packet);
+    QString handle_parsePacket(LocoPacket _packet, bool _enable = 1);
     void do_serialClose();
     //void set_switches();
 
@@ -56,27 +56,30 @@ signals:
     void blockUpdated(LocoBlock);
 
 protected:
-    QString parse_E7(LocoPacket _packet, bool enable = 1);
-    QString parse_B2(LocoPacket _packet, bool enable = 1);
-    QString parse_85(LocoPacket _packet, bool enable = 1);
-    QString parse_83(LocoPacket _packet, bool enable = 1);
-    QString parse_82(LocoPacket _packet, bool enable = 1);
-    QString parse_81(LocoPacket _packet, bool enable = 1);
-    QString parse_BF(LocoPacket _packet, bool enable = 1);
-    QString parse_BD(LocoPacket _packet, bool enable = 1);
-    QString parse_BC(LocoPacket _packet, bool enable = 1);
-    QString parse_BB(LocoPacket _packet, bool enable = 1);
-    QString parse_BA(LocoPacket _packet, bool enable = 1);
-    QString parse_B9(LocoPacket _packet, bool enable = 1);
-    QString parse_B8(LocoPacket _packet, bool enable = 1);
-    QString parse_B6(LocoPacket _packet, bool enable = 1);
-    QString parse_B5(LocoPacket _packet, bool enable = 1);
-    QString parse_B4(LocoPacket _packet, bool enable = 1);
-    QString parse_B1(LocoPacket _packet, bool enable = 1);
-    QString parse_B0(LocoPacket _packet, bool enable = 1);
-    QString parse_A2(LocoPacket _packet, bool enable = 1);
-    QString parse_A1(LocoPacket _packet, bool enable = 1);
-    QString parse_A0(LocoPacket _packet, bool enable = 1);
+    QString parse_E7(LocoPacket _packet, bool _enable);
+    QString parse_EF(LocoPacket _packet, bool _enable);
+    QString parse_E5(LocoPacket _packet, bool _enable);
+    QString parse_ED(LocoPacket _packet, bool _enable);
+    QString parse_B2(LocoPacket _packet, bool _enable);
+    QString parse_85(LocoPacket _packet, bool _enable);
+    QString parse_83(LocoPacket _packet, bool _enable);
+    QString parse_82(LocoPacket _packet, bool _enable);
+    QString parse_81(LocoPacket _packet, bool _enable);
+    QString parse_BF(LocoPacket _packet, bool _enable);
+    QString parse_BD(LocoPacket _packet, bool _enable);
+    QString parse_BC(LocoPacket _packet, bool _enable);
+    QString parse_BB(LocoPacket _packet, bool _enable);
+    QString parse_BA(LocoPacket _packet, bool _enable);
+    QString parse_B9(LocoPacket _packet, bool _enable);
+    QString parse_B8(LocoPacket _packet, bool _enable);
+    QString parse_B6(LocoPacket _packet, bool _enable);
+    QString parse_B5(LocoPacket _packet, bool _enable);
+    QString parse_B4(LocoPacket _packet, bool _enable);
+    QString parse_B1(LocoPacket _packet, bool _enable);
+    QString parse_B0(LocoPacket _packet, bool _enable);
+    QString parse_A2(LocoPacket _packet, bool _enable);
+    QString parse_A1(LocoPacket _packet, bool _enable);
+    QString parse_A0(LocoPacket _packet, bool _enable);
 
 protected slots:
     void handle_serialRead();
