@@ -39,12 +39,14 @@ public:
     void do_findTrains();
     void do_serialWrite(LocoPacket _packet);
     void do_serialWrite(QString _hex);
+    void do_startPacketTimer(int _msec = 200);
+    void do_addTimerPacket(LocoPacket _packet, int _interval = 1);
+    void do_rmTimerPacket(LocoPacket _packet);
+    void do_stopPacketTimer();
 
 public slots:
-    QString do_parsePacket(LocoPacket _packet);
+    QString handle_parsePacket(LocoPacket _packet);
     void do_serialClose();
-    void update_track();
-    void update_trains();
     //void set_switches();
 
 signals:
@@ -54,32 +56,31 @@ signals:
     void blockUpdated(LocoBlock);
 
 protected:
-    void set_timers();
-    void unset_timers();
-    QString handle_E7(LocoPacket _packet);
-    QString handle_B2(LocoPacket _packet);
-    QString handle_85(LocoPacket _packet);
-    QString handle_83(LocoPacket _packet);
-    QString handle_82(LocoPacket _packet);
-    QString handle_81(LocoPacket _packet);
-    QString handle_BF(LocoPacket _packet);
-    QString handle_BD(LocoPacket _packet);
-    QString handle_BC(LocoPacket _packet);
-    QString handle_BB(LocoPacket _packet);
-    QString handle_BA(LocoPacket _packet);
-    QString handle_B9(LocoPacket _packet);
-    QString handle_B8(LocoPacket _packet);
-    QString handle_B6(LocoPacket _packet);
-    QString handle_B5(LocoPacket _packet);
-    QString handle_B4(LocoPacket _packet);
-    QString handle_B1(LocoPacket _packet);
-    QString handle_B0(LocoPacket _packet);
-    QString handle_A2(LocoPacket _packet);
-    QString handle_A1(LocoPacket _packet);
-    QString handle_A0(LocoPacket _packet);
+    QString parse_E7(LocoPacket _packet, bool enable = 1);
+    QString parse_B2(LocoPacket _packet, bool enable = 1);
+    QString parse_85(LocoPacket _packet, bool enable = 1);
+    QString parse_83(LocoPacket _packet, bool enable = 1);
+    QString parse_82(LocoPacket _packet, bool enable = 1);
+    QString parse_81(LocoPacket _packet, bool enable = 1);
+    QString parse_BF(LocoPacket _packet, bool enable = 1);
+    QString parse_BD(LocoPacket _packet, bool enable = 1);
+    QString parse_BC(LocoPacket _packet, bool enable = 1);
+    QString parse_BB(LocoPacket _packet, bool enable = 1);
+    QString parse_BA(LocoPacket _packet, bool enable = 1);
+    QString parse_B9(LocoPacket _packet, bool enable = 1);
+    QString parse_B8(LocoPacket _packet, bool enable = 1);
+    QString parse_B6(LocoPacket _packet, bool enable = 1);
+    QString parse_B5(LocoPacket _packet, bool enable = 1);
+    QString parse_B4(LocoPacket _packet, bool enable = 1);
+    QString parse_B1(LocoPacket _packet, bool enable = 1);
+    QString parse_B0(LocoPacket _packet, bool enable = 1);
+    QString parse_A2(LocoPacket _packet, bool enable = 1);
+    QString parse_A1(LocoPacket _packet, bool enable = 1);
+    QString parse_A0(LocoPacket _packet, bool enable = 1);
 
 protected slots:
-    void do_serialRead();
+    void handle_serialRead();
+    void handle_packetTimer();
 
 private:
     QVector<LocoTrain> trains;
@@ -87,11 +88,10 @@ private:
     QSerialPort * usbBuffer;
     LocoPacket incomingPacket;
     static bool debug;
-    QTimer * trackTimer;
-    QTimer * switchTimer;
-    QTimer * trainTimer;
-    int trackTimer_period, switchTimer_period, trainTimer_period;
-
+    QTimer * packetTimer;
+    QVector<LocoPacket> packetTimerPackets;
+    QVector<int> packetTimerPacketState;
+    QVector<int> packetTimerPacketInterval;
 };
 
 #endif // LOCONET_H

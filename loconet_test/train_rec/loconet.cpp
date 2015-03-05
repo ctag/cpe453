@@ -1,13 +1,10 @@
 #include "loconet.h"
 
-bool LocoNet::debug = true;
+bool LocoNet::debug = false;
 
 LocoNet::LocoNet ()
 {
     incomingPacket = LocoPacket();
-    trackTimer_period = 10;
-    trainTimer_period = 10;
-    switchTimer_period = 10;
 }
 
 LocoNet::~LocoNet ()
@@ -30,61 +27,52 @@ QVector<LocoBlock> LocoNet::get_blocks ()
     return(blocks);
 }
 
-void LocoNet::set_trackUpdatePeriod (int _seconds)
-{
-    trackTimer_period = _seconds;
+void LocoNet::do_startPacketTimer (int _msec) {
+    packetTimer = new QTimer(this);
+    connect(packetTimer, SIGNAL(timeout()), this, SLOT(handle_packetTimer()));
+    packetTimer->start(_msec);
 }
 
-void LocoNet::set_switchUpdatePeriod (int _seconds)
+void LocoNet::do_addTimerPacket (LocoPacket _packet, int _interval)
 {
-    switchTimer_period = _seconds;
+    packetTimerPackets.append(_packet);
+    packetTimerPacketInterval.append(_interval);
+    packetTimerPacketState.append(0);
 }
 
-void LocoNet::set_trainUpdatePeriod (int _seconds)
+void LocoNet::do_rmTimerPacket (LocoPacket _packet)
 {
-    trainTimer_period = _seconds;
-}
-
-void LocoNet::set_timers ()
-{
-    trackTimer = new QTimer(this);
-    trainTimer = new QTimer(this);
-    //switchTimer = new QTimer(this);
-
-    connect(trackTimer, SIGNAL(timeout()), this, SLOT(update_track()));
-    connect(trainTimer, SIGNAL(timeout()), this, SLOT(update_trains()));
-
-    trackTimer->start(trackTimer_period*1000);
-    trainTimer->start(trainTimer_period*1000);
-}
-
-void LocoNet::unset_timers ()
-{
-    trackTimer->stop();
-    trainTimer->stop();
-
-    disconnect(trackTimer, 0, 0, 0);
-    disconnect(trainTimer, 0, 0, 0);
-
-    delete trackTimer;
-    delete trainTimer;
-}
-
-void LocoNet::update_track()
-{
-    //
-}
-
-void LocoNet::update_trains()
-{
-    QVector<LocoTrain> _trains = trains;
-
-    for (int _index = 0; _index < _trains.count(); ++_index)
+    for (int _index = 0; _index < packetTimerPackets.count(); ++_index)
     {
-        LocoByte _adr = _trains[_index].get_adr();
-        QString _packet = "BF00";
-        _packet.append(_adr.get_hex());
-        do_serialWrite(_packet);
+        if (packetTimerPackets[_index] == _packet)
+        {
+            packetTimerPackets.remove(_index);
+            packetTimerPacketInterval.remove(_index);
+            packetTimerPacketState.remove(_index);
+        }
+    }
+}
+
+void LocoNet::do_stopPacketTimer ()
+{
+    packetTimer->stop();
+    disconnect(packetTimer, 0, 0, 0);
+    delete packetTimer;
+    packetTimerPackets.clear();
+    packetTimerPacketInterval.clear();
+    packetTimerPacketState.clear();
+}
+
+void LocoNet::handle_packetTimer ()
+{
+    for (int _index = 0; _index < packetTimerPackets.count(); ++_index)
+    {
+        ++packetTimerPacketState[_index];
+        if (packetTimerPacketState[_index] >= packetTimerPacketInterval[_index])
+        {
+            packetTimerPacketState[_index] = 0;
+            do_serialWrite(packetTimerPackets[_index]);
+        }
     }
 }
 
@@ -97,7 +85,6 @@ bool LocoNet::do_serialOpen (QSerialPortInfo _port)
     usbBuffer->open(QIODevice::ReadWrite);
     if (usbBuffer->isOpen())
     {
-        set_timers();
         connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(do_serialRead()));
         return(true);
     }
@@ -109,7 +96,6 @@ void LocoNet::do_serialClose ()
 {
     if (usbBuffer->isOpen())
     {
-        unset_timers();
         disconnect(usbBuffer, 0, 0, 0);
         usbBuffer->close();
         delete usbBuffer;
@@ -130,7 +116,7 @@ void LocoNet::do_serialRead ()
         return;
     }
     QByteArray _data;
-    while(usbBuffer->bytesAvailable() > 0)
+    while(usbBuffer->waitForReadyRead(20) || usbBuffer->bytesAvailable() > 0)
     {
         if (debug) qDebug() << "Reading serial ^_^";
         _data = usbBuffer->read(1);
@@ -202,7 +188,7 @@ QString LocoNet::do_parsePacket (LocoPacket _packet)
     return ("opcode [" + _opCode + "] doesn't match anything in parser :c");
 }
 
-QString LocoNet::handle_E7 (LocoPacket _packet)
+QString LocoNet::handle_E7 (LocoPacket _packet, bool enable)
 {
     QString _description = "E7:";
     // Parse packet into usable variables
@@ -258,77 +244,77 @@ QString LocoNet::handle_E7 (LocoPacket _packet)
     return (_description);
 }
 
-QString LocoNet::handle_85 (LocoPacket _packet) {
+QString LocoNet::handle_85 (LocoPacket _packet, bool enable) {
     QString _description = "85: Requesting track state IDLE / EMG STOP.";
     return(_description);
 }
 
-QString LocoNet::handle_83 (LocoPacket _packet) {
+QString LocoNet::handle_83 (LocoPacket _packet, bool enable) {
     QString _description = "83: Requesting track state ON.";
     return(_description);
 }
 
-QString LocoNet::handle_82 (LocoPacket _packet) {
+QString LocoNet::handle_82 (LocoPacket _packet, bool enable) {
     QString _description = "82: Requesting track state OFF.";
     return(_description);
 }
 
-QString LocoNet::handle_81 (LocoPacket _packet) {
+QString LocoNet::handle_81 (LocoPacket _packet, bool enable) {
     QString _description = "81: MASTER sent BUSY code.";
     return(_description);
 }
 
-QString LocoNet::handle_BF (LocoPacket _packet) {
+QString LocoNet::handle_BF (LocoPacket _packet, bool enable) {
     QString _description = "BF: Requesting locomotive address.";
     return(_description);
 }
 
-QString LocoNet::handle_BD (LocoPacket _packet) {
+QString LocoNet::handle_BD (LocoPacket _packet, bool enable) {
     QString _description = "BD: Requesting switch with LACK function."; // LACK - Long ACKnowledge
     return(_description);
 }
 
-QString LocoNet::handle_BC (LocoPacket _packet) {
+QString LocoNet::handle_BC (LocoPacket _packet, bool enable) {
     QString _description = "BC: Requesting state of switch.";
     return(_description);
 }
 
-QString LocoNet::handle_BB (LocoPacket _packet) {
+QString LocoNet::handle_BB (LocoPacket _packet, bool enable) {
     QString _description = "BB: Requesting SLOT data/status block.";
     return(_description);
 }
 
-QString LocoNet::handle_BA (LocoPacket _packet) {
+QString LocoNet::handle_BA (LocoPacket _packet, bool enable) {
     QString _description = "BA: Move slot SRC to DEST.";
     return(_description);
 }
 
-QString LocoNet::handle_B9 (LocoPacket _packet) {
+QString LocoNet::handle_B9 (LocoPacket _packet, bool enable) {
     QString _description = "B9: Link slot ARG1 to slot ARG2.";
     return(_description);
 }
 
-QString LocoNet::handle_B8 (LocoPacket _packet) {
+QString LocoNet::handle_B8 (LocoPacket _packet, bool enable) {
     QString _description = "B8: Unlink slot ARG1 from slot ARG2.";
     return(_description);
 }
 
-QString LocoNet::handle_B6 (LocoPacket _packet) {
+QString LocoNet::handle_B6 (LocoPacket _packet, bool enable) {
     QString _description = "B6: Set FUNC bits in a CONSIST uplink element.";
     return(_description);
 }
 
-QString LocoNet::handle_B5 (LocoPacket _packet) {
+QString LocoNet::handle_B5 (LocoPacket _packet, bool enable) {
     QString _description = "B5: Write slot stat1.";
     return(_description);
 }
 
-QString LocoNet::handle_B4 (LocoPacket _packet) {
+QString LocoNet::handle_B4 (LocoPacket _packet, bool enable) {
     QString _description = "B4: Long Acknowledge - LACK.";
     return(_description);
 }
 
-QString LocoNet::handle_B2 (LocoPacket _packet)
+QString LocoNet::handle_B2 (LocoPacket _packet, bool enable)
 {
     QString _description = "B2:";
     LocoByte _arg1 = _packet.get_locobyte(1);
@@ -364,27 +350,27 @@ QString LocoNet::handle_B2 (LocoPacket _packet)
     return(_description);
 }
 
-QString LocoNet::handle_B1 (LocoPacket _packet) {
+QString LocoNet::handle_B1 (LocoPacket _packet, bool enable) {
     QString _description = "B1: Turnout sensor state report.";
     return(_description);
 }
 
-QString LocoNet::handle_B0 (LocoPacket _packet) {
+QString LocoNet::handle_B0 (LocoPacket _packet, bool enable) {
     QString _description = "B0: Request switch function.";
     return(_description);
 }
 
-QString LocoNet::handle_A2 (LocoPacket _packet) {
+QString LocoNet::handle_A2 (LocoPacket _packet, bool enable) {
     QString _description = "A2: Setting slot sound functions.";
     return(_description);
 }
 
-QString LocoNet::handle_A1 (LocoPacket _packet) {
+QString LocoNet::handle_A1 (LocoPacket _packet, bool enable) {
     QString _description = "A1: Setting slot direction.";
     return(_description);
 }
 
-QString LocoNet::handle_A0 (LocoPacket _packet) {
+QString LocoNet::handle_A0 (LocoPacket _packet, bool enable) {
     QString _description = "A0: Setting slot speed.";
     return(_description);
 }

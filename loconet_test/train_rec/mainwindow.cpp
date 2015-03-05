@@ -42,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(disconnectDB()));
     //connect(ui->pushButton_tableText, SIGNAL(clicked()), this, SLOT(tableText()));
     //connect(ui->pushButton_queryModel, SIGNAL(clicked()), this, SLOT(queryModel()));
-    //connect(ui->pushButton_runQuery, SIGNAL(clicked()), this, SLOT(runQuery()));
+    connect(ui->pushButton_runQuery, SIGNAL(clicked()), this, SLOT(manualQuery()));
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
@@ -431,9 +431,16 @@ void MainWindow::queryModel()
 }
 */
 
+void MainWindow::manualQuery() {
+    runQuery("");
+}
+
 void MainWindow::runQuery(QString _query)
 {
     QString queryString = _query; /* Pull fresh query from the main interface */
+    if (queryString == "") {
+        queryString = ui->lineEdit_query->text();
+    }
     if (!db.isOpen()) /* Check that the database is still open */
     {
         ui->textBrowser_sql->append("Database doesn't appear to be open :C");
@@ -470,10 +477,16 @@ void MainWindow::runQuery(QString _query)
 
 // It's a kludge, I'm sorry :c
 void MainWindow::do_resetTrack() {
-    ui->lineEdit_packet->setText("827D");
-    sendSerial();
-    ui->lineEdit_packet->setText("837D");
-    sendSerial();
+    if (ui->lineEdit_packet->text() == "827D")
+    {
+        ui->lineEdit_opcode->setText("83");
+        do_genPacket();
+        sendSerial();
+    } else {
+        ui->lineEdit_opcode->setText("82");
+        do_genPacket();
+        sendSerial();
+    }
 }
 
 /* Flippity Bit

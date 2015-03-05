@@ -54,6 +54,7 @@ protected slots:
     //void queryModel();
     void loadFromPacketHistory(int);
     void do_resetTrack();
+    void manualQuery();
 
 public slots:
     void displayPacket(LocoPacket);
