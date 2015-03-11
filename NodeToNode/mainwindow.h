@@ -50,6 +50,7 @@ protected:
  signals:
         void rad_track_status(bool status);
         void rad_det_status(bool status);
+        void rad_switch_status(bool status);
 
 };
 

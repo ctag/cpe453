@@ -29,6 +29,14 @@ public:
 private:
     QPoint startPos;
     QPoint endPos;
+    QPoint switch_startPos;
+    QPoint switch_endPos;
+    bool firstclick;
+    bool secondclick;
+    bool originclick;
+    bool isSwitch;
+
+
 
     bool leftDown;
     bool rightDown;
@@ -48,8 +56,9 @@ protected:
     void drawLines(QPainter *p);
 
 public slots:
-    void get_rad_track(bool status);
-    void get_det_track(bool status);
+    void get_rad_rad(bool status);
+    void get_det_rad(bool status);
+    void get_switch_rad(bool status);
 signals:
    // void request_rad_status(bool);
 
