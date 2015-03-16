@@ -1,0 +1,8 @@
+Sprint 2: 20 hours
+  - As a developer, I want to investigate the tools needed for painting the track display- 5 hours
+  - As a developer, I want to create a graphical object and use a line to connect them - 15 hours
+Sprint 3: 15
+ 	Created the Interface and mywidget custom class to draw lines on
+
+Sprint 4 10hours
+	Created the availability of creating switches
