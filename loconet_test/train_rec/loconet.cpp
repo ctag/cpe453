@@ -1,6 +1,6 @@
 #include "loconet.h"
 
-bool LocoNet::debug = false;
+bool LocoNet::debug = true;
 QVector<LocoByte> LocoNet::opcodes_hex;
 QVector<QString> LocoNet::opcodes_name;
 QVector<QString> LocoNet::opcodes_desc;
@@ -84,9 +84,14 @@ void LocoNet::do_stopTimerPacket (LocoPacket _packet)
 
 void LocoNet::do_stopPacketTimer ()
 {
+    if (packetTimer == NULL)
+    {
+        return;
+    }
     packetTimer->stop();
     disconnect(packetTimer, 0, 0, 0);
     delete packetTimer;
+    packetTimer = NULL;
     packetTimerPackets.clear();
     packetTimerPacketInterval.clear();
     packetTimerPacketState.clear();
@@ -99,6 +104,7 @@ void LocoNet::handle_packetTimer ()
         ++packetTimerPacketState[_index];
         if (packetTimerPacketState[_index] >= packetTimerPacketInterval[_index])
         {
+            if (debug) qDebug() << "Timer Packet Sent: " << packetTimerPackets[_index].get_packet();
             packetTimerPacketState[_index] = 0;
             do_serialWrite(packetTimerPackets[_index]);
         }
@@ -115,7 +121,8 @@ bool LocoNet::do_serialOpen (QSerialPortInfo _port)
     usbBuffer->setPort(_port);
     usbBuffer->setBaudRate(57600);
     usbBuffer->setFlowControl(QSerialPort::HardwareControl);
-    usbBuffer->setReadBufferSize(4); // To force readyread() signal earlier...
+    // Doesn't work
+    //usbBuffer->setReadBufferSize(4); // To force readyread() signal earlier...
     usbBuffer->open(QIODevice::ReadWrite);
     if (usbBuffer->isOpen())
     {
@@ -123,10 +130,14 @@ bool LocoNet::do_serialOpen (QSerialPortInfo _port)
         //locorecv->moveToThread(&usbThread);
         //connect(locorecv, SIGNAL(receivedPacket(LocoPacket)), this, SLOT(handle_serialRead(LocoPacket)));
         //usbThread.start();
+        if (debug) qDebug() << "Serial port appears to have opened sucessfully.";
         connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(handle_serialRead()));
         return(true);
     }
+    if (debug) qDebug() << "Serial port failed to open. Closing immediately.";
     usbBuffer->close();
+    delete usbBuffer;
+    usbBuffer = NULL;
     return(false);
 }
 
@@ -139,6 +150,7 @@ void LocoNet::do_serialClose ()
         disconnect(usbBuffer, 0, 0, 0);
         usbBuffer->close();
         delete usbBuffer;
+        usbBuffer = NULL;
     }
 }
 
@@ -150,6 +162,10 @@ void LocoNet::handle_serialRead (LocoPacket _packet)
 
 void LocoNet::handle_serialRead ()
 {
+    if (!usbBuffer)
+    {
+        return; // null pointer?
+    }
     // If the usb device isn't open, we're not reading anything...
     if (!usbBuffer->isOpen())
     {
@@ -159,7 +175,7 @@ void LocoNet::handle_serialRead ()
     }
 
     // Read immediately if data is available
-    while(usbBuffer->bytesAvailable() > 0 || usbBuffer->waitForReadyRead(1))
+    while(usbBuffer->bytesAvailable() > 0)
     {
         if (debug) qDebug() << "Reading serial ^_^";
         incomingPacket.do_appendByteArray(usbBuffer->read(1)); // Load in a byte from the serial buffer
@@ -181,12 +197,18 @@ void LocoNet::handle_serialRead ()
 
 void LocoNet::do_serialWrite (LocoPacket _packet)
 {
+    if (!usbBuffer)
+    {
+        if (debug) qDebug() << "usbBuffer doesn't exist, not writing to port.";
+        return;
+    }
     _packet.do_genChecksum();
     if (!usbBuffer->isOpen())
     {
         if (debug) qDebug() << "Serial isn't open...";
         return;
     }
+    if (debug) qDebug() << "Writing packet: " << _packet.get_packet();
     usbBuffer->write(_packet.get_QByteArray());
 }
 

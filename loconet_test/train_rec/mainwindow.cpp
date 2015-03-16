@@ -12,7 +12,7 @@
  * handle_ to take care of a signal
  */
 
-bool MainWindow::debug = false;
+bool MainWindow::debug = true;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -191,15 +191,15 @@ void MainWindow::do_serialConnect()
     }
 
     // Setup packe timer
-    loconet.do_addTimerPacket(LocoPacket("BB030047"), 5); // Get slot status for adr 3
-    loconet.do_addTimerPacket(LocoPacket("BB020046"), 5);
-    loconet.do_addTimerPacket(LocoPacket("BB040040"), 5);
-    loconet.do_addTimerPacket(LocoPacket("BB050041"), 5);
-    loconet.do_addTimerPacket(LocoPacket("BB060042"), 5);
+    loconet.do_addTimerPacket(LocoPacket("BB030047"), 50); // Get slot status for adr 3
+    loconet.do_addTimerPacket(LocoPacket("BB020046"), 50);
+    loconet.do_addTimerPacket(LocoPacket("BB040040"), 50);
+    loconet.do_addTimerPacket(LocoPacket("BB050041"), 50);
+    loconet.do_addTimerPacket(LocoPacket("BB060042"), 50);
     //loconet.do_addTimerPacket(LocoPacket("BF000343"), 5); // Get slot status for adr 3
     //loconet.do_addTimerPacket(LocoPacket("BF000545"), 5); // Get slot status for adr 5
     //loconet.do_addTimerPacket(LocoPacket("BF000444"), 5); // Get slot status for adr 4
-    loconet.set_packetTimer(200); // start the timer
+    loconet.set_packetTimer(20); // start the timer
 }
 
 void MainWindow::do_serialDisconnect()
@@ -212,6 +212,7 @@ void MainWindow::do_serialDisconnect()
     ui->pushButton_serialDisconnect->setEnabled(false);
     ui->comboBox_serialList->setEnabled(true);
     ui->pushButton_serialRefreshList->setEnabled(true);
+    loconet.do_stopPacketTimer();
 }
 
 void MainWindow::loadFromPacketHistory(int _index)
