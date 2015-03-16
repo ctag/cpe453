@@ -41,6 +41,9 @@ public:
     bool is_validOP();
     bool is_followOnMsg();
 
+public slots:
+    void setDebug(bool);
+
 protected:
     QString do_xor(LocoByte _byte1, LocoByte _byte2);
 

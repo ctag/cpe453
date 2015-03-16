@@ -277,6 +277,11 @@ QByteArray LocoPacket::get_QByteArray()
     return (_byteArray);
 }
 
+void LocoPacket::setDebug(bool _debug)
+{
+    debug = _debug;
+}
+
 /* Sometimes I wonder /
  * Whether my code should wander /
  * Those tretcherous glades /

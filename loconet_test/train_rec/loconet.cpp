@@ -127,10 +127,6 @@ void LocoNet::handle_packetTimer ()
 
 bool LocoNet::do_serialOpen (QSerialPortInfo _port)
 {
-    if (!usbBuffer)
-    {
-        return(false); // pointer needs to be null
-    }
     usbBuffer = new QSerialPort;
     usbBuffer->setPort(_port);
     usbBuffer->setBaudRate(57600);
@@ -458,8 +454,11 @@ QString LocoNet::parse_B2 (LocoPacket _packet, bool _enable)
             if (_newBlock == blocks[_index])
             {
                 _existing = true;
+                if (blocks[_index].get_occupied() != _newBlock.get_occupied())
+                {
+                    emit blockUpdated(blocks[_index]);
+                }
                 blocks[_index] = _newBlock;
-                emit blockUpdated(blocks[_index]);
                 _description.append(" Block[" + QString::fromLatin1(blocks[_index].get_adr()) + "] updated.");
             }
         }
@@ -530,6 +529,11 @@ void LocoNet::do_addStaticOP(QString _hex, QString _name, QString _desc)
     opcodes_hex.append(LocoByte(_hex));
     opcodes_name.append(_name);
     opcodes_desc.append(_desc);
+}
+
+void LocoNet::setDebug(bool _debug)
+{
+    debug = _debug;
 }
 
 

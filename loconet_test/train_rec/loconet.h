@@ -54,6 +54,7 @@ public slots:
     QString handle_parsePacket(LocoPacket _packet, bool _enable = 1);
     void do_serialClose();
     //void set_switches();
+    void setDebug(bool);
 
 signals:
     void newPacket(LocoPacket);

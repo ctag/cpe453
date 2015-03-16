@@ -37,7 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(sendSerial()));
     connect(&loconet, &LocoNet::newPacket, this, &MainWindow::displayPacket); // QT-5 style works
     connect(&loconet, &LocoNet::newPacketDescription, this, &MainWindow::printDescriptions);
-    connect(&loconet, &LocoNet::trainUpdated, this, &MainWindow::updateTrains);
+    //connect(&loconet, &LocoNet::trainUpdated, this, &MainWindow::updateTrains);
+    connect(&loconet, &LocoNet::blockUpdated, this, &MainWindow::updateBlocks);
     connect(ui->comboBox_packetHistory, SIGNAL(activated(int)), this, SLOT(loadFromPacketHistory(int)));
     connect(ui->pushButton_resetTrack, SIGNAL(clicked()), this, SLOT(do_resetTrack()));
 
@@ -248,6 +249,10 @@ void MainWindow::displayPacket(LocoPacket _packet)
     QString _op = _packet.get_OPcode();
     if (_op == "B2")
     {
+        if (ui->textBrowser_sorted_b2->backwardHistoryCount() > 200)
+        {
+            ui->textBrowser_sorted_b2->clearHistory();
+        }
         ui->textBrowser_sorted_b2->append(_packet.get_packet());
     } else if (_op == "A0") {
         ui->textBrowser_sorted_a0->append(_packet.get_packet());
@@ -317,6 +322,27 @@ void MainWindow::updateTrains (LocoTrain _train)
         } else {
             ui->textBrowser_console->append(dbQuery.lastError().text());
         }
+    }
+}
+
+void MainWindow::updateBlocks (LocoBlock _block)
+{
+    if (db.open()) {
+        dbQuery.prepare("INSERT INTO cpe453.track_ds (ds_id, status) "
+                        "VALUES (:id, :status) "
+                        "ON DUPLICATE KEY "
+                        "UPDATE ds_id=:id, status=:status;");
+        unsigned int _id = _block.get_adr().toUInt();
+        bool _status = _block.get_occupied();
+        dbQuery.bindValue(":id", _id);
+        dbQuery.bindValue(":status", _status);
+
+        dbQuery.exec();
+        if (ui->textBrowser_sql->backwardHistoryCount() > 200)
+        {
+            ui->textBrowser_sql->clearHistory();
+        }
+        ui->textBrowser_sql->append("ran block update query. id [" + QString::number(_id) + "] status [" + _status + "]");
     }
 }
 
@@ -489,6 +515,11 @@ void MainWindow::do_resetTrack() {
         sendSerial();
         ui->pushButton_resetTrack->setText("Enable Track.");
     }
+}
+
+void MainWindow::setDebug(bool _debug)
+{
+    debug = _debug;
 }
 
 /* Flippity Bit

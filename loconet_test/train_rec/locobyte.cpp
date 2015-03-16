@@ -307,6 +307,11 @@ QBitArray LocoByte::get_qBitArray()
     return(byte);
 }
 
+void LocoByte::setDebug(bool _debug)
+{
+    debug = _debug;
+}
+
 /* Nyble, nable
  * So much babble
  *

@@ -33,6 +33,9 @@ public:
     void do_genComplement();
     void do_debugBits();
 
+public slots:
+    void setDebug(bool);
+
 protected:
     void bitsFromHex(QString _hex, int _nyble);
     void createEmpty();

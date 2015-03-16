@@ -60,6 +60,8 @@ public slots:
     void displayPacket(LocoPacket);
     void printDescriptions(QString);
     void updateTrains(LocoTrain);
+    void updateBlocks(LocoBlock);
+    void setDebug(bool);
 
 private:
     Ui::MainWindow *ui;
