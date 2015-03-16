@@ -12,7 +12,6 @@
 #include <QTimer>
 #include <QObject>
 
-#include "locorecv.h"
 #include "locoblock.h"
 #include "locobyte.h"
 #include "locotrain.h"
@@ -105,8 +104,6 @@ private:
     QVector<LocoPacket> packetTimerPackets;
     QVector<int> packetTimerPacketState;
     QVector<int> packetTimerPacketInterval;
-    //QThread usbThread;
-    //LocoRecv * locorecv;
     LocoPacket incomingPacket;
 };
 
