@@ -1883,7 +1883,7 @@
                <attribute name="title">
                 <string>INFO</string>
                </attribute>
-               <widget class="QWidget" name="">
+               <widget class="QWidget" name="layoutWidget">
                 <property name="geometry">
                  <rect>
                   <x>5</x>
