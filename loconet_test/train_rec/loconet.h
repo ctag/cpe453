@@ -12,6 +12,7 @@
 #include <QTimer>
 #include <QObject>
 
+#include "locorecv.h"
 #include "locoblock.h"
 #include "locobyte.h"
 #include "locotrain.h"
@@ -45,6 +46,10 @@ public:
     void do_addTimerPacket(LocoPacket _packet, int _interval = 1);
     void do_stopTimerPacket(LocoPacket _packet);
     void do_stopPacketTimer();
+    void do_addStaticOP(QString _hex, QString _name, QString _desc);
+    int get_staticOPsize();
+    QString get_staticOPname(int);
+    QString get_staticOPhex(int);
 
 public slots:
     QString handle_parsePacket(LocoPacket _packet, bool _enable = 1);
@@ -84,19 +89,25 @@ protected:
     QString parse_A0(LocoPacket _packet, bool _enable);
 
 protected slots:
-    void handle_serialRead();
     void handle_packetTimer();
+    void handle_serialRead(LocoPacket _packet);
+    void handle_serialRead();
 
 private:
     QVector<LocoTrain> trains;
     QVector<LocoBlock> blocks;
     QSerialPort * usbBuffer;
-    LocoPacket incomingPacket;
     static bool debug;
+    static QVector<LocoByte> opcodes_hex;
+    static QVector<QString> opcodes_name;
+    static QVector<QString> opcodes_desc;
     QTimer * packetTimer;
     QVector<LocoPacket> packetTimerPackets;
     QVector<int> packetTimerPacketState;
     QVector<int> packetTimerPacketInterval;
+    //QThread usbThread;
+    //LocoRecv * locorecv;
+    LocoPacket incomingPacket;
 };
 
 #endif // LOCONET_H

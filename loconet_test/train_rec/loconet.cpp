@@ -1,6 +1,9 @@
 #include "loconet.h"
 
 bool LocoNet::debug = false;
+QVector<LocoByte> LocoNet::opcodes_hex;
+QVector<QString> LocoNet::opcodes_name;
+QVector<QString> LocoNet::opcodes_desc;
 
 LocoNet::LocoNet ()
 {
@@ -112,9 +115,14 @@ bool LocoNet::do_serialOpen (QSerialPortInfo _port)
     usbBuffer->setPort(_port);
     usbBuffer->setBaudRate(57600);
     usbBuffer->setFlowControl(QSerialPort::HardwareControl);
+    usbBuffer->setReadBufferSize(4); // To force readyread() signal earlier...
     usbBuffer->open(QIODevice::ReadWrite);
     if (usbBuffer->isOpen())
     {
+        //locorecv = new LocoRecv(usbBuffer);
+        //locorecv->moveToThread(&usbThread);
+        //connect(locorecv, SIGNAL(receivedPacket(LocoPacket)), this, SLOT(handle_serialRead(LocoPacket)));
+        //usbThread.start();
         connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(handle_serialRead()));
         return(true);
     }
@@ -124,12 +132,20 @@ bool LocoNet::do_serialOpen (QSerialPortInfo _port)
 
 void LocoNet::do_serialClose ()
 {
+    //usbThread.quit();
+    //usbThread.wait();
     if (usbBuffer->isOpen())
     {
         disconnect(usbBuffer, 0, 0, 0);
         usbBuffer->close();
         delete usbBuffer;
     }
+}
+
+void LocoNet::handle_serialRead (LocoPacket _packet)
+{
+    emit newPacket(_packet);
+    emit newPacketDescription(handle_parsePacket(_packet));
 }
 
 void LocoNet::handle_serialRead ()
@@ -142,8 +158,8 @@ void LocoNet::handle_serialRead ()
         return;
     }
 
-    // Either read immediately if data is available, or wait up to 10msec for another ready read signal to generate...
-    while(usbBuffer->waitForReadyRead(10) || usbBuffer->bytesAvailable() > 0)
+    // Read immediately if data is available
+    while(usbBuffer->bytesAvailable() > 0 || usbBuffer->waitForReadyRead(1))
     {
         if (debug) qDebug() << "Reading serial ^_^";
         incomingPacket.do_appendByteArray(usbBuffer->read(1)); // Load in a byte from the serial buffer
@@ -168,7 +184,7 @@ void LocoNet::do_serialWrite (LocoPacket _packet)
     _packet.do_genChecksum();
     if (!usbBuffer->isOpen())
     {
-        qDebug() << "Serial isn't open...";
+        if (debug) qDebug() << "Serial isn't open...";
         return;
     }
     usbBuffer->write(_packet.get_QByteArray());
@@ -452,5 +468,38 @@ QString LocoNet::parse_A0 (LocoPacket _packet, bool _enable) {
     QString _description = "A0: Setting slot speed.";
     return(_description);
 }
+
+/**
+ * Static OP list functions
+ */
+
+int LocoNet::get_staticOPsize()
+{
+    return(opcodes_hex.size());
+}
+
+QString LocoNet::get_staticOPname(int _index)
+{
+    return(opcodes_name[_index]);
+}
+
+QString LocoNet::get_staticOPhex(int _index)
+{
+    return(opcodes_hex[_index].get_hex());
+}
+
+void LocoNet::do_addStaticOP(QString _hex, QString _name, QString _desc)
+{
+    for (int _index = 0; _index < opcodes_hex.size(); ++_index)
+    {
+        if (opcodes_hex[_index].get_hex() == _hex) {
+            return;
+        }
+    }
+    opcodes_hex.append(LocoByte(_hex));
+    opcodes_name.append(_name);
+    opcodes_desc.append(_desc);
+}
+
 
 

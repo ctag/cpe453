@@ -12,6 +12,8 @@
  * handle_ to take care of a signal
  */
 
+bool MainWindow::debug = false;
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -19,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     outgoingPacket.set_allFromHex("00");
-    do_initStaticOP(outgoingPacket);
+    do_initStaticOP();
 
     ui->lineEdit_opcode->setInputMask("hh");
     ui->lineEdit_arg1->setInputMask("hh");
@@ -55,12 +57,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(packetTimer, SIGNAL(timeout()), this, SLOT(do_packetTimer()));
     connect(ui->pushButton_timerToggle, SIGNAL(clicked()), this, SLOT(do_timerToggle()));
 
-    db = QSqlDatabase::addDatabase("QPSQL", "main");
+    db = QSqlDatabase::addDatabase("QMYSQL", "main");
     dbQuery = QSqlQuery(db);
 
     // Added to speed up debugging process
-    do_serialConnect();
-    connectDB();
+    //do_serialConnect();
+    //connectDB();
 
     ui->textBrowser_console->append("Program loaded! :3");
 }
@@ -113,48 +115,48 @@ void MainWindow::do_genPacket()
     }
 }
 
-void MainWindow::do_initStaticOP(LocoPacket _locopacket)
+void MainWindow::do_initStaticOP()
 {
-    _locopacket.do_addStaticOP("85", "Global IDLE", "Put track into IDLE mode.");
-    _locopacket.do_addStaticOP("83", "Global ON", "Put track into ON mode.");
-    _locopacket.do_addStaticOP("82", "Global OFF", "Put track into OFF mode.");
-    _locopacket.do_addStaticOP("BF", "OPC_LOCO_ADR", "Request loco address");
-    _locopacket.do_addStaticOP("BD", "OPC_SW_ACK", "Request switch with acknowledge function");
-    _locopacket.do_addStaticOP("BC", "OPC_SW_STATE", "Request state of switch");
-    _locopacket.do_addStaticOP("BB", "OPC_RQ_SL_DATA", "Request SLOT DATA / status block");
-    _locopacket.do_addStaticOP("BA", "OPC_MOVE_SLOTS", "MOVE slot SRC to DST");
-    _locopacket.do_addStaticOP("B9", "OPC_LINK_SLOTS", "LINK slot ARG1 to slot ARG2");
-    _locopacket.do_addStaticOP("B8", "OPC_UNLINK_SLOTS", "UNLINK slot ARG1 from slot ARG2");
-    _locopacket.do_addStaticOP("B6", "OPC_CONSIST_FUNT", "SET FUNC bits in a consist uplink element");
-    _locopacket.do_addStaticOP("B5", "OPC_SLOT_STAT1", "Write slot stat1");
-    _locopacket.do_addStaticOP("B4", "OPC_LONG_ACK", "Long Acknowledge");
-    _locopacket.do_addStaticOP("B2", "OPC_INPUT_REP", "General sensor input codes");
-    _locopacket.do_addStaticOP("B1", "OPC_SW_REP", "Turnout sensor state report");
-    _locopacket.do_addStaticOP("B0", "OPC_SW_REQ", "Request switch function.");
-    _locopacket.do_addStaticOP("A2", "OPC_LOCO_SND", "Set SLOT sound functions.");
-    _locopacket.do_addStaticOP("A1", "OPC_LOCO_DIRF", "Set SLOT direction, F0-4 state.");
-    _locopacket.do_addStaticOP("A0", "OPC_LOCO_SPD", "Set SLOT speed");
-    _locopacket.do_addStaticOP("EF", "OPC_WR_SL_DATA", "Write SLOT data (10 bytes)");
-    _locopacket.do_addStaticOP("E7", "OPC_SL_RD_DATA", "Read SLOT data");
-    _locopacket.do_addStaticOP("E5", "OPC_PEER_XFER", "Move 8 bytes peer to peer src->dst");
-    _locopacket.do_addStaticOP("ED", "OPC_IMM_PACKET", "Send n-byte packet immediate");
+    loconet.do_addStaticOP("85", "Global IDLE", "Put track into IDLE mode.");
+    loconet.do_addStaticOP("83", "Global ON", "Put track into ON mode.");
+    loconet.do_addStaticOP("82", "Global OFF", "Put track into OFF mode.");
+    loconet.do_addStaticOP("BF", "OPC_LOCO_ADR", "Request loco address");
+    loconet.do_addStaticOP("BD", "OPC_SW_ACK", "Request switch with acknowledge function");
+    loconet.do_addStaticOP("BC", "OPC_SW_STATE", "Request state of switch");
+    loconet.do_addStaticOP("BB", "OPC_RQ_SL_DATA", "Request SLOT DATA / status block");
+    loconet.do_addStaticOP("BA", "OPC_MOVE_SLOTS", "MOVE slot SRC to DST");
+    loconet.do_addStaticOP("B9", "OPC_LINK_SLOTS", "LINK slot ARG1 to slot ARG2");
+    loconet.do_addStaticOP("B8", "OPC_UNLINK_SLOTS", "UNLINK slot ARG1 from slot ARG2");
+    loconet.do_addStaticOP("B6", "OPC_CONSIST_FUNT", "SET FUNC bits in a consist uplink element");
+    loconet.do_addStaticOP("B5", "OPC_SLOT_STAT1", "Write slot stat1");
+    loconet.do_addStaticOP("B4", "OPC_LONG_ACK", "Long Acknowledge");
+    loconet.do_addStaticOP("B2", "OPC_INPUT_REP", "General sensor input codes");
+    loconet.do_addStaticOP("B1", "OPC_SW_REP", "Turnout sensor state report");
+    loconet.do_addStaticOP("B0", "OPC_SW_REQ", "Request switch function.");
+    loconet.do_addStaticOP("A2", "OPC_LOCO_SND", "Set SLOT sound functions.");
+    loconet.do_addStaticOP("A1", "OPC_LOCO_DIRF", "Set SLOT direction, F0-4 state.");
+    loconet.do_addStaticOP("A0", "OPC_LOCO_SPD", "Set SLOT speed");
+    loconet.do_addStaticOP("EF", "OPC_WR_SL_DATA", "Write SLOT data (10 bytes)");
+    loconet.do_addStaticOP("E7", "OPC_SL_RD_DATA", "Read SLOT data");
+    loconet.do_addStaticOP("E5", "OPC_PEER_XFER", "Move 8 bytes peer to peer src->dst");
+    loconet.do_addStaticOP("ED", "OPC_IMM_PACKET", "Send n-byte packet immediate");
 
-    //_locopacket.do_addStaticOP("", "", "");
+    //loconet.do_addStaticOP("", "", "");
 }
 
 void MainWindow::do_loadOPComboBox()
 {
-    for (int _index = 0; _index < outgoingPacket.get_staticOPsize(); ++_index)
+    for (int _index = 0; _index < loconet.get_staticOPsize(); ++_index)
     {
-        QString _text = outgoingPacket.get_staticOPname(_index);
-        _text.append(" [" + outgoingPacket.get_staticOPhex(_index) + "]");
+        QString _text = loconet.get_staticOPname(_index);
+        _text.append(" [" + loconet.get_staticOPhex(_index) + "]");
         ui->comboBox_opcodes->insertItem(_index, _text);
     }
 }
 
 void MainWindow::do_OPfromComboBox()
 {
-    QString _hex = outgoingPacket.get_staticOPhex(ui->comboBox_opcodes->currentIndex());
+    QString _hex = loconet.get_staticOPhex(ui->comboBox_opcodes->currentIndex());
     ui->lineEdit_opcode->setText(_hex);
     do_enableArgs();
 }
@@ -187,6 +189,17 @@ void MainWindow::do_serialConnect()
     } else {
         ui->textBrowser_console->append("Serial port not open xC");
     }
+
+    // Setup packe timer
+    loconet.do_addTimerPacket(LocoPacket("BB030047"), 5); // Get slot status for adr 3
+    loconet.do_addTimerPacket(LocoPacket("BB020046"), 5);
+    loconet.do_addTimerPacket(LocoPacket("BB040040"), 5);
+    loconet.do_addTimerPacket(LocoPacket("BB050041"), 5);
+    loconet.do_addTimerPacket(LocoPacket("BB060042"), 5);
+    //loconet.do_addTimerPacket(LocoPacket("BF000343"), 5); // Get slot status for adr 3
+    //loconet.do_addTimerPacket(LocoPacket("BF000545"), 5); // Get slot status for adr 5
+    //loconet.do_addTimerPacket(LocoPacket("BF000444"), 5); // Get slot status for adr 4
+    loconet.set_packetTimer(200); // start the timer
 }
 
 void MainWindow::do_serialDisconnect()
@@ -213,7 +226,7 @@ void MainWindow::sendSerial()
     outgoingPacket.set_allFromHex(ui->lineEdit_packet->text());
     if (!outgoingPacket.is_validChk())
     {
-        qDebug() << "Packet isn't right `_`";
+        if (debug) qDebug() << "Packet isn't right `_`";
         return;
     }
 
@@ -222,13 +235,13 @@ void MainWindow::sendSerial()
     loconet.do_serialWrite(outgoingPacket);
 
     dumpQByteArray(outgoingPacket.get_QByteArray());
-    qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
-    qDebug() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
+    if (debug) qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
+    if (debug) qDebug() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
 }
 
 void MainWindow::displayPacket(LocoPacket _packet)
 {
-    qDebug() << "Reading packet to text browser.";
+    if (debug) qDebug() << "Reading packet to text browser.";
     //ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz ") + _packet.get_packet());
     // Sort packets for easier reading
     QString _op = _packet.get_OPcode();
@@ -245,9 +258,9 @@ void MainWindow::displayPacket(LocoPacket _packet)
 void MainWindow::dumpQByteArray(QByteArray _packet)
 {
     LocoPacket _localPacket = LocoPacket(_packet.toHex());
-    qDebug() << _packet.toHex();
+    if (debug) qDebug() << _packet.toHex();
     ui->textBrowser_console->append(incomingPacket.get_packet());
-    qDebug() << _localPacket.get_packet();
+    if (debug) qDebug() << _localPacket.get_packet();
 }
 
 void MainWindow::do_packetTimer()
@@ -336,7 +349,6 @@ void MainWindow::connectDB()
         ui->pushButton_queryModel->setEnabled(true);
         ui->pushButton_runQuery->setEnabled(true);
     }
-
 }
 
 void MainWindow::disconnectDB()
@@ -469,12 +481,12 @@ void MainWindow::do_resetTrack() {
         ui->lineEdit_opcode->setText("83");
         do_genPacket();
         sendSerial();
-        ui->pushButton_resetTrack->setText("Enable Track.");
+        ui->pushButton_resetTrack->setText("Disable Track.");
     } else {
         ui->lineEdit_opcode->setText("82");
         do_genPacket();
         sendSerial();
-        ui->pushButton_resetTrack->setText("Disable Track.");
+        ui->pushButton_resetTrack->setText("Enable Track.");
     }
 }
 

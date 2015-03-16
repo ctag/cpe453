@@ -10,9 +10,6 @@
 
 /* Static Members */
 bool LocoPacket::debug = false;
-QVector<LocoByte> LocoPacket::opcodes_hex;
-QVector<QString> LocoPacket::opcodes_name;
-QVector<QString> LocoPacket::opcodes_desc;
 
 /*
  * Default Constructor
@@ -33,6 +30,7 @@ LocoPacket::LocoPacket(QString _hex)
     if ((_hex.count()%2) != 0)
     {
         if (debug) qDebug() << "Hex packet is malformed! D:";
+        locobyte_array.clear();
         return;
     }
     int _length = (_hex.count() / 2);
@@ -41,15 +39,15 @@ LocoPacket::LocoPacket(QString _hex)
     {
         LocoByte _tmp_locohex(_hex.mid((_packet * 2),2));
         locobyte_array.append(_tmp_locohex);
-        qDebug() << "New packet: " << locobyte_array[_packet].get_hex() << " " << locobyte_array[_packet].get_binary();
+        if (debug) qDebug() << "New packet: " << locobyte_array[_packet].get_hex() << " " << locobyte_array[_packet].get_binary();
     }
     if (is_validOP())
     {
-        qDebug() << "Valid OP code x)";
+        if (debug) qDebug() << "Valid OP code x)";
     }
     if (is_validChk())
     {
-        qDebug() << "Valid Checksum x)";
+        if (debug) qDebug() << "Valid Checksum x)";
     }
 }
 
@@ -73,15 +71,15 @@ void LocoPacket::set_allFromHex(QString _hex)
     {
         LocoByte _tmp_locohex(_hex.mid((_packet * 2),2));
         locobyte_array.append(_tmp_locohex);
-        qDebug() << "New packet: " << locobyte_array[_packet].get_hex() << " " << locobyte_array[_packet].get_binary();
+        if (debug) qDebug() << "New packet: " << locobyte_array[_packet].get_hex() << " " << locobyte_array[_packet].get_binary();
     }
     if (is_validOP())
     {
-        qDebug() << "Valid OP code x)";
+        if (debug) qDebug() << "Valid OP code x)";
     }
     if (is_validChk())
     {
-        qDebug() << "Valid Checksum x)";
+        if (debug) qDebug() << "Valid Checksum x)";
     }
 }
 
@@ -111,14 +109,9 @@ QString LocoPacket::get_packet()
 int LocoPacket::get_packetLen()
 {
     int _result = -1;
-    for (int _index = 0; _index < opcodes_hex.size(); ++_index)
-    {
-        if (opcodes_hex[_index].get_hex() == locobyte_array[0].get_hex() && locobyte_array[0].get_isOP()) {
-            _result = (locobyte_array[0].get_packetLength());
-            return(_result);
-        }
-    }
-    if (_result < 0) {
+    if (locobyte_array[0].get_isOP()) {
+        _result = (locobyte_array[0].get_packetLength());
+    } else {
         _result = (locobyte_array[1].get_packetLength());
     }
     return(_result);
@@ -127,21 +120,6 @@ int LocoPacket::get_packetLen()
 int LocoPacket::get_numBytes ()
 {
     return(locobyte_array.count());
-}
-
-int LocoPacket::get_staticOPsize()
-{
-    return(opcodes_hex.size());
-}
-
-QString LocoPacket::get_staticOPname(int _index)
-{
-    return(opcodes_name[_index]);
-}
-
-QString LocoPacket::get_staticOPhex(int _index)
-{
-    return(opcodes_hex[_index].get_hex());
 }
 
 QString LocoPacket::get_OPcode ()
@@ -189,7 +167,7 @@ QString LocoPacket::do_genChecksum()
 {
     if (is_validChk() && is_validOP())
     {
-        qDebug() << "Not generating a checksum for an already valid packet ^-^";
+        if (debug) qDebug() << "Not generating a checksum for an already valid packet ^-^";
         QString _chk = "";
         _chk.append(locobyte_array[locobyte_array.size()-1].get_hex());
         return(_chk);
@@ -204,19 +182,6 @@ QString LocoPacket::do_genChecksum()
     _checksum.do_genComplement();
     locobyte_array.append(_checksum);
     return(_checksum.get_hex());
-}
-
-void LocoPacket::do_addStaticOP(QString _hex, QString _name, QString _desc)
-{
-    for (int _index = 0; _index < opcodes_hex.size(); ++_index)
-    {
-        if (opcodes_hex[_index].get_hex() == _hex) {
-            return;
-        }
-    }
-    opcodes_hex.append(LocoByte(_hex));
-    opcodes_name.append(_name);
-    opcodes_desc.append(_desc);
 }
 
 /* do_appendByte()
@@ -273,33 +238,12 @@ bool LocoPacket::is_validChk()
 
 bool LocoPacket::is_validOP()
 {
-    int _len = locobyte_array.count();
-    if (_len == 0)
-    {
-        qDebug() << "No bytes in packet, skipping OP check.";
-        return true;
-    }
-    // Begin at byte after OP and search for incorrectly placed OPs
-    for (int _index = 1; _index < locobyte_array.count(); ++_index)
-    {
-        if (locobyte_array[_index].get_isOP())
-        {
-            return(false); // There's an OP where there shouldn't be, packet is bad.
-        }
-    }
-    // This NEEDS to be fixed, what an awful idea...
-    for (int _index = 0; _index < opcodes_hex.size(); ++_index)
-    {
-        if (opcodes_hex[_index].get_hex() == locobyte_array[0].get_hex()) {
-            return(true); // So we're only reporting true if the OP is a KNOWN code.
-        }
-    }
-    return(false); // First byte isn't a known op code.
+    return(locobyte_array[0].get_isOP());
 }
 
 bool LocoPacket::is_followOnMsg ()
 {
-    return (locobyte_array[0].get_followOnMsg());
+    return (locobyte_array[0].get_hasFollowMsg());
 }
 
 QBitArray LocoPacket::get_QBitArray()

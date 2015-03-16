@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="tab_packets">
        <attribute name="title">
@@ -228,9 +228,6 @@
          </layout>
         </item>
        </layout>
-       <zorder>textBrowser_packets</zorder>
-       <zorder>formLayoutWidget_2</zorder>
-       <zorder>formLayoutWidget_2</zorder>
       </widget>
       <widget class="QWidget" name="tab_console">
        <attribute name="title">
@@ -431,7 +428,7 @@
               <item alignment="Qt::AlignLeft">
                <widget class="QLineEdit" name="lineEdit_hostname">
                 <property name="text">
-                 <string>chargertrains.club</string>
+                 <string>pavelow.eng.uah.edu</string>
                 </property>
                </widget>
               </item>
@@ -449,10 +446,10 @@
               <item alignment="Qt::AlignLeft">
                <widget class="QSpinBox" name="spinBox_port">
                 <property name="maximum">
-                 <number>9999</number>
+                 <number>99999</number>
                 </property>
                 <property name="value">
-                 <number>5432</number>
+                 <number>33153</number>
                 </property>
                </widget>
               </item>
@@ -470,7 +467,7 @@
               <item alignment="Qt::AlignLeft">
                <widget class="QLineEdit" name="lineEdit_user">
                 <property name="text">
-                 <string>loconet</string>
+                 <string>root</string>
                 </property>
                </widget>
               </item>
@@ -488,7 +485,7 @@
               <item alignment="Qt::AlignLeft">
                <widget class="QLineEdit" name="lineEdit_password">
                 <property name="text">
-                 <string>iamtrain</string>
+                 <string>cstrapwi</string>
                 </property>
                </widget>
               </item>

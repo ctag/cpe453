@@ -58,14 +58,11 @@ bool LocoByte::operator ==(LocoByte _arg)
  */
 void LocoByte::createEmpty()
 {
-    if (debug) qDebug() << "Creating new empty locohex object";
+    if (debug) qDebug() << "Creating new empty locobyte.";
     byte = QBitArray(8, 0);
-    for (int nyble = 0; nyble < 2; ++nyble)
+    for (u_int16_t _bit = 0; _bit < 8; ++_bit)
     {
-        for (int bit = 0; bit < 4; ++bit)
-        {
-            byte[(nyble*4)+bit] = 0;
-        }
+        byte[_bit] = 0;
     }
 }
 
@@ -110,17 +107,12 @@ void LocoByte::bitsFromHex(QString _hex, int _nyble)
  */
 void LocoByte::set_fromHex (QString _hex)
 {
-    QString functionName = "defineByHex()";
-    if (debug) qDebug() << functionName;
-
     _hex = _hex.toUpper(); // Only deal with one case
 
-    if (debug) qDebug() << functionName << " nybles: 0-" << _hex.mid(0,1) << " 1-" << _hex.mid(1,1);
+    if (debug) qDebug() << "set_fromHex() -> nybles: 0-" << _hex.mid(0,1) << " 1-" << _hex.mid(1,1);
 
     bitsFromHex(_hex.mid(0,1), 0);
     bitsFromHex(_hex.mid(1,1), 1);
-
-    if (debug) qDebug() << functionName << " end";
 } /* end set_fromHex */
 
 /* get_binary()
@@ -130,16 +122,13 @@ void LocoByte::set_fromHex (QString _hex)
 QString LocoByte::get_binary()
 {
     QString _binary = "";
-    for (int _nyble = 0; _nyble < 2; ++_nyble)
+    for (u_int16_t _bit = 0; _bit < 8; ++_bit)
     {
-        for (int _bit = 0; _bit < 4; ++_bit)
+        if (byte[_bit] == 1)
         {
-            if (byte[(_nyble*4)+_bit] == 1)
-            {
-                _binary.append("1");
-            } else {
-                _binary.append("0");
-            }
+            _binary.append("1");
+        } else {
+            _binary.append("0");
         }
     }
     return(_binary);
@@ -151,7 +140,7 @@ QString LocoByte::get_binary()
  */
 QString LocoByte::get_hex()
 {
-    if (debug) qDebug() << "hexFromBits() " << get_binary();
+    if (debug) qDebug() << "hexFromBits()";
     int _decimal[2] = {0, 0};
     QChar _hexArray[2] = {'0', '0'};
 
@@ -184,7 +173,13 @@ QString LocoByte::get_hex()
  */
 bool LocoByte::get_oneBit(int _bit)
 {
-    return(byte[_bit]); // Fire away
+    if (_bit < 8 && _bit >= 0)
+    {
+        return(byte[_bit]); // Fire away
+    } else {
+        qDebug() << "Error in get_oneBit().";
+        return(-1);
+    }
 } /* end get_oneBit */
 
 /* set_oneBit()
@@ -194,7 +189,12 @@ bool LocoByte::get_oneBit(int _bit)
 void LocoByte::set_oneBit(int _bit, bool _value)
 {
     if (debug) qDebug() << "setBit() bit: " << _bit << " value: " << _value;
-    byte[_bit] = _value;
+    if (_bit < 8 && _bit >= 0)
+    {
+        byte[_bit] = _value;
+    } else {
+        qDebug() << "Error in set_oneBit().";
+    }
     if (debug) qDebug() << "end setBit()";
 } /* end set_oneBit */
 
@@ -211,13 +211,9 @@ short unsigned int LocoByte::get_packetLength()
 {
     if (!get_isOP()) { // Assume we want the second hex 7-bit packet length
         int _len = 0;
-        for (int _nyble = 0; _nyble < 2; ++_nyble)
+        for (u_int16_t _bit = 0; _bit < 8; ++_bit)
         {
-            for (int _bit = 0; _bit < 4; ++_bit)
-            {
-                int _pos = ((_nyble*4)+_bit);
-                _len += (byte[_pos] * pow(2, (7 - _pos)));
-            }
+            _len += (byte[_bit] * pow(2, (7 - _bit)));
         }
         return(_len);
     }
@@ -237,7 +233,7 @@ short unsigned int LocoByte::get_packetLength()
     return(-1);
 }
 
-bool LocoByte::get_followOnMsg()
+bool LocoByte::get_hasFollowMsg()
 {
     if (get_isOP() && byte[4])
     {
@@ -274,32 +270,19 @@ void LocoByte::do_genComplement()
     if (debug) qDebug() << "end genComplement()";
 }
 
-/* do_testDriver()
- *
- * Run a test driver. Not yet implemented.
- */
-void LocoByte::do_testDriver()
-{
-    qDebug() << "LocoHex:runDriver is not to be used in normal operation!";
-}
-
 /* set_fromBinary()
  *
  */
 void LocoByte::set_fromBinary(QString _binary)
 {
-    for (int _nyble = 0; _nyble < 2; ++_nyble)
+    for (u_int16_t _bit = 0; _bit < 8; ++_bit)
     {
-        for (int _bit = 0; _bit < 4; ++_bit)
+        QString _test = _binary.mid(_bit, 1);
+        if (_test == "1")
         {
-            int _pos = ((_nyble*4)+_bit);
-            QString _test = _binary.mid(_pos, 1);
-            if (_test == "1")
-            {
-                byte[_pos] = 1;
-            } else {
-                byte[_pos] = 0;
-            }
+            byte[_bit] = 1;
+        } else {
+            byte[_bit] = 0;
         }
     }
 }

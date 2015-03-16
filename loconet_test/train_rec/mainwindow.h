@@ -33,7 +33,7 @@ public:
     ~MainWindow();
 
 protected:
-    void do_initStaticOP(LocoPacket);
+    void do_initStaticOP();
     void do_loadOPComboBox();
 
 protected slots:
@@ -73,6 +73,7 @@ private:
     QSqlDatabase db;
     QSqlQuery dbQuery;
     void runQuery(QString _query);
+    static bool debug;
 };
 
 #endif // MAINWINDOW_H
