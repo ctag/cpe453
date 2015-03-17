@@ -183,6 +183,10 @@ void LocoNet::handle_serialRead ()
     while(usbBuffer->bytesAvailable() > 0)
     {
         if (debug) qDebug() << "Reading serial ^_^";
+        if (incomingPacket.get_numBytes() > 36)
+        {
+            incomingPacket = LocoPacket();
+        }
         incomingPacket.do_appendByteArray(usbBuffer->read(1)); // Load in a byte from the serial buffer
         // Check to see if the packet has a valid OP code.
         if (!incomingPacket.is_validOP()) {

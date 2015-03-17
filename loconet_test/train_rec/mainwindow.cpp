@@ -249,10 +249,6 @@ void MainWindow::displayPacket(LocoPacket _packet)
     QString _op = _packet.get_OPcode();
     if (_op == "B2")
     {
-        if (ui->textBrowser_sorted_b2->backwardHistoryCount() > 200)
-        {
-            ui->textBrowser_sorted_b2->clearHistory();
-        }
         ui->textBrowser_sorted_b2->append(_packet.get_packet());
     } else if (_op == "A0") {
         ui->textBrowser_sorted_a0->append(_packet.get_packet());
@@ -332,17 +328,13 @@ void MainWindow::updateBlocks (LocoBlock _block)
                         "VALUES (:id, :status) "
                         "ON DUPLICATE KEY "
                         "UPDATE ds_id=:id, status=:status;");
-        unsigned int _id = _block.get_adr().toUInt();
+        QString _id = QString::fromLatin1(_block.get_adr());
         bool _status = _block.get_occupied();
         dbQuery.bindValue(":id", _id);
         dbQuery.bindValue(":status", _status);
 
         dbQuery.exec();
-        if (ui->textBrowser_sql->backwardHistoryCount() > 200)
-        {
-            ui->textBrowser_sql->clearHistory();
-        }
-        ui->textBrowser_sql->append("ran block update query. id [" + QString::number(_id) + "] status [" + _status + "]");
+        ui->textBrowser_sql->append("ran block update query. id [" + _id + "] status [" + QString::number(_status) + "]");
     }
 }
 
