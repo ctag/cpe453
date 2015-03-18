@@ -18,13 +18,15 @@ SOURCES += main.cpp\
     locobyte.cpp \
     locotrain.cpp \
     loconet.cpp \
-    locoblock.cpp
+    locoblock.cpp \
+    locoserial.cpp
 
 HEADERS  += mainwindow.h \
 	locopacket.h \
     locobyte.h \
     locotrain.h \
     loconet.h \
-    locoblock.h
+    locoblock.h \
+    locoserial.h
 
 FORMS    += mainwindow.ui

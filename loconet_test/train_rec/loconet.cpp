@@ -8,15 +8,20 @@ QVector<QString> LocoNet::opcodes_desc;
 LocoNet::LocoNet ()
 {
     incomingPacket = LocoPacket();
-    usbBuffer = NULL;
+    //usbBuffer = NULL;
     packetTimer = NULL;
+    locoserial.moveToThread(&serialThread);
+    connect(&locoserial, &LocoSerial::receivedPacket, this, &LocoNet::handle_parsePacket);
+    serialThread.start();
 }
 
 LocoNet::~LocoNet ()
 {
-
+    serialThread.wait();
+    serialThread.quit();
 }
 
+/*
 bool LocoNet::get_serialOpen ()
 {
     if (!usbBuffer)
@@ -25,6 +30,7 @@ bool LocoNet::get_serialOpen ()
     }
     return(usbBuffer->isOpen());
 }
+*/
 
 QVector<LocoTrain> LocoNet::get_trains ()
 {
@@ -125,6 +131,12 @@ void LocoNet::handle_packetTimer ()
  * Serial Port related functions
  */
 
+void LocoNet::do_serialOpen (QSerialPortInfo _port)
+{
+    locoserial.open(_port);
+}
+
+/*
 bool LocoNet::do_serialOpen (QSerialPortInfo _port)
 {
     usbBuffer = new QSerialPort;
@@ -143,7 +155,14 @@ bool LocoNet::do_serialOpen (QSerialPortInfo _port)
     usbBuffer = NULL;
     return(false);
 }
+*/
 
+void LocoNet::do_serialClose ()
+{
+    locoserial.close();
+}
+
+/*
 void LocoNet::do_serialClose ()
 {
     if (!usbBuffer)
@@ -158,7 +177,9 @@ void LocoNet::do_serialClose ()
         usbBuffer = NULL;
     }
 }
+*/
 
+/*
 void LocoNet::handle_serialRead (LocoPacket _packet)
 {
     emit newPacket(_packet);
@@ -190,7 +211,7 @@ void LocoNet::handle_serialRead ()
         incomingPacket.do_appendByteArray(usbBuffer->read(1)); // Load in a byte from the serial buffer
         // Check to see if the packet has a valid OP code.
         if (!incomingPacket.is_validOP()) {
-            incomingPacket = LocoPacket(); // Reset the packet, since the OP isn't valid.
+            incomingPacket.set_allFromHex(""); // Reset the packet, since the OP isn't valid.
             continue; // Read in next byte from buffer. I'm sure this section could use some cleaner code.
         }
         // No point having an else-if when we break the while() above.
@@ -203,7 +224,9 @@ void LocoNet::handle_serialRead ()
         if (debug) qDebug() << incomingPacket.get_packet();
     }
 }
+*/
 
+/*
 void LocoNet::do_serialWrite (LocoPacket _packet)
 {
     if (!usbBuffer)
@@ -226,6 +249,9 @@ void LocoNet::do_serialWrite (QString _hex)
     // That was easy enough. Just drop the hex into a new packet and call the 'real' serialWrite().
     do_serialWrite(LocoPacket(_hex));
 }
+*/
+
+
 
 /*
  * Packet related functions

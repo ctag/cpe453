@@ -180,6 +180,12 @@ void MainWindow::do_serialConnect()
     QSerialPortInfo _device = usbPorts.availablePorts().at(_portIndex);
     loconet.do_serialOpen(_device);
 
+    ui->pushButton_serialConnect->setEnabled(false);
+    ui->pushButton_serialDisconnect->setEnabled(true);
+    ui->comboBox_serialList->setEnabled(false);
+    ui->pushButton_serialRefreshList->setEnabled(false);
+
+    /*
     if (loconet.get_serialOpen())
     {
         ui->textBrowser_console->append("Serial port open :D");
@@ -190,6 +196,7 @@ void MainWindow::do_serialConnect()
     } else {
         ui->textBrowser_console->append("Serial port not open xC");
     }
+    */
 
     // Setup packe timer
     loconet.do_addTimerPacket(LocoPacket("BB030047"), 50); // Get slot status for adr 3
@@ -205,9 +212,12 @@ void MainWindow::do_serialConnect()
 
 void MainWindow::do_serialDisconnect()
 {
+    /*
     if (loconet.get_serialOpen()) {
         loconet.do_serialClose();
     }
+    */
+    loconet.do_serialClose();
     ui->textBrowser_console->append("Serial port closed :D");
     ui->pushButton_serialConnect->setEnabled(true);
     ui->pushButton_serialDisconnect->setEnabled(false);

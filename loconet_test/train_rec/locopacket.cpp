@@ -109,9 +109,10 @@ QString LocoPacket::get_packet()
 int LocoPacket::get_packetLen()
 {
     int _result = -1;
-    if (locobyte_array[0].get_isOP()) {
-        _result = (locobyte_array[0].get_packetLength());
-    } else {
+    _result = (locobyte_array[0].get_packetLength());
+    if (_result == 0)
+    {
+        // N byte packet, check next section for count
         _result = (locobyte_array[1].get_packetLength());
     }
     return(_result);

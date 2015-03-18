@@ -26,6 +26,7 @@ public:
     short unsigned int get_packetLength();
     bool get_hasFollowMsg();
     QBitArray get_qBitArray();
+    QByteArray get_qByteArray();
     void set_fromBinary(QString _binary);
     void set_fromHex(QString _hex);
     void set_oneBit(int _bit, bool _value);

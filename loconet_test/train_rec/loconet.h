@@ -6,16 +6,16 @@
 #include <QChar>
 #include <QBitArray>
 #include <QByteArray>
-#include <QSerialPort>
-#include <QSerialPortInfo>
 #include <QVector>
 #include <QTimer>
 #include <QObject>
+#include <QThread>
 
 #include "locoblock.h"
 #include "locobyte.h"
 #include "locotrain.h"
 #include "locopacket.h"
+#include "locoserial.h"
 
 namespace std {
 class LocoNet;
@@ -29,7 +29,7 @@ class LocoNet : public QObject
 public:
     LocoNet();
     ~LocoNet();
-    bool get_serialOpen();
+    //bool get_serialOpen();
     bool get_timerActive();
     QVector<LocoPacket> get_timerPackets();
     int get_timerPacketInterval(LocoPacket _packet);
@@ -89,14 +89,13 @@ protected:
     QString parse_A0(LocoPacket _packet, bool _enable);
 
 protected slots:
-    void handle_packetTimer();
     void handle_serialRead(LocoPacket _packet);
     void handle_serialRead();
+    void handle_packetTimer();
 
 private:
     QVector<LocoTrain> trains;
     QVector<LocoBlock> blocks;
-    QSerialPort * usbBuffer;
     static bool debug;
     static QVector<LocoByte> opcodes_hex;
     static QVector<QString> opcodes_name;
@@ -105,7 +104,9 @@ private:
     QVector<LocoPacket> packetTimerPackets;
     QVector<int> packetTimerPacketState;
     QVector<int> packetTimerPacketInterval;
-    LocoPacket incomingPacket;
+    //LocoPacket incomingPacket;
+    LocoSerial locoserial;
+    QThread serialThread;
 };
 
 #endif // LOCONET_H

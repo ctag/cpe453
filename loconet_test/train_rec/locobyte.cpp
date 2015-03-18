@@ -210,10 +210,19 @@ bool LocoByte::get_isOP()
 short unsigned int LocoByte::get_packetLength()
 {
     if (!get_isOP()) { // Assume we want the second hex 7-bit packet length
-        int _len = 0;
+        u_int16_t _len = 0;
+        /*
         for (u_int16_t _bit = 0; _bit < 8; ++_bit)
         {
             _len += (byte[_bit] * pow(2, (7 - _bit)));
+        }
+        */
+        // Using bitshift instead of pow()
+        // _bit = 6 because we only want the 7 least significant bits, since the 8th should be zero
+        for (u_int16_t _bit = 6; _bit >= 0; --_bit)
+        {
+            _len = _len<<1;
+            _len += (byte[_bit]);
         }
         return(_len);
     }
@@ -228,7 +237,7 @@ short unsigned int LocoByte::get_packetLength()
     } else if (_bit1 && !_bit2) {
         return(6);
     } else if (_bit1 && _bit2) {
-        return(0);
+        return(0); // Packet is N bytes, defined by next byte in packet.
     }
     return(-1);
 }
@@ -300,6 +309,18 @@ void LocoByte::set_fromByteArray(QByteArray _bytearr)
             byte.setBit(_pos, _val);
         }
     }
+}
+
+QByteArray LocoByte::get_qByteArray()
+{
+    // Resulting byte array
+    QByteArray _byteArray;
+
+    // Convert from QBitArray to QByteArray
+    for(int b=0; b<byte.count(); ++b)
+        _byteArray[b/8] = (_byteArray.at(b/8) | ((byte[b]?1:0)<<(b%8)));
+
+    return(_byteArray);
 }
 
 QBitArray LocoByte::get_qBitArray()
