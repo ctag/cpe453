@@ -25,6 +25,7 @@
 #include "locopacket.h"
 #include "locoserial.h"
 #include "locosql.h"
+#include "locoudp.h"
 
 namespace Ui {
 class MainWindow;
@@ -63,13 +64,14 @@ private:
     Ui::MainWindow *ui;
     LocoPacket outgoingPacket;
     LocoPacket incomingPacket;
-    //LocoNet loconet;
     QSerialPortInfo usbPorts;
     QDateTime date;
     LocoSerial locoserial;
-    QThread serialThread;
+    QThread threadSerial;
     LocoSQL locosql;
-    QThread sqlThread;
+    QThread threadSQL;
+    LocoUDP locoudp;
+    QThread threadUDP;
 };
 
 #endif // MAINWINDOW_H

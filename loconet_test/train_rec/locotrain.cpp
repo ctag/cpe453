@@ -1,6 +1,6 @@
 #include "locotrain.h"
 
-bool LocoTrain::debug = true;
+bool LocoTrain::debug = false;
 
 LocoTrain::LocoTrain ()
 {

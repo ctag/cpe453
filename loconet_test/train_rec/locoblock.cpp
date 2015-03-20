@@ -1,6 +1,6 @@
 #include "locoblock.h"
 
-bool LocoBlock::debug = true;
+bool LocoBlock::debug = false;
 
 LocoBlock::LocoBlock ()
 {

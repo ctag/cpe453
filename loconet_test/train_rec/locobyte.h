@@ -27,6 +27,7 @@ public:
     bool get_hasFollowMsg();
     QBitArray get_qBitArray();
     QByteArray get_qByteArray();
+    int get_decimal();
     void set_fromBinary(QString _binary);
     void set_fromHex(QString _hex);
     void set_oneBit(int _bit, bool _value);

@@ -41,8 +41,8 @@ signals:
     void serialClosed();
 
 public slots:
-    void write(LocoPacket _packet);
-    void write(QByteArray _bytes);
+    void do_write(LocoPacket _packet);
+    void do_write(QByteArray _bytes);
     void close();
     bool open(QSerialPortInfo _port);
     void do_read();

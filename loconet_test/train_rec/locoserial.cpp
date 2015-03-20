@@ -20,12 +20,12 @@ LocoSerial::~LocoSerial()
     readTimerStop();
 }
 
-void LocoSerial::write(LocoPacket _packet)
+void LocoSerial::do_write(LocoPacket _packet)
 {
-    write(_packet.get_QByteArray()); // just redirect
+    do_write(_packet.get_QByteArray()); // just redirect
 }
 
-void LocoSerial::write(QByteArray _bytes)
+void LocoSerial::do_write(QByteArray _bytes)
 {
     if (!usbBuffer.isOpen())
     {
@@ -214,7 +214,7 @@ QString LocoSerial::parse_E7 (LocoPacket _packet)
 
     if (!_busy) // There is no train in the slot
     {
-        _description.append(" Slot " + _slot.get_hex() + " is inactive. Trains associated with it have been deleted.");
+        _description.append(" Slot " + _slot.get_hex() + " is inactive.");
         // Find trains assigned to the slot and delete them
         /*
         for (int _index = 0; _index < trains.count(LocoPacket _packet); ++_index)
@@ -224,7 +224,7 @@ QString LocoSerial::parse_E7 (LocoPacket _packet)
             }
         }
         */
-    } else { // Past here we know a train is in the slot
+    } else { // Past here we know a 'train' is in the slot
         LocoTrain _newTrain;
         _newTrain.set_adr(_adr);
         _newTrain.set_reverse(_dir);
@@ -392,6 +392,11 @@ QString LocoSerial::parse_A1 (LocoPacket _packet) {
 
 QString LocoSerial::parse_A0 (LocoPacket _packet) {
     QString _description = "A0: Setting slot speed.";
+    LocoByte _arg1 = _packet.get_locobyte(1);
+    LocoByte _arg2 = _packet.get_locobyte(2);
+    QString _queryText = "BB" + _arg1.get_hex();
+    LocoPacket _querySlot(_queryText);
+    do_write(_querySlot);
     return(_description);
 }
 

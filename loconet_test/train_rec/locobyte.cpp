@@ -332,6 +332,16 @@ QBitArray LocoByte::get_qBitArray()
     return(byte);
 }
 
+int LocoByte::get_decimal()
+{
+    int _result = 0;
+    for(int b=0; b<8/*byte.count()*/; ++b)
+    {
+        _result = (_result + ((byte[b]?1:0)<<(b)));
+    }
+    return(_result);
+}
+
 void LocoByte::setDebug(bool _debug)
 {
     debug = _debug;

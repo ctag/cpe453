@@ -12,6 +12,7 @@
 
 #include "locobyte.h"
 #include "locoblock.h"
+#include "locotrain.h"
 
 namespace std {
 class LocoSQL;
@@ -30,6 +31,9 @@ public slots:
     bool do_openDB(QString hostname, int port, QString database, QString username, QString password);
     void do_closeDB();
     void do_updateBlock(LocoBlock _block);
+    void do_updateTrain(LocoTrain _train);
+    void do_clearTable(QString _table);
+    void do_clearAllTables();
 
 signals:
     void DBopened();

@@ -28,6 +28,9 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
         qDebug() << mainDB.lastError();
         return(false);
     }
+    // Clear status tables on startup
+    do_clearAllTables();
+
     emit DBopened();
     return(true);
 }
@@ -38,6 +41,34 @@ void LocoSQL::do_closeDB()
     emit DBclosed();
 }
 
+void LocoSQL::do_clearAllTables()
+{
+    do_clearTable("track_ds");
+    do_clearTable("track_trains");
+}
+
+void LocoSQL::do_clearTable(QString _table)
+{
+    if (mainDB.isOpen()) {
+        _table.prepend("DELETE FROM cpe453.");
+        mainQuery.prepare(_table);
+        mainQuery.bindValue(":table", _table);
+        if (debug) qDebug() << "Deleting all rows in SQL cpe453." << _table;
+        if (!mainQuery.exec())
+        {
+            qDebug() << mainQuery.lastError();
+        }
+    }
+}
+
+/*
+ * Status updating methods
+ */
+
+/**
+ * @brief LocoSQL::do_updateBlock
+ * @param _block
+ */
 void LocoSQL::do_updateBlock(LocoBlock _block)
 {
     if (mainDB.isOpen()) {
@@ -54,4 +85,28 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
     }
 }
 
+/**
+ * @brief LocoSQL::do_updateTrain
+ * @param _train
+ */
+void LocoSQL::do_updateTrain (LocoTrain _train)
+{
+    if (mainDB.open()) {
+        QString _adr = _train.get_adr().get_hex();
+        QString _slot = _train.get_slot().get_hex();
+        int _speed = _train.get_speed().get_decimal();
+        int _dir = _train.get_direction()?1:0;
+
+        mainQuery.prepare("INSERT INTO cpe453.track_trains (slot, adr, speed, dir) "
+                          "VALUES (:slot, :adr, :speed, :dir) "
+                          "ON DUPLICATE KEY "
+                          "UPDATE adr=:adr, speed=:speed, dir=:dir;");
+        mainQuery.bindValue(":slot", _slot);
+        mainQuery.bindValue(":adr", _adr);
+        mainQuery.bindValue(":speed", _speed);
+        mainQuery.bindValue(":dir", _dir);
+        if (debug) qDebug() << "Updating train SQL.";
+        mainQuery.exec();
+    }
+}
 

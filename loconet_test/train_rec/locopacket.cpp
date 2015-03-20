@@ -74,11 +74,13 @@ bool LocoPacket::do_openDB()
         qDebug() << "Unable to open packets sqlite database.";
         return(false);
     }
+    if (debug) qDebug() << "Opened packet database.";
     return(true);
 }
 
 void LocoPacket::do_closeDB()
 {
+    if (debug) qDebug() << "Closed packet database.";
     packetDB.close();
 }
 
@@ -170,7 +172,7 @@ LocoByte LocoPacket::get_locobyte (int _byte)
 {
     if (_byte >= locobyte_array.count())
     {
-        return LocoByte("00");
+        return LocoByte("FF");
     }
     return locobyte_array[_byte];
 }

@@ -6,8 +6,8 @@
  * Underscores indicate a local variable to a function
  *
  * set_ to change a member variable
- * get_ to retrieve a member variable
- * do_ to complete a task
+ * get_ to retrieve a member variable or variant
+ * do_ to complete a task or slot
  * is_ to query a state of the object
  * handle_ to take care of a signal
  */
@@ -20,11 +20,16 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    locoserial.moveToThread(&serialThread);
-    serialThread.start();
+    locoserial.moveToThread(&threadSerial);
+    threadSerial.start();
 
-    locosql.moveToThread(&sqlThread);
-    sqlThread.start();
+    locosql.moveToThread(&threadSQL);
+    threadSQL.start();
+
+    locoudp.moveToThread(&threadUDP);
+    threadUDP.start();
+
+    locoudp.do_openSocket(7755);
 
     outgoingPacket.clear();
 
@@ -32,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->lineEdit_arg1->setInputMask("hh");
     ui->lineEdit_arg2->setInputMask("hh");
 
+    connect(ui->comboBox_opcodes, SIGNAL(activated(int)), this, SLOT(do_OPfromComboBox()));
     connect(ui->pushButton_genPacket, SIGNAL(clicked()), this, SLOT(do_genPacket()));
     connect(ui->lineEdit_opcode, SIGNAL(editingFinished()), this, SLOT(do_enableArgs()));
     connect(ui->pushButton_serialRefreshList, SIGNAL(clicked()), this, SLOT(do_refreshSerialList()));
@@ -47,11 +53,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&locoserial, &LocoSerial::serialOpened, this, &MainWindow::handle_serialOpened);
     connect(&locoserial, &LocoSerial::serialClosed, this, &MainWindow::handle_serialClosed);
     connect(&locoserial, &LocoSerial::blockUpdated, &locosql, &LocoSQL::do_updateBlock);
+    connect(&locoserial, &LocoSerial::trainUpdated, &locosql, &LocoSQL::do_updateTrain);
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
 
-    //do_loadOPComboBox();
+    do_loadOPComboBox();
     do_refreshSerialList();
 
     if (debug) qDebug() << "Interface loaded.";
@@ -59,6 +66,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    // Clean up sub-threads
+    threadSerial.quit();
+    threadSerial.wait();
+    threadSQL.quit();
+    threadSQL.wait();
+
     delete ui;
 }
 
@@ -99,37 +112,6 @@ void MainWindow::do_genPacket()
     ui->textBrowser_packets->append(_packet->get_packet());
     ui->lineEdit_packet->setText(_packet->get_packet());
 }
-
-/*
-void MainWindow::do_initStaticOP()
-{
-    loconet.do_addStaticOP("85", "Global IDLE", "Put track into IDLE mode.");
-    loconet.do_addStaticOP("83", "Global ON", "Put track into ON mode.");
-    loconet.do_addStaticOP("82", "Global OFF", "Put track into OFF mode.");
-    loconet.do_addStaticOP("BF", "OPC_LOCO_ADR", "Request loco address");
-    loconet.do_addStaticOP("BD", "OPC_SW_ACK", "Request switch with acknowledge function");
-    loconet.do_addStaticOP("BC", "OPC_SW_STATE", "Request state of switch");
-    loconet.do_addStaticOP("BB", "OPC_RQ_SL_DATA", "Request SLOT DATA / status block");
-    loconet.do_addStaticOP("BA", "OPC_MOVE_SLOTS", "MOVE slot SRC to DST");
-    loconet.do_addStaticOP("B9", "OPC_LINK_SLOTS", "LINK slot ARG1 to slot ARG2");
-    loconet.do_addStaticOP("B8", "OPC_UNLINK_SLOTS", "UNLINK slot ARG1 from slot ARG2");
-    loconet.do_addStaticOP("B6", "OPC_CONSIST_FUNT", "SET FUNC bits in a consist uplink element");
-    loconet.do_addStaticOP("B5", "OPC_SLOT_STAT1", "Write slot stat1");
-    loconet.do_addStaticOP("B4", "OPC_LONG_ACK", "Long Acknowledge");
-    loconet.do_addStaticOP("B2", "OPC_INPUT_REP", "General sensor input codes");
-    loconet.do_addStaticOP("B1", "OPC_SW_REP", "Turnout sensor state report");
-    loconet.do_addStaticOP("B0", "OPC_SW_REQ", "Request switch function.");
-    loconet.do_addStaticOP("A2", "OPC_LOCO_SND", "Set SLOT sound functions.");
-    loconet.do_addStaticOP("A1", "OPC_LOCO_DIRF", "Set SLOT direction, F0-4 state.");
-    loconet.do_addStaticOP("A0", "OPC_LOCO_SPD", "Set SLOT speed");
-    loconet.do_addStaticOP("EF", "OPC_WR_SL_DATA", "Write SLOT data (10 bytes)");
-    loconet.do_addStaticOP("E7", "OPC_SL_RD_DATA", "Read SLOT data");
-    loconet.do_addStaticOP("E5", "OPC_PEER_XFER", "Move 8 bytes peer to peer src->dst");
-    loconet.do_addStaticOP("ED", "OPC_IMM_PACKET", "Send n-byte packet immediate");
-
-    //loconet.do_addStaticOP("", "", "");
-}
-*/
 
 void MainWindow::do_loadOPComboBox()
 {
@@ -211,7 +193,7 @@ void MainWindow::do_sendSerial()
 
     ui->textBrowser_packets->append(outgoingPacket.get_packet().toLatin1());
 
-    locoserial.write(outgoingPacket);
+    locoserial.do_write(outgoingPacket);
 
     do_dumpQByteArray(outgoingPacket.get_QByteArray());
     if (debug) qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
@@ -246,58 +228,6 @@ void MainWindow::do_printDescriptions(QString description)
 {
     ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz ") + description);
 }
-
-/*
-void MainWindow::updateTrains (LocoTrain _train)
-{
-    QVector<LocoTrain> _trainList = loconet.get_trains();
-    ui->textBrowser_trains->clear();
-    for (int _index = 0; _index < _trainList.count(); ++_index)
-    {
-        ui->textBrowser_trains->append(_trainList[_index].get_descrtiption());
-    }
-    if (db.open()) {
-        QString _adr = _train.get_adr().get_hex();
-        QString _slot = _train.get_slot().get_hex();
-        QString _speed = _train.get_speed().get_hex();
-        QString _dir = QString::number(_train.get_direction());
-        QString _query = "SELECT * FROM public.track_trains;";// WHERE slot='";
-        //_query += _slot;
-        //_query += "';";
-        runQuery(_query);
-        return;
-        ui->textBrowser_sql->append(_query);
-        if (dbQuery.exec(_query)) {
-            ui->textBrowser_sql->append(QString::number(dbQuery.size()) + ", " + _query);
-            if (dbQuery.size() == 0) {
-                _query = "INSERT INTO public.track_trains (adr, slot, speed, dir)"
-                        "VALUES (:adr, :slot, :speed, :dir);";
-                dbQuery.exec(_query);
-                ui->textBrowser_sql->append(dbQuery.lastError().text());
-            }
-        } else {
-            ui->textBrowser_console->append(dbQuery.lastError().text());
-        }
-    }
-}
-
-void MainWindow::updateBlocks (LocoBlock _block)
-{
-    if (db.open()) {
-        dbQuery.prepare("INSERT INTO cpe453.track_ds (ds_id, status) "
-                        "VALUES (:id, :status) "
-                        "ON DUPLICATE KEY "
-                        "UPDATE ds_id=:id, status=:status;");
-        QString _id = QString::fromLatin1(_block.get_adr());
-        bool _status = _block.get_occupied();
-        dbQuery.bindValue(":id", _id);
-        dbQuery.bindValue(":status", _status);
-
-        dbQuery.exec();
-        ui->textBrowser_sql->append("ran block update query. id [" + _id + "] status [" + QString::number(_status) + "]");
-    }
-}
-*/
 
 void MainWindow::handle_DBopened()
 {

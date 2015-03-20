@@ -1,4 +1,8 @@
 
+
+19-3 6.3hr
+	retooling program for threaded handling of sql tables.
+
 # Sprint 4
 Many hours
 
