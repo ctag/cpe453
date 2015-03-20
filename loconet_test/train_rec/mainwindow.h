@@ -17,8 +17,14 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QtSql>
+#include <QThread>
 
-#include "loconet.h"
+#include "locoblock.h"
+#include "locobyte.h"
+#include "locotrain.h"
+#include "locopacket.h"
+#include "locoserial.h"
+#include "locosql.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,51 +37,39 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
-protected:
-    void do_initStaticOP();
-    void do_loadOPComboBox();
-
-protected slots:
-    void do_enableArgs();
-    void do_genPacket();
-    void do_OPfromComboBox();
-    void do_serialRefreshList();
-    void do_serialConnect();
-    void do_serialDisconnect();
-    //void readSerial();
-    void dumpQByteArray(QByteArray _data);
-    void sendSerial();
-    void do_packetTimer();
-    void do_timerToggle();
-    void connectDB();
-    void disconnectDB();
-    //void tableText();
-    //void queryModel();
-    void loadFromPacketHistory(int);
-    void do_resetTrack();
-    void manualQuery();
+    static bool debug;
 
 public slots:
-    void displayPacket(LocoPacket);
-    void printDescriptions(QString);
-    void updateTrains(LocoTrain);
-    void updateBlocks(LocoBlock);
-    void setDebug(bool);
+    void do_enableArgs();
+    void do_genPacket();
+    void do_refreshSerialList();
+    void do_openSerial();
+    void do_closeSerial();
+    void do_dumpQByteArray(QByteArray _data);
+    void do_sendSerial();
+    void do_connectDB();
+    void do_disconnectDB();
+    void do_displayPacket(LocoPacket);
+    void do_printDescriptions(QString);
+    void do_loadOPComboBox();
+    void do_OPfromComboBox();
+
+    void handle_serialOpened();
+    void handle_serialClosed();
+    void handle_DBopened();
+    void handle_DBclosed();
 
 private:
     Ui::MainWindow *ui;
     LocoPacket outgoingPacket;
     LocoPacket incomingPacket;
-    //QSerialPort * usbBuffer;
-    LocoNet loconet;
+    //LocoNet loconet;
     QSerialPortInfo usbPorts;
-    QTimer * packetTimer;
-    //QDateTime date;
-    QSqlDatabase db;
-    QSqlQuery dbQuery;
-    void runQuery(QString _query);
-    static bool debug;
+    QDateTime date;
+    LocoSerial locoserial;
+    QThread serialThread;
+    LocoSQL locosql;
+    QThread sqlThread;
 };
 
 #endif // MAINWINDOW_H

@@ -60,7 +60,7 @@ void LocoByte::createEmpty()
 {
     if (debug) qDebug() << "Creating new empty locobyte.";
     byte = QBitArray(8, 0);
-    for (u_int16_t _bit = 0; _bit < 8; ++_bit)
+    for (int16_t _bit = 0; _bit < 8; ++_bit)
     {
         byte[_bit] = 0;
     }
@@ -122,7 +122,7 @@ void LocoByte::set_fromHex (QString _hex)
 QString LocoByte::get_binary()
 {
     QString _binary = "";
-    for (u_int16_t _bit = 0; _bit < 8; ++_bit)
+    for (int16_t _bit = 0; _bit < 8; ++_bit)
     {
         if (byte[_bit] == 1)
         {
@@ -211,19 +211,20 @@ short unsigned int LocoByte::get_packetLength()
 {
     if (!get_isOP()) { // Assume we want the second hex 7-bit packet length
         u_int16_t _len = 0;
-        /*
-        for (u_int16_t _bit = 0; _bit < 8; ++_bit)
+        for (int16_t _bit = 0; _bit < 8; ++_bit)
         {
-            _len += (byte[_bit] * pow(2, (7 - _bit)));
+            int _pow = pow(2, (7 - _bit));
+            _len += ((byte[_bit])?1:0 * _pow);
         }
-        */
         // Using bitshift instead of pow()
         // _bit = 6 because we only want the 7 least significant bits, since the 8th should be zero
-        for (u_int16_t _bit = 6; _bit >= 0; --_bit)
+        /*
+        for (int16_t _bit = 6; _bit >= 0; --_bit)
         {
             _len = _len<<1;
             _len += (byte[_bit]);
         }
+        */
         return(_len);
     }
 
@@ -284,7 +285,7 @@ void LocoByte::do_genComplement()
  */
 void LocoByte::set_fromBinary(QString _binary)
 {
-    for (u_int16_t _bit = 0; _bit < 8; ++_bit)
+    for (int16_t _bit = 0; _bit < 8; ++_bit)
     {
         QString _test = _binary.mid(_bit, 1);
         if (_test == "1")
@@ -317,8 +318,11 @@ QByteArray LocoByte::get_qByteArray()
     QByteArray _byteArray;
 
     // Convert from QBitArray to QByteArray
-    for(int b=0; b<byte.count(); ++b)
-        _byteArray[b/8] = (_byteArray.at(b/8) | ((byte[b]?1:0)<<(b%8)));
+    for(int b=0; b<8/*byte.count()*/; ++b)
+    {
+        //_byteArray[b/8] = (_byteArray[b/8] | ((byte[b]?1:0)<<(b%8)));
+        _byteArray[0] = (_byteArray[0] | ((byte[b]?1:0)<<(b)));
+    }
 
     return(_byteArray);
 }
@@ -332,13 +336,6 @@ void LocoByte::setDebug(bool _debug)
 {
     debug = _debug;
 }
-
-/* Nyble, nable
- * So much babble
- *
- * Bibble bit
- * This code's a hit
- */
 
 
 

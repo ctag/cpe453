@@ -16,6 +16,7 @@
 #include "locotrain.h"
 #include "locopacket.h"
 #include "locoserial.h"
+#include "locosql.h"
 
 namespace std {
 class LocoNet;
@@ -35,78 +36,62 @@ public:
     int get_timerPacketInterval(LocoPacket _packet);
     QVector<LocoTrain> get_trains();
     QVector<LocoBlock> get_blocks();
-    void set_trackUpdatePeriod(int _seconds);
-    void set_switchUpdatePeriod(int _seconds);
-    void set_trainUpdatePeriod(int _seconds);
-    bool do_serialOpen(QSerialPortInfo _port);
-    void do_serialWrite(LocoPacket _packet);
-    void do_serialWrite(QString _hex);
-    void set_packetTimer(int _msec = 200);
-    void do_addTimerPacket(LocoPacket _packet, int _interval = 1);
-    void do_stopTimerPacket(LocoPacket _packet);
-    void do_stopPacketTimer();
-    void do_addStaticOP(QString _hex, QString _name, QString _desc);
+    //void set_trackUpdatePeriod(int _seconds);
+    //void set_switchUpdatePeriod(int _seconds);
+    //void set_trainUpdatePeriod(int _seconds);
+    //void set_packetTimer(int _msec = 200);
+    //void do_addTimerPacket(LocoPacket _packet, int _interval = 1);
+    //void do_stopTimerPacket(LocoPacket _packet);
+    //void do_stopPacketTimer();
+    //void do_addStaticOP(QString _hex, QString _name, QString _desc);
     int get_staticOPsize();
     QString get_staticOPname(int);
     QString get_staticOPhex(int);
+    static bool debug;
 
 public slots:
-    QString handle_parsePacket(LocoPacket _packet, bool _enable = 1);
+    //QString handle_parsePacket(LocoPacket _packet, bool _enable = 1);
     void do_serialClose();
     //void set_switches();
-    void setDebug(bool);
+    void do_serialOpen(QSerialPortInfo _port);
+    void do_serialWrite(LocoPacket _packet);
+    void do_serialWrite(QString _hex);
+    void do_sqlOpen(QString hostname, int port, QString database, QString username, QString password);
+    void do_sqlClose();
 
 signals:
-    void newPacket(LocoPacket);
+    void receivedPacket(LocoPacket);
     void newPacketDescription(QString);
     void trainUpdated(LocoTrain);
     void blockUpdated(LocoBlock);
+    void DBopened();
+    void DBclosed();
+    void serialOpened();
+    void serialClosed();
+    void droppedPacket();
 
 protected:
-    QString parse_E7(LocoPacket _packet, bool _enable);
-    QString parse_EF(LocoPacket _packet, bool _enable);
-    QString parse_E5(LocoPacket _packet, bool _enable);
-    QString parse_ED(LocoPacket _packet, bool _enable);
-    QString parse_B2(LocoPacket _packet, bool _enable);
-    QString parse_85(LocoPacket _packet, bool _enable);
-    QString parse_83(LocoPacket _packet, bool _enable);
-    QString parse_82(LocoPacket _packet, bool _enable);
-    QString parse_81(LocoPacket _packet, bool _enable);
-    QString parse_BF(LocoPacket _packet, bool _enable);
-    QString parse_BD(LocoPacket _packet, bool _enable);
-    QString parse_BC(LocoPacket _packet, bool _enable);
-    QString parse_BB(LocoPacket _packet, bool _enable);
-    QString parse_BA(LocoPacket _packet, bool _enable);
-    QString parse_B9(LocoPacket _packet, bool _enable);
-    QString parse_B8(LocoPacket _packet, bool _enable);
-    QString parse_B6(LocoPacket _packet, bool _enable);
-    QString parse_B5(LocoPacket _packet, bool _enable);
-    QString parse_B4(LocoPacket _packet, bool _enable);
-    QString parse_B1(LocoPacket _packet, bool _enable);
-    QString parse_B0(LocoPacket _packet, bool _enable);
-    QString parse_A2(LocoPacket _packet, bool _enable);
-    QString parse_A1(LocoPacket _packet, bool _enable);
-    QString parse_A0(LocoPacket _packet, bool _enable);
 
 protected slots:
-    void handle_serialRead(LocoPacket _packet);
-    void handle_serialRead();
-    void handle_packetTimer();
+    //void handle_serialRead(LocoPacket _packet);
+    //void handle_serialRead();
+    //void handle_packetTimer();
 
 private:
-    QVector<LocoTrain> trains;
-    QVector<LocoBlock> blocks;
-    static bool debug;
-    static QVector<LocoByte> opcodes_hex;
-    static QVector<QString> opcodes_name;
-    static QVector<QString> opcodes_desc;
-    QTimer * packetTimer;
-    QVector<LocoPacket> packetTimerPackets;
-    QVector<int> packetTimerPacketState;
-    QVector<int> packetTimerPacketInterval;
+    //QVector<LocoTrain> trains;
+    //QVector<LocoBlock> blocks;
+    //static QVector<LocoByte> opcodes_hex;
+    //static QVector<QString> opcodes_name;
+    //static QVector<QString> opcodes_desc;
+    //QTimer * packetTimer;
+    //QVector<LocoPacket> packetTimerPackets;
+    //QVector<int> packetTimerPacketState;
+    //QVector<int> packetTimerPacketInterval;
     //LocoPacket incomingPacket;
     LocoSerial locoserial;
     QThread serialThread;
+    LocoSQL locosql;
+    QThread sqlThread;
 };
 
 #endif // LOCONET_H

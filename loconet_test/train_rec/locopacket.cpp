@@ -10,6 +10,7 @@
 
 /* Static Members */
 bool LocoPacket::debug = false;
+QSqlDatabase LocoPacket::packetDB = QSqlDatabase::addDatabase("QSQLITE");
 
 /*
  * Default Constructor
@@ -17,6 +18,10 @@ bool LocoPacket::debug = false;
 LocoPacket::LocoPacket()
 {
     locobyte_array.clear();
+    if (!packetDB.isOpen())
+    {
+        do_openDB();
+    }
 }
 
 /*
@@ -41,14 +46,40 @@ LocoPacket::LocoPacket(QString _hex)
         locobyte_array.append(_tmp_locohex);
         if (debug) qDebug() << "New packet: " << locobyte_array[_packet].get_hex() << " " << locobyte_array[_packet].get_binary();
     }
-    if (is_validOP())
+    if (hasOP())
     {
         if (debug) qDebug() << "Valid OP code x)";
     }
-    if (is_validChk())
+    if (validChk())
     {
         if (debug) qDebug() << "Valid Checksum x)";
     }
+    if (!packetDB.isOpen())
+    {
+        do_openDB();
+    }
+}
+
+void LocoPacket::clear()
+{
+    locobyte_array.clear();
+}
+
+bool LocoPacket::do_openDB()
+{
+    packetDB.setDatabaseName("packets.sqlite");
+    if (!packetDB.open())
+    {
+        qDebug() << packetDB.lastError();
+        qDebug() << "Unable to open packets sqlite database.";
+        return(false);
+    }
+    return(true);
+}
+
+void LocoPacket::do_closeDB()
+{
+    packetDB.close();
 }
 
 /* set_allFromHex()
@@ -73,11 +104,11 @@ void LocoPacket::set_allFromHex(QString _hex)
         locobyte_array.append(_tmp_locohex);
         if (debug) qDebug() << "New packet: " << locobyte_array[_packet].get_hex() << " " << locobyte_array[_packet].get_binary();
     }
-    if (is_validOP())
+    if (hasOP())
     {
         if (debug) qDebug() << "Valid OP code x)";
     }
-    if (is_validChk())
+    if (validChk())
     {
         if (debug) qDebug() << "Valid Checksum x)";
     }
@@ -106,11 +137,14 @@ QString LocoPacket::get_packet()
     return (_result);
 }
 
-int LocoPacket::get_packetLen()
+int LocoPacket::get_finalSize()
 {
     int _result = -1;
-    _result = (locobyte_array[0].get_packetLength());
-    if (_result == 0)
+    if (locobyte_array.count() >= 1)
+    {
+        _result = (locobyte_array[0].get_packetLength());
+    }
+    if (_result == 0 && locobyte_array.count() >= 2)
     {
         // N byte packet, check next section for count
         _result = (locobyte_array[1].get_packetLength());
@@ -118,7 +152,7 @@ int LocoPacket::get_packetLen()
     return(_result);
 }
 
-int LocoPacket::get_numBytes ()
+int LocoPacket::get_size ()
 {
     return(locobyte_array.count());
 }
@@ -129,8 +163,7 @@ QString LocoPacket::get_OPcode ()
     {
         return("00");
     }
-    LocoByte _opcode = locobyte_array[0];
-    return(_opcode.get_hex());
+    return(locobyte_array.first().get_hex());
 }
 
 LocoByte LocoPacket::get_locobyte (int _byte)
@@ -166,7 +199,7 @@ QString LocoPacket::do_xor(LocoByte _byte1, LocoByte _byte2)
 
 QString LocoPacket::do_genChecksum()
 {
-    if (is_validChk() && is_validOP())
+    if (validChk() && hasOP())
     {
         if (debug) qDebug() << "Not generating a checksum for an already valid packet ^-^";
         QString _chk = "";
@@ -192,7 +225,7 @@ QString LocoPacket::do_genChecksum()
 void LocoPacket::do_appendByte(QString _byte)
 {
     LocoByte _newByte(_byte);
-    if (is_validChk())
+    if (validChk())
     {
         locobyte_array.removeLast();
         locobyte_array.append(_newByte);
@@ -207,19 +240,20 @@ void LocoPacket::do_appendByteArray(QByteArray _byteArray)
     {
         LocoByte _newByte;
         _newByte.set_fromByteArray(_byteArray);
-        if (is_validChk())
-        {
-            locobyte_array.removeLast();
-        }
         locobyte_array.append(_newByte);
     }
+}
+
+void LocoPacket::do_appendLocoByte(LocoByte _byte)
+{
+    locobyte_array.append(_byte);
 }
 
 /* get_validChk()
  *
  * Returns whether the packet has a valid OP code
  */
-bool LocoPacket::is_validChk()
+bool LocoPacket::validChk()
 {
     LocoByte _hexHolder;
     for (int _index = 0; _index < locobyte_array.size(); ++_index)
@@ -237,9 +271,89 @@ bool LocoPacket::is_validChk()
     return(false);
 }
 
-bool LocoPacket::is_validOP()
+bool LocoPacket::hasOP()
 {
     return(locobyte_array[0].get_isOP());
+}
+
+// Check for valid OP code in sqlite
+bool LocoPacket::validOP()
+{
+    if (!packetDB.isOpen())
+    {
+        bool _status = do_openDB();
+        if (!_status)
+        {
+            return(false); // Can't determine validity
+        }
+    }
+    QString _op = locobyte_array[0].get_hex();
+    QSqlQuery _query;
+    _query.prepare("SELECT * FROM opcodes WHERE opcode=:_op;");
+    _query.bindValue(":_op", _op);
+    if (!_query.exec())
+    {
+        qDebug() << _query.lastError();
+        qDebug() << "Query to find valid OP codes failed.";
+        return(false);
+    }
+    if (_query.size() > 0)
+    {
+        return(true);
+    }
+    return(false);
+}
+
+QVector<QString> LocoPacket::get_DBopcodes ()
+{
+    QVector<QString> _opcodes;
+    if (!packetDB.isOpen())
+    {
+        bool _status = do_openDB();
+        if (!_status)
+        {
+            return(_opcodes); // Can't determine validity
+        }
+    }
+    QSqlQuery _query;
+    _query.prepare("SELECT opcode FROM opcodes;");
+    if (!_query.exec())
+    {
+        qDebug() << _query.lastError();
+        qDebug() << "Query to find all OP codes failed.";
+        return(_opcodes);
+    }
+    while (_query.next())
+    {
+        _opcodes.append(_query.value(0).toString());
+    }
+    return(_opcodes);
+}
+
+QVector<QString> LocoPacket::get_DBnames ()
+{
+    QVector<QString> _names;
+    if (!packetDB.isOpen())
+    {
+        bool _status = do_openDB();
+        if (!_status)
+        {
+            return(_names); // Can't determine validity
+        }
+    }
+    QSqlQuery _query;
+    _query.prepare("SELECT name FROM opcodes;");
+    if (!_query.exec())
+    {
+        qDebug() << _query.lastError();
+        qDebug() << "Query to find all OP names failed.";
+        return(_names);
+    }
+    while (_query.next())
+    {
+        _names.append(_query.value(0).toString());
+    }
+    return(_names);
 }
 
 bool LocoPacket::is_followOnMsg ()
@@ -266,8 +380,8 @@ QByteArray LocoPacket::get_QByteArray()
 {
     QByteArray _byteArray;
     QBitArray _bitArray = get_QBitArray();
-    short unsigned int _bytes = locobyte_array.count();
-    for (int _byteIndex = 0; _byteIndex < _bytes; ++_byteIndex)
+    short int _bytes = locobyte_array.count();
+    for (short int _byteIndex = 0; _byteIndex < _bytes; ++_byteIndex)
     {
         for (int _bitIndex = 0; _bitIndex < 8; ++_bitIndex)
         {
@@ -276,11 +390,6 @@ QByteArray LocoPacket::get_QByteArray()
         }
     }
     return (_byteArray);
-}
-
-void LocoPacket::setDebug(bool _debug)
-{
-    debug = _debug;
 }
 
 /* Sometimes I wonder /

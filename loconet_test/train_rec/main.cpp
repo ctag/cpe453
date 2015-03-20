@@ -7,5 +7,10 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
+    qRegisterMetaType<LocoByte>("LocoByte");
+    qRegisterMetaType<LocoPacket>("LocoPacket");
+    qRegisterMetaType<LocoBlock>("LocoBlock");
+    qRegisterMetaType<LocoTrain>("LocoTrain");
+
     return a.exec();
 }

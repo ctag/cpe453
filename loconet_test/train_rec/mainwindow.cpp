@@ -12,7 +12,7 @@
  * handle_ to take care of a signal
  */
 
-bool MainWindow::debug = true;
+bool MainWindow::debug = false;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,52 +20,41 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    outgoingPacket.set_allFromHex("00");
-    do_initStaticOP();
+    locoserial.moveToThread(&serialThread);
+    serialThread.start();
+
+    locosql.moveToThread(&sqlThread);
+    sqlThread.start();
+
+    outgoingPacket.clear();
 
     ui->lineEdit_opcode->setInputMask("hh");
     ui->lineEdit_arg1->setInputMask("hh");
     ui->lineEdit_arg2->setInputMask("hh");
-    ui->lineEdit_opcode->setText("");
 
     connect(ui->pushButton_genPacket, SIGNAL(clicked()), this, SLOT(do_genPacket()));
-    connect(ui->lineEdit_opcode, SIGNAL(returnPressed()), this, SLOT(do_enableArgs()));
-    connect(ui->comboBox_opcodes, SIGNAL(currentIndexChanged(int)), this, SLOT(do_OPfromComboBox()));
-    connect(ui->pushButton_serialRefreshList, SIGNAL(clicked()), this, SLOT(do_serialRefreshList()));
-    connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_serialConnect()));
-    connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), this, SLOT(do_serialDisconnect()));
-    connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(sendSerial()));
-    connect(&loconet, &LocoNet::newPacket, this, &MainWindow::displayPacket); // QT-5 style works
-    connect(&loconet, &LocoNet::newPacketDescription, this, &MainWindow::printDescriptions);
-    //connect(&loconet, &LocoNet::trainUpdated, this, &MainWindow::updateTrains);
-    connect(&loconet, &LocoNet::blockUpdated, this, &MainWindow::updateBlocks);
-    connect(ui->comboBox_packetHistory, SIGNAL(activated(int)), this, SLOT(loadFromPacketHistory(int)));
-    connect(ui->pushButton_resetTrack, SIGNAL(clicked()), this, SLOT(do_resetTrack()));
-
-    connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(connectDB()));
-    connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(disconnectDB()));
-    //connect(ui->pushButton_tableText, SIGNAL(clicked()), this, SLOT(tableText()));
-    //connect(ui->pushButton_queryModel, SIGNAL(clicked()), this, SLOT(queryModel()));
-    connect(ui->pushButton_runQuery, SIGNAL(clicked()), this, SLOT(manualQuery()));
+    connect(ui->lineEdit_opcode, SIGNAL(editingFinished()), this, SLOT(do_enableArgs()));
+    connect(ui->pushButton_serialRefreshList, SIGNAL(clicked()), this, SLOT(do_refreshSerialList()));
+    connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_openSerial()));
+    connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), this, SLOT(do_closeSerial()));
+    connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(do_sendSerial()));
+    connect(&locoserial, &LocoSerial::receivedPacket, this, &MainWindow::do_displayPacket); // QT-5 style works
+    //connect(&locoserial, &LocoSerial::, this, &MainWindow::do_printDescriptions);
+    connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(do_connectDB()));
+    connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
+    connect(&locosql, &LocoSQL::DBopened, this, &MainWindow::handle_DBopened);
+    connect(&locosql, &LocoSQL::DBclosed, this, &MainWindow::handle_DBclosed);
+    connect(&locoserial, &LocoSerial::serialOpened, this, &MainWindow::handle_serialOpened);
+    connect(&locoserial, &LocoSerial::serialClosed, this, &MainWindow::handle_serialClosed);
+    connect(&locoserial, &LocoSerial::blockUpdated, &locosql, &LocoSQL::do_updateBlock);
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
 
-    do_loadOPComboBox();
-    do_serialRefreshList();
+    //do_loadOPComboBox();
+    do_refreshSerialList();
 
-    packetTimer = new QTimer(this);
-    connect(packetTimer, SIGNAL(timeout()), this, SLOT(do_packetTimer()));
-    connect(ui->pushButton_timerToggle, SIGNAL(clicked()), this, SLOT(do_timerToggle()));
-
-    db = QSqlDatabase::addDatabase("QMYSQL", "main");
-    dbQuery = QSqlQuery(db);
-
-    // Added to speed up debugging process
-    //do_serialConnect();
-    //connectDB();
-
-    ui->textBrowser_console->append("Program loaded! :3");
+    if (debug) qDebug() << "Interface loaded.";
 }
 
 MainWindow::~MainWindow()
@@ -76,7 +65,7 @@ MainWindow::~MainWindow()
 void MainWindow::do_enableArgs()
 {
     LocoPacket _packet(ui->lineEdit_opcode->text());
-    int _args = _packet.get_packetLen() - 2;
+    int _args = _packet.get_finalSize() - 2;
     if (_args > 0) {
         ui->lineEdit_arg1->setEnabled(true);
     } else {
@@ -95,7 +84,7 @@ void MainWindow::do_genPacket()
 {
     QString _hex = "";
     outgoingPacket.set_allFromHex(ui->lineEdit_opcode->text());
-    int _numArgs = outgoingPacket.get_packetLen() - 2;
+    int _numArgs = outgoingPacket.get_finalSize() - 2;
     LocoPacket * _packet;
     _hex.append(ui->lineEdit_opcode->text());
     if (_numArgs > 0) {
@@ -109,13 +98,9 @@ void MainWindow::do_genPacket()
     outgoingPacket = *_packet;
     ui->textBrowser_packets->append(_packet->get_packet());
     ui->lineEdit_packet->setText(_packet->get_packet());
-    QString _historyPacket = outgoingPacket.get_packet();
-    int _index = ui->comboBox_packetHistory->findText(_historyPacket);
-    if (_index == -1) {
-        ui->comboBox_packetHistory->addItem(_historyPacket);
-    }
 }
 
+/*
 void MainWindow::do_initStaticOP()
 {
     loconet.do_addStaticOP("85", "Global IDLE", "Put track into IDLE mode.");
@@ -144,25 +129,37 @@ void MainWindow::do_initStaticOP()
 
     //loconet.do_addStaticOP("", "", "");
 }
+*/
 
 void MainWindow::do_loadOPComboBox()
 {
-    for (int _index = 0; _index < loconet.get_staticOPsize(); ++_index)
+    ui->comboBox_opcodes->clear();
+    LocoPacket _tmp;
+    QVector<QString> _opcodes = _tmp.get_DBopcodes();
+    QVector<QString> _names = _tmp.get_DBnames();
+    if (_opcodes.count() != _names.count())
     {
-        QString _text = loconet.get_staticOPname(_index);
-        _text.append(" [" + loconet.get_staticOPhex(_index) + "]");
+        qDebug() << "database opcodes and names don't match.";
+        return;
+    }
+    for (int _index = 0; _index < _opcodes.count(); ++_index)
+    {
+        QString _text = _names[_index];
+        _text.append(" [" + _opcodes[_index] + "]");
         ui->comboBox_opcodes->insertItem(_index, _text);
     }
 }
 
 void MainWindow::do_OPfromComboBox()
 {
-    QString _hex = loconet.get_staticOPhex(ui->comboBox_opcodes->currentIndex());
+    LocoPacket _tmp;
+    QVector<QString> _opcodes = _tmp.get_DBopcodes();
+    QString _hex = _opcodes[ui->comboBox_opcodes->currentIndex()];
     ui->lineEdit_opcode->setText(_hex);
     do_enableArgs();
 }
 
-void MainWindow::do_serialRefreshList()
+void MainWindow::do_refreshSerialList()
 {
     QList<QSerialPortInfo> _ports = usbPorts.availablePorts();
     int _index = _ports.count();
@@ -174,69 +171,39 @@ void MainWindow::do_serialRefreshList()
     }
 }
 
-void MainWindow::do_serialConnect()
+void MainWindow::handle_serialOpened()
 {
-    int _portIndex = ui->comboBox_serialList->currentIndex();
-    QSerialPortInfo _device = usbPorts.availablePorts().at(_portIndex);
-    loconet.do_serialOpen(_device);
-
     ui->pushButton_serialConnect->setEnabled(false);
     ui->pushButton_serialDisconnect->setEnabled(true);
     ui->comboBox_serialList->setEnabled(false);
     ui->pushButton_serialRefreshList->setEnabled(false);
-
-    /*
-    if (loconet.get_serialOpen())
-    {
-        ui->textBrowser_console->append("Serial port open :D");
-        ui->pushButton_serialConnect->setEnabled(false);
-        ui->pushButton_serialDisconnect->setEnabled(true);
-        ui->comboBox_serialList->setEnabled(false);
-        ui->pushButton_serialRefreshList->setEnabled(false);
-    } else {
-        ui->textBrowser_console->append("Serial port not open xC");
-    }
-    */
-
-    // Setup packe timer
-    loconet.do_addTimerPacket(LocoPacket("BB030047"), 50); // Get slot status for adr 3
-    loconet.do_addTimerPacket(LocoPacket("BB020046"), 50);
-    loconet.do_addTimerPacket(LocoPacket("BB040040"), 50);
-    loconet.do_addTimerPacket(LocoPacket("BB050041"), 50);
-    loconet.do_addTimerPacket(LocoPacket("BB060042"), 50);
-    //loconet.do_addTimerPacket(LocoPacket("BF000343"), 5); // Get slot status for adr 3
-    //loconet.do_addTimerPacket(LocoPacket("BF000545"), 5); // Get slot status for adr 5
-    //loconet.do_addTimerPacket(LocoPacket("BF000444"), 5); // Get slot status for adr 4
-    loconet.set_packetTimer(20); // start the timer
 }
 
-void MainWindow::do_serialDisconnect()
+void MainWindow::do_openSerial()
 {
-    /*
-    if (loconet.get_serialOpen()) {
-        loconet.do_serialClose();
-    }
-    */
-    loconet.do_serialClose();
+    int _portIndex = ui->comboBox_serialList->currentIndex();
+    QSerialPortInfo _device = usbPorts.availablePorts().at(_portIndex);
+    locoserial.open(_device);
+}
+
+void MainWindow::handle_serialClosed()
+{
     ui->textBrowser_console->append("Serial port closed :D");
     ui->pushButton_serialConnect->setEnabled(true);
     ui->pushButton_serialDisconnect->setEnabled(false);
     ui->comboBox_serialList->setEnabled(true);
     ui->pushButton_serialRefreshList->setEnabled(true);
-    loconet.do_stopPacketTimer();
 }
 
-void MainWindow::loadFromPacketHistory(int _index)
+void MainWindow::do_closeSerial()
 {
-    QString _packet = ui->comboBox_packetHistory->itemText(_index);
-    ui->lineEdit_packet->clear();
-    ui->lineEdit_packet->setText(_packet);
+    locoserial.close();
 }
 
-void MainWindow::sendSerial()
+void MainWindow::do_sendSerial()
 {
     outgoingPacket.set_allFromHex(ui->lineEdit_packet->text());
-    if (!outgoingPacket.is_validChk())
+    if (!outgoingPacket.validChk())
     {
         if (debug) qDebug() << "Packet isn't right `_`";
         return;
@@ -244,17 +211,17 @@ void MainWindow::sendSerial()
 
     ui->textBrowser_packets->append(outgoingPacket.get_packet().toLatin1());
 
-    loconet.do_serialWrite(outgoingPacket);
+    locoserial.write(outgoingPacket);
 
-    dumpQByteArray(outgoingPacket.get_QByteArray());
+    do_dumpQByteArray(outgoingPacket.get_QByteArray());
     if (debug) qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
     if (debug) qDebug() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
 }
 
-void MainWindow::displayPacket(LocoPacket _packet)
+void MainWindow::do_displayPacket(LocoPacket _packet)
 {
-    if (debug) qDebug() << "Reading packet to text browser.";
-    //ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz ") + _packet.get_packet());
+    if (debug) qDebug() << "Reading packet to text browser. " << _packet.get_packet();
+    ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz ") + _packet.get_packet());
     // Sort packets for easier reading
     QString _op = _packet.get_OPcode();
     if (_op == "B2")
@@ -267,7 +234,7 @@ void MainWindow::displayPacket(LocoPacket _packet)
     }
 }
 
-void MainWindow::dumpQByteArray(QByteArray _packet)
+void MainWindow::do_dumpQByteArray(QByteArray _packet)
 {
     LocoPacket _localPacket = LocoPacket(_packet.toHex());
     if (debug) qDebug() << _packet.toHex();
@@ -275,29 +242,12 @@ void MainWindow::dumpQByteArray(QByteArray _packet)
     if (debug) qDebug() << _localPacket.get_packet();
 }
 
-void MainWindow::do_packetTimer()
-{
-    sendSerial();
-}
-
-void MainWindow::do_timerToggle()
-{
-    if (packetTimer->isActive())
-    {
-        packetTimer->stop();
-        ui->pushButton_timerToggle->setText("Start Timer");
-        return;
-    }
-    int _period = ui->spinBox_timerPeriod->value();
-    packetTimer->start(_period*1000);
-    ui->pushButton_timerToggle->setText("Stop Timer");
-}
-
-void MainWindow::printDescriptions(QString description)
+void MainWindow::do_printDescriptions(QString description)
 {
     ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz ") + description);
 }
 
+/*
 void MainWindow::updateTrains (LocoTrain _train)
 {
     QVector<LocoTrain> _trainList = loconet.get_trains();
@@ -347,8 +297,25 @@ void MainWindow::updateBlocks (LocoBlock _block)
         ui->textBrowser_sql->append("ran block update query. id [" + _id + "] status [" + QString::number(_status) + "]");
     }
 }
+*/
 
-void MainWindow::connectDB()
+void MainWindow::handle_DBopened()
+{
+    ui->textBrowser_sql->append("Database opened. Connection test appears successful :)");
+    ui->pushButton_connect->setEnabled(false);
+    ui->pushButton_disconnect->setEnabled(true);
+    ui->pushButton_runQuery->setEnabled(true);
+}
+
+void MainWindow::handle_DBclosed()
+{
+    ui->textBrowser_sql->append("Database closed.");
+    ui->pushButton_connect->setEnabled(true);
+    ui->pushButton_disconnect->setEnabled(false);
+    ui->pushButton_runQuery->setEnabled(false);
+}
+
+void MainWindow::do_connectDB()
 {
     // Collect information from window
     QString hostname = ui->lineEdit_hostname->text();
@@ -357,171 +324,12 @@ void MainWindow::connectDB()
     QString username = ui->lineEdit_user->text();
     QString password = ui->lineEdit_password->text();
 
-    // Load connection details
-    db.setHostName(hostname);
-    db.setPort(port);
-    db.setUserName(username);
-    db.setPassword(password);
-    db.setDatabaseName(database);
-
-    // Attempt to open database
-    if (!db.open())
-    {
-        ui->textBrowser_sql->append("Opening postgresql database failed D:");
-        ui->textBrowser_sql->append(db.lastError().text());
-    } else {
-        ui->textBrowser_sql->append("Database opened. Connection test appears successful :)");
-        ui->textBrowser_sql->append(db.tables().join(",\n")); // Get a list of tables in the database and display them.
-        ui->pushButton_connect->setEnabled(false);
-        ui->pushButton_disconnect->setEnabled(true);
-        ui->pushButton_tableText->setEnabled(true);
-        ui->pushButton_queryModel->setEnabled(true);
-        ui->pushButton_runQuery->setEnabled(true);
-    }
+    locosql.do_openDB(hostname, port, database, username, password);
 }
 
-void MainWindow::disconnectDB()
+void MainWindow::do_disconnectDB()
 {
-    if (!db.isOpen())
-    {
-        ui->textBrowser_sql->append("Database appears to already be closed? Wat do?!");
-        return;
-    } else {
-        ui->textBrowser_sql->append("Trying to close the database.");
-        db.close();
-        if (!db.isOpen())
-        {
-            ui->textBrowser_sql->append("Database closed.");
-            ui->pushButton_connect->setEnabled(true);
-            ui->pushButton_disconnect->setEnabled(false);
-            ui->pushButton_tableText->setEnabled(false);
-            ui->pushButton_queryModel->setEnabled(false);
-            ui->pushButton_runQuery->setEnabled(false);
-        }
-    }
-}
-
-/*
-void MainWindow::tableText()
-{
-    if (!db.isOpen())
-    {
-        ui->textBrowser_output->append("The database isn't open.. :(");
-    }
-
-    ui->textBrowser_output->append("viewTable(): dumping table to this text box.");
-
-    //INSERT INTO public.testsql VALUES('hi', 1);
-    if (!dbQuery.exec("SELECT * FROM public.testsql"))
-    {
-        ui->textBrowser_output->append("Query failed :(");
-        ui->textBrowser_output->append(dbQuery.lastError().text());
-        return;
-    }
-    while (dbQuery.next())
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            ui->textBrowser_output->append(dbQuery.value(i).toString());
-        }
-    }
-    ui->textBrowser_output->append("viewTable(): done.");
-}
-*/
-
-/*
-void MainWindow::queryModel()
-{
-    ui->textBrowser_output->append("queryModel(): opening query view.");
-
-    // Build the query from text entered in MainWindow.
-    // Match the form "SELECT * FROM schema.table" to agree with Postgresql.
-    schema = ui->lineEdit_schema->text();
-    table = ui->lineEdit_table->text();
-    QString tmpQuery = "SELECT * FROM ";
-    tmpQuery.append(schema);
-    tmpQuery.append(".");
-    tmpQuery.append(table);
-
-    // Load our query text into a query model
-    dbQueryModel->setQuery(tmpQuery, db);
-
-    // Check if the query model is correct
-    if (dbQueryModel->lastError().isValid())
-    {
-        ui->textBrowser_output->append(dbQueryModel->lastError().text());
-        ui->textBrowser_output->append("Issue with dbQueryModel listed above, exiting queryModel().");
-        return;
-    }
-
-    // Load the query model into the table view. This is an attempt at View/Model practices.
-    dbTableView->setModel(dbQueryModel);
-    dbTableView->show();
-}
-*/
-
-void MainWindow::manualQuery() {
-    runQuery("");
-}
-
-void MainWindow::runQuery(QString _query)
-{
-    QString queryString = _query; /* Pull fresh query from the main interface */
-    if (queryString == "") {
-        queryString = ui->lineEdit_query->text();
-    }
-    if (!db.isOpen()) /* Check that the database is still open */
-    {
-        ui->textBrowser_sql->append("Database doesn't appear to be open :C");
-        return;
-    } else if (dbQuery.exec(queryString)) /* Execute the query and check that it succeeds */
-    {
-        ui->textBrowser_sql->append("Query successful? :3");
-        if (dbQuery.isSelect()) /* A SELECT query was run */
-        {
-            ui->textBrowser_sql->append("Detected that the query is type SELECT.");
-            while (dbQuery.next()) /* Must prime the results by calling .next(); the first row is always null */
-            {
-                int queryValue = 0;
-                QString queryResults = "";
-                while (!dbQuery.isNull(queryValue)) /* Cycle through the columns */
-                {
-                    queryResults.append("[");
-                    queryResults.append(QString("%1").arg(queryValue)); /* Cast the int as QString */
-                    queryResults.append("]: ");
-                    queryResults.append(dbQuery.value(queryValue).toString());
-                    queryValue++; /* Go to next column in row */
-                }
-                ui->textBrowser_sql->append(queryResults);
-            }
-        } else { /* Query was not type SELECT */
-            ui->textBrowser_sql->append("Detected that the query is NOT type SELECT.");
-            ui->textBrowser_sql->append("Number of rows affected: " + QString("%1").arg(dbQuery.numRowsAffected()));
-        }
-    } else { /* The query was not successful */
-        ui->textBrowser_sql->append("Dun goofed. This shouldn't happen.");
-        ui->textBrowser_sql->append(dbQuery.lastError().text());
-    }
-}
-
-void MainWindow::do_resetTrack() {
-    if (ui->lineEdit_packet->text() == "827D")
-    {
-        ui->lineEdit_opcode->setText("83");
-        do_genPacket();
-        sendSerial();
-        ui->pushButton_resetTrack->setText("Disable Track.");
-    } else {
-        ui->lineEdit_opcode->setText("82");
-        do_genPacket();
-        sendSerial();
-        ui->pushButton_resetTrack->setText("Enable Track.");
-    }
-}
-
-void MainWindow::setDebug(bool _debug)
-{
-    debug = _debug;
+    locosql.do_closeDB();
 }
 
 /* Flippity Bit

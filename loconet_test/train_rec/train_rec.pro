@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     locotrain.cpp \
     loconet.cpp \
     locoblock.cpp \
-    locoserial.cpp
+    locoserial.cpp \
+    locosql.cpp
 
 HEADERS  += mainwindow.h \
 	locopacket.h \
@@ -27,6 +28,7 @@ HEADERS  += mainwindow.h \
     locotrain.h \
     loconet.h \
     locoblock.h \
-    locoserial.h
+    locoserial.h \
+    locosql.h
 
 FORMS    += mainwindow.ui
