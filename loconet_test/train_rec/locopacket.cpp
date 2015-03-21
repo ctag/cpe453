@@ -17,7 +17,7 @@ QSqlDatabase LocoPacket::packetDB = QSqlDatabase::addDatabase("QSQLITE");
  */
 LocoPacket::LocoPacket()
 {
-    locobyte_array.clear();
+    clear();
     if (!packetDB.isOpen())
     {
         do_openDB();
@@ -38,14 +38,8 @@ LocoPacket::LocoPacket(QString _hex)
         locobyte_array.clear();
         return;
     }
-    int _length = (_hex.count() / 2);
-    locobyte_array.clear();
-    for (int _packet = 0; _packet < _length; ++_packet)
-    {
-        LocoByte _tmp_locohex(_hex.mid((_packet * 2),2));
-        locobyte_array.append(_tmp_locohex);
-        if (debug) qDebug() << "New packet: " << locobyte_array[_packet].get_hex() << " " << locobyte_array[_packet].get_binary();
-    }
+    clear();
+    set_allFromHex(_hex);
     if (hasOP())
     {
         if (debug) qDebug() << "Valid OP code x)";
@@ -54,6 +48,16 @@ LocoPacket::LocoPacket(QString _hex)
     {
         if (debug) qDebug() << "Valid Checksum x)";
     }
+    if (!packetDB.isOpen())
+    {
+        do_openDB();
+    }
+}
+
+LocoPacket::LocoPacket(QByteArray _bytearray)
+{
+    clear();
+    do_appendByteArray(_bytearray);
     if (!packetDB.isOpen())
     {
         do_openDB();

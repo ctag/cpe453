@@ -20,7 +20,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    /*
     locoserial.moveToThread(&threadSerial);
     threadSerial.setObjectName("threadSerial");
     threadSerial.start();
@@ -28,13 +27,12 @@ MainWindow::MainWindow(QWidget *parent) :
     locosql.moveToThread(&threadSQL);
     threadSQL.setObjectName("threadSQL");
     threadSQL.start();
-*/
 
-    //locoudp.moveToThread(&threadUDP);
-    //threadUDP.setObjectName("threadUDP");
-    //threadUDP.start();
+    locoudp.moveToThread(&threadUDP);
+    threadUDP.setObjectName("threadUDP");
+    threadUDP.start();
 
-    //locoudp.do_openSocket(7755);
+    locoudp.do_openSocket(7755);
 
     outgoingPacket.clear();
 
@@ -47,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->lineEdit_opcode, SIGNAL(editingFinished()), this, SLOT(do_enableArgs()));
     connect(ui->pushButton_serialRefreshList, SIGNAL(clicked()), this, SLOT(do_refreshSerialList()));
     connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_openSerial()));
-    connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), this, SLOT(do_closeSerial()));
+    connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), &locoserial, SLOT(do_close()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(do_sendSerial()));
     connect(&locoserial, &LocoSerial::receivedPacket, this, &MainWindow::do_displayPacket); // QT-5 style works
     //connect(&locoserial, &LocoSerial::, this, &MainWindow::do_printDescriptions);
@@ -72,14 +70,12 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     // Clean up sub-threads
-    /*
     threadSerial.quit();
     threadSerial.wait();
     threadSQL.quit();
     threadSQL.wait();
-    */
-    //threadUDP.quit();
-    //threadUDP.wait();
+    threadUDP.quit();
+    threadUDP.wait();
 
     delete ui;
 }
@@ -174,7 +170,7 @@ void MainWindow::do_openSerial()
 {
     int _portIndex = ui->comboBox_serialList->currentIndex();
     QSerialPortInfo _device = usbPorts.availablePorts().at(_portIndex);
-    locoserial.open(_device);
+    locoserial.do_open(_device);
 }
 
 void MainWindow::handle_serialClosed()
@@ -184,11 +180,6 @@ void MainWindow::handle_serialClosed()
     ui->pushButton_serialDisconnect->setEnabled(false);
     ui->comboBox_serialList->setEnabled(true);
     ui->pushButton_serialRefreshList->setEnabled(true);
-}
-
-void MainWindow::do_closeSerial()
-{
-    locoserial.close();
 }
 
 void MainWindow::do_sendSerial()

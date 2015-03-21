@@ -57,7 +57,7 @@ void LocoSerial::readTimerStop()
     readTimer.stop();
 }
 
-void LocoSerial::close()
+void LocoSerial::do_close()
 {
     readTimerStop();
     disconnect(&usbBuffer, 0, 0, 0);
@@ -65,7 +65,7 @@ void LocoSerial::close()
     emit serialClosed();
 }
 
-bool LocoSerial::open(QSerialPortInfo _port)
+bool LocoSerial::do_open(QSerialPortInfo _port)
 {
     usbBuffer.close(); // Make sure to close any previous connection
 

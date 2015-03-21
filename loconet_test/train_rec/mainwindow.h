@@ -45,7 +45,7 @@ public slots:
     void do_genPacket();
     void do_refreshSerialList();
     void do_openSerial();
-    void do_closeSerial();
+    //void do_closeSerial();
     void do_dumpQByteArray(QByteArray _data);
     void do_sendSerial();
     void do_connectDB();

@@ -31,6 +31,7 @@ class LocoPacket
 public:
     LocoPacket();
     LocoPacket(QString _hex);
+    LocoPacket(QByteArray _bytearray);
     ~LocoPacket();
     bool operator==(LocoPacket _arg);
     QString get_packet();

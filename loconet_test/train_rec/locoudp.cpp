@@ -35,5 +35,11 @@ void LocoUDP::do_readPendingDatagrams()
         socket.readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
 
         qDebug() << "New UDP datagram: " << datagram;
+
+        LocoPacket _packet(datagram);
+        if (_packet.validOP())
+        {
+            emit incomingRequest(_packet);
+        }
     }
 }

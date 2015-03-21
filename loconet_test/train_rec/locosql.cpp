@@ -61,6 +61,26 @@ void LocoSQL::do_clearTable(QString _table)
     }
 }
 
+void LocoSQL::do_findReqs()
+{
+    if (!mainDB.isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery.prepare("SELECT packet FROM cpe453.req_packets;");
+    mainQuery.exec();
+    while (mainQuery.next())
+    {
+        LocoPacket _packet(mainQuery.value("packet").toString());
+        if (_packet.validOP())
+        {
+            emit incomingRequest(_packet);
+        }
+    }
+    QTimer::singleShot(200, this, SLOT(do_findReqs()));
+}
+
 /*
  * Status updating methods
  */

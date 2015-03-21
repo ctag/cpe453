@@ -9,10 +9,12 @@
 #include <QSql>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QTimer>
 
 #include "locobyte.h"
 #include "locoblock.h"
 #include "locotrain.h"
+#include "locopacket.h"
 
 namespace std {
 class LocoSQL;
@@ -34,10 +36,12 @@ public slots:
     void do_updateTrain(LocoTrain _train);
     void do_clearTable(QString _table);
     void do_clearAllTables();
+    void do_findReqs();
 
 signals:
     void DBopened();
     void DBclosed();
+    void incomingRequest(LocoPacket _packet);
 
 protected:
 
