@@ -210,22 +210,7 @@ bool LocoByte::get_isOP()
 short unsigned int LocoByte::get_packetLength()
 {
     if (!get_isOP()) { // Assume we want the second hex 7-bit packet length
-        u_int16_t _len = 0;
-        for (int16_t _bit = 0; _bit < 8; ++_bit)
-        {
-            int _pow = pow(2, (7 - _bit));
-            _len += ((byte[_bit])?1:0 * _pow);
-        }
-        // Using bitshift instead of pow()
-        // _bit = 6 because we only want the 7 least significant bits, since the 8th should be zero
-        /*
-        for (int16_t _bit = 6; _bit >= 0; --_bit)
-        {
-            _len = _len<<1;
-            _len += (byte[_bit]);
-        }
-        */
-        return(_len);
+        return(get_decimal());
     }
 
     bool _bit1 = byte[1];
@@ -335,9 +320,10 @@ QBitArray LocoByte::get_qBitArray()
 int LocoByte::get_decimal()
 {
     int _result = 0;
+    qDebug() << get_binary();
     for(int b=0; b<8/*byte.count()*/; ++b)
     {
-        _result = (_result + ((byte[b]?1:0)<<(b)));
+        _result = (_result + ((byte[b]?1:0)<<(7-b)));
     }
     return(_result);
 }

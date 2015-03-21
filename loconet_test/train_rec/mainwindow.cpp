@@ -20,16 +20,21 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    /*
     locoserial.moveToThread(&threadSerial);
+    threadSerial.setObjectName("threadSerial");
     threadSerial.start();
 
     locosql.moveToThread(&threadSQL);
+    threadSQL.setObjectName("threadSQL");
     threadSQL.start();
+*/
 
-    locoudp.moveToThread(&threadUDP);
-    threadUDP.start();
+    //locoudp.moveToThread(&threadUDP);
+    //threadUDP.setObjectName("threadUDP");
+    //threadUDP.start();
 
-    locoudp.do_openSocket(7755);
+    //locoudp.do_openSocket(7755);
 
     outgoingPacket.clear();
 
@@ -67,10 +72,14 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     // Clean up sub-threads
+    /*
     threadSerial.quit();
     threadSerial.wait();
     threadSQL.quit();
     threadSQL.wait();
+    */
+    //threadUDP.quit();
+    //threadUDP.wait();
 
     delete ui;
 }

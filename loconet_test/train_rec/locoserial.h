@@ -43,6 +43,7 @@ signals:
 public slots:
     void do_write(LocoPacket _packet);
     void do_write(QByteArray _bytes);
+    void do_querySlot(LocoByte _slot);
     void close();
     bool open(QSerialPortInfo _port);
     void do_read();

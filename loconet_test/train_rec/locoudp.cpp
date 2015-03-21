@@ -25,15 +25,15 @@ void LocoUDP::do_closeSocket()
 
 void LocoUDP::do_readPendingDatagrams()
 {
-    while (socket.hasPendingDatagrams()) {
-            QByteArray datagram;
-            datagram.resize(socket.pendingDatagramSize());
-            QHostAddress sender;
-            quint16 senderPort;
+    while (socket.hasPendingDatagrams())
+    {
+        QByteArray datagram;
+        datagram.resize(socket.pendingDatagramSize());
+        QHostAddress sender;
+        quint16 senderPort;
 
-            socket.readDatagram(datagram.data(), datagram.size(),
-                                    &sender, &senderPort);
+        socket.readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
 
-            qDebug() << "New UDP datagram: " << datagram;
-        }
+        qDebug() << "New UDP datagram: " << datagram;
+    }
 }

@@ -1,6 +1,6 @@
 #include "locoserial.h"
 
-bool LocoSerial::debug = false;
+bool LocoSerial::debug = true;
 
 LocoSerial::LocoSerial()
 {
@@ -22,6 +22,7 @@ LocoSerial::~LocoSerial()
 
 void LocoSerial::do_write(LocoPacket _packet)
 {
+    _packet.do_genChecksum();
     do_write(_packet.get_QByteArray()); // just redirect
 }
 
@@ -35,6 +36,13 @@ void LocoSerial::do_write(QByteArray _bytes)
     outgoingPacket.clear();
     outgoingPacket.do_appendByteArray(_bytes);
     parse(outgoingPacket);
+}
+
+void LocoSerial::do_querySlot(LocoByte _slot)
+{
+    QString _queryText = "BB" + _slot.get_hex() + "00";
+    LocoPacket _querySlot(_queryText);
+    do_write(_querySlot); // the write() method will generate a checksum for us
 }
 
 void LocoSerial::readTimerStart(int _msec)
@@ -70,7 +78,7 @@ bool LocoSerial::open(QSerialPortInfo _port)
     {
         if (debug) qDebug() << "Serial port appears to have opened sucessfully.";
         connect(&usbBuffer, SIGNAL(readyRead()), this, SLOT(do_read()));
-        readTimerStart(10);
+        readTimerStart(15);
         emit serialOpened();
         return(true);
     }
@@ -112,7 +120,7 @@ void LocoSerial::do_read()
         incomingPacket.do_appendLocoByte(_byte);
         //incomingPacket.do_appendByteArray(usbBuffer.read(1)); // Load in a byte from the serial buffer
         if (debug) qDebug() << "packet:" << incomingPacket.get_size() << ":" << incomingPacket.get_finalSize();
-        if (incomingPacket.get_size() == incomingPacket.get_finalSize()) // packet is the right size
+        if (incomingPacket.get_size() == incomingPacket.get_finalSize() && incomingPacket.get_size() >= 2) // packet is the right size
         {
             if (incomingPacket.validChk()) // packet has a valid checksum, bingo!
             {
@@ -125,7 +133,7 @@ void LocoSerial::do_read()
             incomingPacket.clear(); // doesn't matter if packet has valid checksum here, time to move to the next packet
             continue;
         }
-        if (incomingPacket.get_size() > incomingPacket.get_finalSize())
+        if (incomingPacket.get_size() > incomingPacket.get_finalSize() && incomingPacket.get_size() >= 2)
         {
             if (debug) qDebug() << "Dropping packet for exceeding length stated by op code.";
             emit droppedPacket();
@@ -147,7 +155,7 @@ QString LocoSerial::parse (LocoPacket _packet)
         return("packet is malformed >.<");
     }
 
-    // This looks so gross >.< ugh
+    // This looks so gross >.<
     if (_opCode == "E7") {
         return(parse_E7(_packet));
     } else if (_opCode == "B2") {
@@ -394,9 +402,7 @@ QString LocoSerial::parse_A0 (LocoPacket _packet) {
     QString _description = "A0: Setting slot speed.";
     LocoByte _arg1 = _packet.get_locobyte(1);
     LocoByte _arg2 = _packet.get_locobyte(2);
-    QString _queryText = "BB" + _arg1.get_hex();
-    LocoPacket _querySlot(_queryText);
-    do_write(_querySlot);
+    do_querySlot(_arg1); // Ask for E7 slot data
     return(_description);
 }
 
