@@ -20,13 +20,14 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    locoserial.moveToThread(&threadSerial);
+    /*locoserial.moveToThread(&threadSerial);
     threadSerial.setObjectName("threadSerial");
     threadSerial.start();
 
     locosql.moveToThread(&threadSQL);
     threadSQL.setObjectName("threadSQL");
     threadSQL.start();
+    */
 
     /*
     locoudp.setParent(0);
@@ -75,10 +76,10 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     // Clean up sub-threads
-    threadSerial.quit();
+    /*threadSerial.quit();
     threadSerial.wait();
     threadSQL.quit();
-    threadSQL.wait();
+    threadSQL.wait();*/
     //threadUDP.quit();
     //threadUDP.wait();
 

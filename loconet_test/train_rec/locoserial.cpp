@@ -32,6 +32,7 @@ void LocoSerial::do_write(QByteArray _bytes)
     {
         return;
     }
+    if (debug) qDebug() << "Writing to serial: " << _bytes.toInt(0, 16);
     usbBuffer.write(_bytes);
     outgoingPacket.clear();
     outgoingPacket.do_appendByteArray(_bytes);
