@@ -140,7 +140,7 @@ QString LocoByte::get_binary()
  */
 QString LocoByte::get_hex()
 {
-    if (debug) qDebug() << "hexFromBits()";
+    if (debug) qDebug() << "hexFromBits()" << byte;
     int _decimal[2] = {0, 0};
     QChar _hexArray[2] = {'0', '0'};
 

@@ -34,11 +34,14 @@ void LocoUDP::do_readPendingDatagrams()
 
         socket.readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
 
-        qDebug() << "New UDP datagram: " << datagram;
+        QString _hex(datagram);
+        LocoPacket _packet(_hex);
 
-        LocoPacket _packet(datagram);
+        qDebug() << "New UDP datagram: " << _packet.get_packet();
+
         if (_packet.validOP())
         {
+            qDebug() << "Emitting UDP packet.";
             emit incomingRequest(_packet);
         }
     }

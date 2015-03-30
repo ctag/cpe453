@@ -20,7 +20,6 @@ public:
     ~MainWindow();
 
 public slots:
-    void do_connectUDP();
     void do_sendUDP();
 
 private:

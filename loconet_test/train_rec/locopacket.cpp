@@ -245,7 +245,7 @@ void LocoPacket::do_appendByteArray(QByteArray _byteArray)
     for (int _index = 0; _index < _byteArray.count(); ++_index)
     {
         LocoByte _newByte;
-        _newByte.set_fromByteArray(_byteArray);
+        _newByte.set_fromByteArray(_byteArray/*.mid(_index, 1)*/);
         locobyte_array.append(_newByte);
     }
 }
@@ -282,9 +282,19 @@ bool LocoPacket::hasOP()
     return(locobyte_array[0].get_isOP());
 }
 
+bool LocoPacket::get_isEmpty() {
+    if (locobyte_array.size() > 0) {
+        return false;
+    }
+    return true;
+}
+
 // Check for valid OP code in sqlite
 bool LocoPacket::validOP()
 {
+    if (get_isEmpty()) {
+        return false;
+    }
     if (!packetDB.isOpen())
     {
         bool _status = do_openDB();
@@ -294,6 +304,7 @@ bool LocoPacket::validOP()
         }
     }
     QString _op = locobyte_array[0].get_hex();
+    qDebug() << "Checking opcodes database for " << _op;
     QSqlQuery _query;
     _query.prepare("SELECT * FROM opcodes WHERE opcode=:_op;");
     _query.bindValue(":_op", _op);
@@ -302,8 +313,10 @@ bool LocoPacket::validOP()
         qDebug() << _query.lastError();
         qDebug() << "Query to find valid OP codes failed.";
         return(false);
+    } else {
+        qDebug() << _query.size() << _query.first();
     }
-    if (_query.size() > 0)
+    if (_query.first())
     {
         return(true);
     }

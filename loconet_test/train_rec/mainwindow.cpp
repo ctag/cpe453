@@ -12,7 +12,7 @@
  * handle_ to take care of a signal
  */
 
-bool MainWindow::debug = false;
+bool MainWindow::debug = true;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -28,9 +28,12 @@ MainWindow::MainWindow(QWidget *parent) :
     threadSQL.setObjectName("threadSQL");
     threadSQL.start();
 
+    /*
+    locoudp.setParent(0);
     locoudp.moveToThread(&threadUDP);
     threadUDP.setObjectName("threadUDP");
     threadUDP.start();
+    */
 
     locoudp.do_openSocket(7755);
 
@@ -48,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), &locoserial, SLOT(do_close()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(do_sendSerial()));
     connect(&locoserial, &LocoSerial::receivedPacket, this, &MainWindow::do_displayPacket); // QT-5 style works
+    //connect(&locoudp, &LocoUDP::incomingRequest, this, &MainWindow::do_displayPacket);
     //connect(&locoserial, &LocoSerial::, this, &MainWindow::do_printDescriptions);
     connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(do_connectDB()));
     connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
@@ -57,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&locoserial, &LocoSerial::serialClosed, this, &MainWindow::handle_serialClosed);
     connect(&locoserial, &LocoSerial::blockUpdated, &locosql, &LocoSQL::do_updateBlock);
     connect(&locoserial, &LocoSerial::trainUpdated, &locosql, &LocoSQL::do_updateTrain);
+    connect(&locoudp, &LocoUDP::incomingRequest, &locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
@@ -74,8 +79,8 @@ MainWindow::~MainWindow()
     threadSerial.wait();
     threadSQL.quit();
     threadSQL.wait();
-    threadUDP.quit();
-    threadUDP.wait();
+    //threadUDP.quit();
+    //threadUDP.wait();
 
     delete ui;
 }

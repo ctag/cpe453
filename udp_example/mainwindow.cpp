@@ -7,7 +7,6 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(do_connectUDP()));
     connect(ui->pushButton_send, SIGNAL(clicked()), this, SLOT(do_sendUDP()));
 }
 
@@ -16,6 +15,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/*
 void MainWindow::do_connectUDP()
 {
     if (ui->pushButton_connect->text() == "connect")
@@ -36,6 +36,7 @@ void MainWindow::do_connectUDP()
         ui->pushButton_connect->setText("connect");
     }
 }
+*/
 
 void MainWindow::do_sendUDP()
 {

@@ -43,6 +43,7 @@ public:
     LocoByte get_locobyte(int _byte);
     QString get_description(); // Pull packet description from sqlite
     QString get_name(); // Pull packet name from sqlite
+    bool get_isEmpty();
     QVector<QString> get_DBopcodes();
     QVector<QString> get_DBnames();
     void set_allFromHex(QString _hex);
