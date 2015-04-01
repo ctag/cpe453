@@ -28,7 +28,8 @@ public:
 public slots:
     void do_openSocket(int _port);
     void do_closeSocket();
-    void do_readPendingDatagrams();
+    void do_readPendingDatagram();
+    void do_writeDatagram(LocoPacket _packet);
 
 signals:
     void incomingRequest(LocoPacket _packet);

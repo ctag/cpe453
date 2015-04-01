@@ -12,7 +12,7 @@
  * handle_ to take care of a signal
  */
 
-bool MainWindow::debug = true;
+bool MainWindow::debug = false;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -51,8 +51,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_openSerial()));
     connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), &locoserial, SLOT(do_close()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(do_sendSerial()));
+    //connect(ui->pushButton_sendPacket, &QPushButton::clicked, &locosql, &LocoSQL::do_findThrottleReq);
     connect(&locoserial, &LocoSerial::receivedPacket, this, &MainWindow::do_displayPacket); // QT-5 style works
-    //connect(&locoudp, &LocoUDP::incomingRequest, this, &MainWindow::do_displayPacket);
+    connect(&locoudp, &LocoUDP::incomingRequest, this, &MainWindow::do_displayPacket);
+    connect(&locosql, &LocoSQL::incomingRequest, &locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));;
     //connect(&locoserial, &LocoSerial::, this, &MainWindow::do_printDescriptions);
     connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(do_connectDB()));
     connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
@@ -63,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&locoserial, &LocoSerial::blockUpdated, &locosql, &LocoSQL::do_updateBlock);
     connect(&locoserial, &LocoSerial::trainUpdated, &locosql, &LocoSQL::do_updateTrain);
     connect(&locoudp, &LocoUDP::incomingRequest, &locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));
+    //connect(&locoudp, &LocoUDP::incomingRequest, &locoudp, &LocoUDP::do_writeDatagram);
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
@@ -200,6 +203,7 @@ void MainWindow::do_sendSerial()
     ui->textBrowser_packets->append(outgoingPacket.get_packet().toLatin1());
 
     locoserial.do_write(outgoingPacket);
+    locoudp.do_writeDatagram(outgoingPacket);
 
     do_dumpQByteArray(outgoingPacket.get_QByteArray());
     if (debug) qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();

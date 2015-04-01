@@ -6,6 +6,7 @@ LocoSQL::LocoSQL()
 {
     mainDB = QSqlDatabase::addDatabase("QMYSQL", "main");
     mainQuery = QSqlQuery(mainDB);
+    reqDelay = 10000;
 }
 
 LocoSQL::~LocoSQL()
@@ -30,6 +31,7 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
     }
     // Clear status tables on startup
     do_clearAllTables();
+    do_cycleReqs();
 
     emit DBopened();
     return(true);
@@ -61,7 +63,88 @@ void LocoSQL::do_clearTable(QString _table)
     }
 }
 
-void LocoSQL::do_findReqs()
+int LocoSQL::get_percentFromHex(QString _hex) {
+    int _percent = _hex.toInt(0, 16);
+    _percent *= 0.787401575;
+    if (_percent < 0) {
+        _percent = 0;
+    } else if (_percent > 100) {
+        _percent = 100;
+    }
+    qDebug() << "GET PERCENT FROM HEX: " << _percent;
+    return(_percent);
+}
+
+QString LocoSQL::get_hexFromPercent(int _percent) {
+    if (_percent < 2) {
+        return("00");
+    }
+    _percent *= 1.27;
+    QString _hex =  QString::number(_percent, 16);
+    qDebug() << "GET HEX FROM PERCENT: " << _hex;
+    return(_hex);
+}
+
+QString LocoSQL::get_hexFromInt(int _adr) {
+    QString _hex =  QString("%1").arg(_adr, 2, 16, QChar('0'));//QString::number(_adr, 16);
+    qDebug() << "GET HEX FROM ADDRESS: " << _hex;
+    return(_hex);
+}
+
+void LocoSQL::do_cycleReqs()
+{
+    switch(reqIndex)
+    {
+    case 0:
+        do_reqTrain();
+        reqIndex = 1;
+        break;
+    case 1:
+        do_reqPacket();
+        reqIndex = 0;
+        break;
+    default:
+        reqIndex = 0;
+        break;
+    }
+    QTimer::singleShot(reqDelay, this, SLOT(do_cycleReqs()));
+}
+
+void LocoSQL::do_reqTrain()
+{
+    if (debug) qDebug() << "Querying for throttle requests.";
+    if (!mainDB.isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery.prepare("SELECT * FROM cpe453.req_train;");
+    mainQuery.exec();
+    while (mainQuery.next())
+    {
+        if (debug) qDebug() << "TESTING SQL " << mainQuery.value("id").toString() << ":" << mainQuery.value("speed").toString();
+        get_percentFromHex(mainQuery.value("speed").toString());
+        get_hexFromPercent(get_percentFromHex(mainQuery.value("speed").toString()));
+        get_hexFromInt(mainQuery.value("id").toInt());
+        //continue;
+        LocoByte _command;
+        LocoPacket _packet;
+        LocoByte _slot;
+        LocoByte _speed;
+        _command.set_fromHex("A0");
+        _speed.set_fromHex(get_hexFromPercent(mainQuery.value("speed").toInt()));
+        _slot.set_fromHex(get_hexFromInt(mainQuery.value("id").toInt()));
+        _packet.do_appendLocoByte(_command);
+        _packet.do_appendLocoByte(_slot);
+        _packet.do_appendLocoByte(_speed);
+        _packet.do_genChecksum();
+        emit incomingRequest(_packet);
+        if (debug) qDebug() << "Found throttle request. " << _packet.get_packet();
+    }
+    //QTimer::singleShot(reqDelay, this, SLOT(do_reqTrain()));
+}
+
+void LocoSQL::do_reqPacket()
 {
     if (!mainDB.isOpen())
     {
@@ -78,7 +161,7 @@ void LocoSQL::do_findReqs()
             emit incomingRequest(_packet);
         }
     }
-    QTimer::singleShot(200, this, SLOT(do_findReqs()));
+    //QTimer::singleShot(reqDelay, this, SLOT(do_reqPacket()));
 }
 
 /*
@@ -114,7 +197,7 @@ void LocoSQL::do_updateTrain (LocoTrain _train)
     if (mainDB.open()) {
         QString _adr = _train.get_adr().get_hex();
         QString _slot = _train.get_slot().get_hex();
-        int _speed = _train.get_speed().get_decimal();
+        int _speed = get_percentFromHex(_train.get_speed().get_hex());
         int _dir = _train.get_direction()?1:0;
 
         mainQuery.prepare("INSERT INTO cpe453.track_trains (slot, adr, speed, dir) "

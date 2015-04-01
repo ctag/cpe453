@@ -36,7 +36,12 @@ public slots:
     void do_updateTrain(LocoTrain _train);
     void do_clearTable(QString _table);
     void do_clearAllTables();
-    void do_findReqs();
+    void do_reqPacket();
+    void do_reqTrain();
+    void do_cycleReqs();
+    int get_percentFromHex(QString _hex);
+    QString get_hexFromPercent(int _percent);
+    QString get_hexFromInt(int _adr);
 
 signals:
     void DBopened();
@@ -48,6 +53,8 @@ protected:
 private:
     QSqlDatabase mainDB;
     QSqlQuery mainQuery;
+    int reqDelay;
+    int reqIndex;
 
 };
 

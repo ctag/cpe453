@@ -1,6 +1,6 @@
 #include "locoudp.h"
 
-bool LocoUDP::debug = true;
+bool LocoUDP::debug = false;
 
 LocoUDP::LocoUDP()
 {
@@ -15,7 +15,7 @@ LocoUDP::~LocoUDP()
 void LocoUDP::do_openSocket(int _port)
 {
     socket.bind(QHostAddress::LocalHost, _port);
-    connect(&socket, SIGNAL(readyRead()), this, SLOT(do_readPendingDatagrams()));
+    connect(&socket, SIGNAL(readyRead()), this, SLOT(do_readPendingDatagram()));
 }
 
 void LocoUDP::do_closeSocket()
@@ -23,7 +23,7 @@ void LocoUDP::do_closeSocket()
     socket.close();
 }
 
-void LocoUDP::do_readPendingDatagrams()
+void LocoUDP::do_readPendingDatagram()
 {
     while (socket.hasPendingDatagrams())
     {
@@ -46,3 +46,19 @@ void LocoUDP::do_readPendingDatagrams()
         }
     }
 }
+
+void LocoUDP::do_writeDatagram(LocoPacket _packet)
+{
+    QByteArray datagram;
+    datagram.resize(_packet.get_size());
+    QHostAddress address("127.0.0.1");
+    quint16 port = 7756;
+    socket.writeDatagram(datagram.data(), datagram.size(), address, port);
+}
+
+
+
+
+
+
+
