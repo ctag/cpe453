@@ -6,7 +6,7 @@ LocoSQL::LocoSQL()
 {
     mainDB = QSqlDatabase::addDatabase("QMYSQL", "main");
     mainQuery = QSqlQuery(mainDB);
-    reqDelay = 10000;
+    reqDelay = 1000;
 }
 
 LocoSQL::~LocoSQL()
@@ -71,7 +71,7 @@ int LocoSQL::get_percentFromHex(QString _hex) {
     } else if (_percent > 100) {
         _percent = 100;
     }
-    qDebug() << "GET PERCENT FROM HEX: " << _percent;
+    if (debug) qDebug() << "get_percentFromHex(): " << _percent;
     return(_percent);
 }
 
@@ -81,13 +81,13 @@ QString LocoSQL::get_hexFromPercent(int _percent) {
     }
     _percent *= 1.27;
     QString _hex =  QString::number(_percent, 16);
-    qDebug() << "GET HEX FROM PERCENT: " << _hex;
+    if (debug) qDebug() << "get_hexFromPercent(): " << _hex;
     return(_hex);
 }
 
 QString LocoSQL::get_hexFromInt(int _adr) {
     QString _hex =  QString("%1").arg(_adr, 2, 16, QChar('0'));//QString::number(_adr, 16);
-    qDebug() << "GET HEX FROM ADDRESS: " << _hex;
+    if (debug) qDebug() << "get_hexFromInt(): " << _hex;
     return(_hex);
 }
 
@@ -122,24 +122,31 @@ void LocoSQL::do_reqTrain()
     mainQuery.exec();
     while (mainQuery.next())
     {
-        if (debug) qDebug() << "TESTING SQL " << mainQuery.value("id").toString() << ":" << mainQuery.value("speed").toString();
-        get_percentFromHex(mainQuery.value("speed").toString());
+        //if (debug) qDebug() << "TESTING SQL " << mainQuery.value("id").toString() << ":" << mainQuery.value("speed").toString();
+        /*get_percentFromHex(mainQuery.value("speed").toString());
         get_hexFromPercent(get_percentFromHex(mainQuery.value("speed").toString()));
-        get_hexFromInt(mainQuery.value("id").toInt());
+        get_hexFromInt(mainQuery.value("id").toInt());*/
         //continue;
         LocoByte _command;
-        LocoPacket _packet;
+        LocoPacket _speedPacket;
+        LocoPacket _dirPacket;
         LocoByte _slot;
         LocoByte _speed;
+        int _dir;
         _command.set_fromHex("A0");
         _speed.set_fromHex(get_hexFromPercent(mainQuery.value("speed").toInt()));
-        _slot.set_fromHex(get_hexFromInt(mainQuery.value("id").toInt()));
-        _packet.do_appendLocoByte(_command);
-        _packet.do_appendLocoByte(_slot);
-        _packet.do_appendLocoByte(_speed);
-        _packet.do_genChecksum();
-        emit incomingRequest(_packet);
-        if (debug) qDebug() << "Found throttle request. " << _packet.get_packet();
+        _slot.set_fromHex(get_hexFromInt(mainQuery.value("slot").toInt()));
+        _dir = mainQuery.value("dir").toInt();
+        _speedPacket.do_appendLocoByte(_command);
+        _speedPacket.do_appendLocoByte(_slot);
+        _speedPacket.do_appendLocoByte(_speed);
+        _speedPacket.do_genChecksum();
+        emit incomingRequest(_speedPacket);
+        if (debug) qDebug() << "Found speed request. " << _speedPacket.get_packet();
+        _command.set_fromHex("A1");
+        _dirPacket.do_appendLocoByte(_command);
+        _dirPacket.do_appendLocoByte(_slot);
+        _dirPacket.do_appendByte(QString::number(_dir+2)+"0");
     }
     //QTimer::singleShot(reqDelay, this, SLOT(do_reqTrain()));
 }
