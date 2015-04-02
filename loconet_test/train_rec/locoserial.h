@@ -38,6 +38,7 @@ signals:
     void blockUpdated(LocoBlock);
     void serialOpened();
     void serialClosed();
+    void delayWrite(QByteArray _bytes);
 
 public slots:
     void do_write(LocoPacket _packet);
@@ -49,6 +50,11 @@ public slots:
     QString parse(LocoPacket _packet);
     void run();
     void do_scanTrains();
+    void do_trackReset();
+    void do_trackOn();
+    void do_trackOff();
+    //void do_waitForReply();
+    //void do_waitForReplyDone();
 
 protected:
     void readTimerStop();
@@ -86,7 +92,8 @@ private:
     LocoPacket * incomingPacket;
     LocoPacket * outgoingPacket;
     bool * debug;
-
+    //int * waitForReply;
+    //QVector<LocoPacket> * outgoingQueue;
 };
 
 #endif // LOCOSERIAL_H

@@ -52,6 +52,9 @@ signals:
     void DBclosed();
     void incomingRequest(LocoPacket _packet);
     void scanTrains();
+    void trackReset();
+    void trackOn();
+    void trackOff();
 
 protected:
     void reqTimerStop();

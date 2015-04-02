@@ -3,8 +3,10 @@
 LocoSerial::LocoSerial()
 {
     debug = NULL;
+    //waitForReply = NULL;
     incomingPacket = NULL;
     outgoingPacket = NULL;
+    //outgoingQueue = NULL;
 }
 
 LocoSerial::~LocoSerial()
@@ -21,14 +23,31 @@ void LocoSerial::run()
     outgoingPacket = new LocoPacket;
     incomingPacket->clear();
     outgoingPacket->clear();
+    //outgoingQueue = new QVector<LocoPacket>;
+    //outgoingQueue->clear();
     debug = new bool;
     *debug = false;
+    //waitForReply = new int;
+    //*waitForReply = 0;
+    //connect(this, &LocoSerial::delayWrite, this, static_cast<void (LocoSerial::*)(QByteArray)>(&LocoSerial::do_write));
+    //static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));
 }
 
 void LocoSerial::do_write(LocoPacket _packet)
 {
+    /*
+    if (*waitForReply > 0)
+    {
+        outgoingQueue->append(_packet);
+        return; // will write next time
+    }*/
     _packet.do_genChecksum();
-    do_write(_packet.get_QByteArray()); // just redirect
+    do_write(_packet.get_QByteArray());
+    /*if (_packet.is_followOnMsg())
+    {
+        do_waitForReply();
+        do_write(_packet.get_QByteArray());
+    }*/
 }
 
 void LocoSerial::do_write(QByteArray _bytes)
@@ -46,6 +65,22 @@ void LocoSerial::do_write(QByteArray _bytes)
     outgoingPacket->do_appendByteArray(_bytes);
     parse(*outgoingPacket);
 }
+
+/*
+void LocoSerial::do_waitForReply()
+{
+    ++*waitForReply;
+    QTimer::singleShot(20, this, SLOT(do_waitForReplyDone()));
+}
+
+void LocoSerial::do_waitForReplyDone()
+{
+    --*waitForReply;
+    if (*waitForReply < 0) {
+        *waitForReply = 0;
+    }
+}
+*/
 
 void LocoSerial::do_querySlot(LocoByte _slot)
 {
@@ -164,13 +199,40 @@ void LocoSerial::do_read()
             continue;
         }
     }
+    /*
+    if (!outgoingQueue->isEmpty())
+    {
+        LocoPacket _fromQueue = outgoingQueue->takeFirst();
+        do_write(_fromQueue);
+    }*/
+}
+
+void LocoSerial::do_trackOn()
+{
+    LocoPacket _packet;
+    _packet.set_allFromHex("837C");
+    do_write(_packet);
+}
+
+void LocoSerial::do_trackOff()
+{
+    LocoPacket _packet;
+    _packet.set_allFromHex("827D");
+    do_write(_packet);
+}
+
+void LocoSerial::do_trackReset()
+{
+    do_trackOff();
+    QTimer::singleShot(10000, this, SLOT(do_trackOn()));
 }
 
 void LocoSerial::do_scanTrains()
 {
     LocoByte _slot;
-    for (int _index = 1; _index < 12; ++_index)
-    {
+    int _index = 2;
+    //for (int _index = 1; _index < 12; ++_index)
+    //{
         LocoPacket _packet;
         _slot.set_fromHex(QString("%1").arg(_index, 2, 16, QChar('0')));
         _packet.do_appendByte("BB"); // OP code
@@ -178,7 +240,7 @@ void LocoSerial::do_scanTrains()
         _packet.do_appendByte("00");
         _packet.do_genChecksum();
         do_write(_packet);
-    }
+    //}
 }
 
 /*
@@ -303,6 +365,18 @@ QString LocoSerial::parse_E7 (LocoPacket _packet)
         */
         emit trainUpdated(_newTrain);
         _description.append(" Speed: " + _speed.get_hex() + " Slot: " + _slot.get_hex() + " Direction: " + QString::number(_dir));
+    }
+
+    // query next train
+    if (_slot.get_decimal() < 12)
+    {
+        LocoPacket _packet;
+        _slot.set_fromHex(QString("%1").arg((_slot.get_decimal()+1), 2, 16, QChar('0')));
+        _packet.do_appendByte("BB"); // OP code
+        _packet.do_appendLocoByte(_slot);
+        _packet.do_appendByte("00");
+        _packet.do_genChecksum();
+        do_write(_packet);
     }
 
     if (_description == "E7:") {

@@ -31,7 +31,7 @@ void LocoSQL::run()
     *mainQuery = QSqlQuery(*mainDB);
     reqIndex = new int;
     debug = new bool;
-    *debug = true;
+    *debug = false;
     doDelete = new bool;
     *doDelete = true;
 }
@@ -55,7 +55,7 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
     if (*doDelete) {
         do_clearAllTables();
     }
-    reqTimerStart(4000);
+    reqTimerStart(300);
 
     emit DBopened();
     return(true);
@@ -113,7 +113,7 @@ void LocoSQL::do_clearTable(QString _table)
 }
 
 int LocoSQL::get_percentFromHex(QString _hex) {
-    if (*debug) qDebug() << "percentfromhex: " << _hex;
+    /*if (*debug)*/ qDebug() << "percentfromhex: " << _hex;
     int _percent = _hex.toInt(0, 16);
     _percent = _percent*0.8;
     if (_percent < 0) {
@@ -121,7 +121,7 @@ int LocoSQL::get_percentFromHex(QString _hex) {
     } else if (_percent > 100) {
         _percent = 100;
     }
-    if (*debug) qDebug() << "get_percentFromHex(): " << _percent;
+    /*if (*debug)*/ qDebug() << "get_percentFromHex(): " << _percent;
     return(_percent);
 }
 
@@ -189,6 +189,15 @@ void LocoSQL::do_reqMacro()
         if (_macro == "SCAN_TRAINS") {
             if (debug) qDebug() << "Scanning for trains";
             emit scanTrains();
+        } else if (_macro == "TRACK_RESET") {
+            if (debug) qDebug() << "Calling for track reset.";
+            emit trackReset();
+        } else if (_macro == "TRACK_ON") {
+            if (debug) qDebug() << "Calling for track on.";
+            emit trackOn();
+        } else if (_macro == "TRACK_OFF") {
+            if (debug) qDebug() << "Calling for track off.";
+            emit trackOff();
         }
         if (*doDelete)
         {
@@ -370,7 +379,7 @@ void LocoSQL::do_updateTrain (LocoTrain _train)
         mainQuery->bindValue(":adr", _adr);
         mainQuery->bindValue(":speed", _speed);
         mainQuery->bindValue(":dir", _dir);
-        if (*debug) qDebug() << "Updating train SQL.";
+        /*if (*debug)*/ qDebug() << "Updating train SQL." << _slot << ":" << _speed;
         mainQuery->exec();
     }
 }
