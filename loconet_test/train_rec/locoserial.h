@@ -28,7 +28,6 @@ class LocoSerial : public QObject
 
 public:
     LocoSerial();
-    LocoSerial(QSerialPortInfo _port);
     ~LocoSerial();
     static bool debug;
 
@@ -48,6 +47,7 @@ public slots:
     bool do_open(QSerialPortInfo _port);
     void do_read();
     QString parse(LocoPacket _packet);
+    void run();
 
 protected:
     void readTimerStop();
@@ -80,10 +80,10 @@ protected:
 protected slots:
 
 private:
-    QSerialPort usbBuffer;
-    QTimer readTimer;
-    LocoPacket incomingPacket;
-    LocoPacket outgoingPacket;
+    QSerialPort * usbBuffer;
+    QTimer * readTimer;
+    LocoPacket * incomingPacket;
+    LocoPacket * outgoingPacket;
 
 };
 

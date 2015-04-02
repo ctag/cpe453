@@ -304,17 +304,17 @@ bool LocoPacket::validOP()
         }
     }
     QString _op = locobyte_array[0].get_hex();
-    qDebug() << "Checking opcodes database for " << _op;
+    if (debug) qDebug() << "Checking opcodes database for " << _op;
     QSqlQuery _query;
     _query.prepare("SELECT * FROM opcodes WHERE opcode=:_op;");
     _query.bindValue(":_op", _op);
     if (!_query.exec())
     {
-        qDebug() << _query.lastError();
-        qDebug() << "Query to find valid OP codes failed.";
+      if (debug) qDebug() << _query.lastError();
+      if (debug) qDebug() << "Query to find valid OP codes failed.";
         return(false);
     } else {
-        qDebug() << _query.size() << _query.first();
+      if (debug) qDebug() << _query.size() << _query.first();
     }
     if (_query.first())
     {

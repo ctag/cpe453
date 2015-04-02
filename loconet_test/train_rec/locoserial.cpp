@@ -4,20 +4,26 @@ bool LocoSerial::debug = true;
 
 LocoSerial::LocoSerial()
 {
-    incomingPacket.clear();
-    outgoingPacket.clear();
-}
-
-LocoSerial::LocoSerial(QSerialPortInfo _port)
-{
-    incomingPacket.clear();
-    outgoingPacket.clear();
 }
 
 LocoSerial::~LocoSerial()
 {
-    usbBuffer.close();
+    usbBuffer->close();
     readTimerStop();
+    delete usbBuffer;
+    delete readTimer;
+    delete incomingPacket;
+    delete outgoingPacket;
+}
+
+void LocoSerial::run()
+{
+    usbBuffer = new QSerialPort;
+    readTimer = new QTimer;
+    incomingPacket = new LocoPacket;
+    outgoingPacket = new LocoPacket;
+    incomingPacket->clear();
+    outgoingPacket->clear();
 }
 
 void LocoSerial::do_write(LocoPacket _packet)
@@ -28,15 +34,15 @@ void LocoSerial::do_write(LocoPacket _packet)
 
 void LocoSerial::do_write(QByteArray _bytes)
 {
-    if (!usbBuffer.isOpen())
+    if (!usbBuffer->isOpen())
     {
         return;
     }
-    if (debug) qDebug() << "Writing to serial: " << _bytes.toInt(0, 16);
-    usbBuffer.write(_bytes);
-    outgoingPacket.clear();
-    outgoingPacket.do_appendByteArray(_bytes);
-    parse(outgoingPacket);
+    if (debug) qDebug() << "Writing to serial: " << _bytes << _bytes.toInt(0, 16);
+    usbBuffer->write(_bytes);
+    outgoingPacket->clear();
+    outgoingPacket->do_appendByteArray(_bytes);
+    parse(*outgoingPacket);
 }
 
 void LocoSerial::do_querySlot(LocoByte _slot)
@@ -48,62 +54,62 @@ void LocoSerial::do_querySlot(LocoByte _slot)
 
 void LocoSerial::readTimerStart(int _msec)
 {
-    connect(&readTimer, SIGNAL(timeout()), this, SLOT(do_read()));
-    readTimer.start(_msec);
+    connect(readTimer, SIGNAL(timeout()), this, SLOT(do_read()));
+    readTimer->start(_msec);
 }
 
 void LocoSerial::readTimerStop()
 {
-    disconnect(&readTimer, 0, 0, 0);
-    readTimer.stop();
+    disconnect(readTimer, 0, 0, 0);
+    readTimer->stop();
 }
 
 void LocoSerial::do_close()
 {
     readTimerStop();
-    disconnect(&usbBuffer, 0, 0, 0);
-    usbBuffer.close();
+    disconnect(usbBuffer, 0, 0, 0);
+    usbBuffer->close();
     emit serialClosed();
 }
 
 bool LocoSerial::do_open(QSerialPortInfo _port)
 {
-    usbBuffer.close(); // Make sure to close any previous connection
+    usbBuffer->close(); // Make sure to close any previous connection
 
-    usbBuffer.setPort(_port);
-    usbBuffer.setBaudRate(57600);
-    usbBuffer.setFlowControl(QSerialPort::HardwareControl);
-    usbBuffer.open(QIODevice::ReadWrite);
+    usbBuffer->setPort(_port);
+    usbBuffer->setBaudRate(57600);
+    usbBuffer->setFlowControl(QSerialPort::HardwareControl);
+    usbBuffer->open(QIODevice::ReadWrite);
 
-    if (usbBuffer.isOpen())
+    if (usbBuffer->isOpen())
     {
         if (debug) qDebug() << "Serial port appears to have opened sucessfully.";
-        connect(&usbBuffer, SIGNAL(readyRead()), this, SLOT(do_read()));
+        connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(do_read()));
         readTimerStart(15);
         emit serialOpened();
         return(true);
     }
 
     if (debug) qDebug() << "Serial port failed to open.";
-    usbBuffer.close();
+    usbBuffer->close();
     emit serialClosed();
     return(false);
 }
 
 void LocoSerial::do_read()
 {
-    if (!usbBuffer.isOpen())
+    if (!usbBuffer->isOpen())
     {
         return; // not open
     }
 
     // Read immediately if data is available
-    while(usbBuffer.bytesAvailable() > 0)
+    while(usbBuffer->bytesAvailable() > 0)
     {
         if (debug) qDebug() << "Reading byte from serial.";
         LocoByte _byte;
-        _byte.set_fromByteArray(usbBuffer.read(1));
-        if (!_byte.get_isOP() && incomingPacket.get_size() == 0)
+        _byte.set_fromByteArray(usbBuffer->read(1));
+        if (!_byte.get_isOP() && incomingPacket->get_size() == 0)
         {
             if (debug) qDebug() << "Skipping non opcode with empty incoming packet.";
             continue; // no need to assign anything but an OP to position 0
@@ -112,33 +118,33 @@ void LocoSerial::do_read()
         {
             if (debug) qDebug() << "OP code: " << _byte.get_hex();
         }
-        if (_byte.get_isOP() && (incomingPacket.get_size() > 0))
+        if (_byte.get_isOP() && (incomingPacket->get_size() > 0))
         {
             if (debug) qDebug() << "Dropping packet to catch incoming op code.";
             emit droppedPacket();
-            incomingPacket.clear();
+            incomingPacket->clear();
         }
-        incomingPacket.do_appendLocoByte(_byte);
-        //incomingPacket.do_appendByteArray(usbBuffer.read(1)); // Load in a byte from the serial buffer
-        if (debug) qDebug() << "packet:" << incomingPacket.get_size() << ":" << incomingPacket.get_finalSize();
-        if (incomingPacket.get_size() == incomingPacket.get_finalSize() && incomingPacket.get_size() >= 2) // packet is the right size
+        incomingPacket->do_appendLocoByte(_byte);
+        //incomingPacket->do_appendByteArray(usbBuffer->read(1)); // Load in a byte from the serial buffer
+        if (debug) qDebug() << "packet:" << incomingPacket->get_size() << ":" << incomingPacket->get_finalSize();
+        if (incomingPacket->get_size() == incomingPacket->get_finalSize() && incomingPacket->get_size() >= 2) // packet is the right size
         {
-            if (incomingPacket.validChk()) // packet has a valid checksum, bingo!
+            if (incomingPacket->validChk()) // packet has a valid checksum, bingo!
             {
-                if (debug) qDebug() << "Received a full packet! " << incomingPacket.get_packet();
-                emit receivedPacket(incomingPacket);
-                parse(incomingPacket);
+                if (debug) qDebug() << "Received a full packet! " << incomingPacket->get_packet();
+                emit receivedPacket(*incomingPacket);
+                parse(*incomingPacket);
             } else {
                 emit droppedPacket();
             }
-            incomingPacket.clear(); // doesn't matter if packet has valid checksum here, time to move to the next packet
+            incomingPacket->clear(); // doesn't matter if packet has valid checksum here, time to move to the next packet
             continue;
         }
-        if (incomingPacket.get_size() > incomingPacket.get_finalSize() && incomingPacket.get_size() >= 2)
+        if (incomingPacket->get_size() > incomingPacket->get_finalSize() && incomingPacket->get_size() >= 2)
         {
             if (debug) qDebug() << "Dropping packet for exceeding length stated by op code.";
             emit droppedPacket();
-            incomingPacket.clear();
+            incomingPacket->clear();
             continue;
         }
     }

@@ -1,16 +1,18 @@
 #include "locosql.h"
 
-bool LocoSQL::debug = true;
+bool LocoSQL::debug = false;
 
 LocoSQL::LocoSQL()
 {
     mainDB = QSqlDatabase::addDatabase("QMYSQL", "main");
     mainQuery = QSqlQuery(mainDB);
-    reqDelay = 1000;
+    reqTimer = new QTimer;
+    //reqDelay = 1000;
 }
 
 LocoSQL::~LocoSQL()
 {
+    delete reqTimer;
     //
 }
 
@@ -31,7 +33,7 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
     }
     // Clear status tables on startup
     do_clearAllTables();
-    do_cycleReqs();
+    reqTimerStart(400);
 
     emit DBopened();
     return(true);
@@ -43,10 +45,22 @@ void LocoSQL::do_closeDB()
     emit DBclosed();
 }
 
+void LocoSQL::reqTimerStart(int _msec)
+{
+    connect(reqTimer, SIGNAL(timeout()), this, SLOT(do_cycleReqs()));
+    reqTimer->start(_msec);
+}
+
+void LocoSQL::reqTimerStop()
+{
+    disconnect(reqTimer, 0, 0, 0);
+    reqTimer->stop();
+}
+
 void LocoSQL::do_clearAllTables()
 {
     do_clearTable("track_ds");
-    do_clearTable("track_trains");
+    do_clearTable("track_train");
 }
 
 void LocoSQL::do_clearTable(QString _table)
@@ -64,14 +78,15 @@ void LocoSQL::do_clearTable(QString _table)
 }
 
 int LocoSQL::get_percentFromHex(QString _hex) {
+    if (debug) qDebug() << "percentfromhex: " << _hex;
     int _percent = _hex.toInt(0, 16);
-    _percent *= 0.787401575;
+    _percent = _percent*0.8;
     if (_percent < 0) {
         _percent = 0;
     } else if (_percent > 100) {
         _percent = 100;
     }
-    if (debug) qDebug() << "get_percentFromHex(): " << _percent;
+    /*if (debug)*/ qDebug() << "get_percentFromHex(): " << _percent;
     return(_percent);
 }
 
@@ -79,9 +94,11 @@ QString LocoSQL::get_hexFromPercent(int _percent) {
     if (_percent < 2) {
         return("00");
     }
-    _percent *= 1.27;
-    QString _hex =  QString::number(_percent, 16);
+    _percent = _percent*1.25;
+    if (debug) qDebug() << "Percent " << _percent;
+    QString _hex =  QString("%1").arg(_percent, 2, 16, QChar('0')); //QString::number(_percent, 16);
     if (debug) qDebug() << "get_hexFromPercent(): " << _hex;
+    get_percentFromHex(_hex);
     return(_hex);
 }
 
@@ -107,7 +124,7 @@ void LocoSQL::do_cycleReqs()
         reqIndex = 0;
         break;
     }
-    QTimer::singleShot(reqDelay, this, SLOT(do_cycleReqs()));
+    //QTimer::singleShot(reqDelay, this, SLOT(do_cycleReqs()));
 }
 
 void LocoSQL::do_reqTrain()
@@ -136,7 +153,7 @@ void LocoSQL::do_reqTrain()
         _command.set_fromHex("A0");
         _speed.set_fromHex(get_hexFromPercent(mainQuery.value("speed").toInt()));
         _slot.set_fromHex(get_hexFromInt(mainQuery.value("slot").toInt()));
-        _dir = mainQuery.value("dir").toInt();
+        _dir = mainQuery.value("dir").toBool();
         _speedPacket.do_appendLocoByte(_command);
         _speedPacket.do_appendLocoByte(_slot);
         _speedPacket.do_appendLocoByte(_speed);
@@ -146,29 +163,31 @@ void LocoSQL::do_reqTrain()
         _command.set_fromHex("A1");
         _dirPacket.do_appendLocoByte(_command);
         _dirPacket.do_appendLocoByte(_slot);
-        _dirPacket.do_appendByte(QString::number(_dir+2)+"0");
+        _dirPacket.do_appendByte(QString::number(((_dir)?2:0)+1)+"0");
+        emit incomingRequest(_dirPacket);
+        if (debug) qDebug() << "Found dir request. " << _dirPacket.get_packet();
     }
-    //QTimer::singleShot(reqDelay, this, SLOT(do_reqTrain()));
 }
 
 void LocoSQL::do_reqPacket()
 {
+    if (debug) qDebug() << "Querying for packet requests.";
     if (!mainDB.isOpen())
     {
         // open
         return;
     }
-    mainQuery.prepare("SELECT packet FROM cpe453.req_packets;");
+    mainQuery.prepare("SELECT packet FROM cpe453.req_packet;");
     mainQuery.exec();
     while (mainQuery.next())
     {
         LocoPacket _packet(mainQuery.value("packet").toString());
         if (_packet.validOP())
         {
+            if (debug) qDebug() << "Found packet request: " << _packet.get_packet();
             emit incomingRequest(_packet);
         }
     }
-    //QTimer::singleShot(reqDelay, this, SLOT(do_reqPacket()));
 }
 
 /*
@@ -207,7 +226,7 @@ void LocoSQL::do_updateTrain (LocoTrain _train)
         int _speed = get_percentFromHex(_train.get_speed().get_hex());
         int _dir = _train.get_direction()?1:0;
 
-        mainQuery.prepare("INSERT INTO cpe453.track_trains (slot, adr, speed, dir) "
+        mainQuery.prepare("INSERT INTO cpe453.track_train (slot, adr, speed, dir) "
                           "VALUES (:slot, :adr, :speed, :dir) "
                           "ON DUPLICATE KEY "
                           "UPDATE adr=:adr, speed=:speed, dir=:dir;");

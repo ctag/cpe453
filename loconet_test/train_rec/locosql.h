@@ -49,12 +49,15 @@ signals:
     void incomingRequest(LocoPacket _packet);
 
 protected:
+    void reqTimerStop();
+    void reqTimerStart(int _msec);
 
 private:
     QSqlDatabase mainDB;
     QSqlQuery mainQuery;
-    int reqDelay;
+    //int reqDelay;
     int reqIndex;
+    QTimer * reqTimer;
 
 };
 

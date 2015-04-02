@@ -60,13 +60,17 @@ public slots:
     void handle_DBopened();
     void handle_DBclosed();
 
+signals:
+    void locoserial_open(QSerialPortInfo _device);
+    void locoserial_write(LocoPacket outgoingPacket);
+
 private:
     Ui::MainWindow *ui;
     LocoPacket outgoingPacket;
     LocoPacket incomingPacket;
     QSerialPortInfo usbPorts;
     QDateTime date;
-    LocoSerial locoserial;
+    LocoSerial * locoserial;
     QThread threadSerial;
     LocoSQL locosql;
     QThread threadSQL;
