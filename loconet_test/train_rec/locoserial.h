@@ -29,7 +29,6 @@ class LocoSerial : public QObject
 public:
     LocoSerial();
     ~LocoSerial();
-    static bool debug;
 
 signals:
     void receivedPacket(LocoPacket);
@@ -84,6 +83,7 @@ private:
     QTimer * readTimer;
     LocoPacket * incomingPacket;
     LocoPacket * outgoingPacket;
+    bool debug;
 
 };
 

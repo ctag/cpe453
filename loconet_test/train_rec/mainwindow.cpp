@@ -24,11 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
     locoserial->moveToThread(&threadSerial);
     //threadSerial.setObjectName("threadSerial");
 
-    /*
-    locosql.moveToThread(&threadSQL);
-    threadSQL.setObjectName("threadSQL");
-    threadSQL.start();
-    */
+    locosql = new LocoSQL;
+    locosql->moveToThread(&threadSQL);
+    //threadSQL.setObjectName("threadSQL");
 
     /*
     locoudp.setParent(0);
@@ -52,19 +50,19 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_serialConnect, SIGNAL(clicked()), this, SLOT(do_openSerial()));
     connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), locoserial, SLOT(do_close()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(do_sendSerial()));
-    //connect(ui->pushButton_sendPacket, &QPushButton::clicked, &locosql, &LocoSQL::do_findThrottleReq);
+    //connect(ui->pushButton_sendPacket, &QPushButton::clicked, locosql, &LocoSQL::do_findThrottleReq);
     connect(locoserial, &LocoSerial::receivedPacket, this, &MainWindow::do_displayPacket); // QT-5 style works
     connect(&locoudp, &LocoUDP::incomingRequest, this, &MainWindow::do_displayPacket);
-    connect(&locosql, &LocoSQL::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));;
+    connect(locosql, &LocoSQL::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));;
     //connect(locoserial, locoserial::, this, &MainWindow::do_printDescriptions);
     connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(do_connectDB()));
     connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
-    connect(&locosql, &LocoSQL::DBopened, this, &MainWindow::handle_DBopened);
-    connect(&locosql, &LocoSQL::DBclosed, this, &MainWindow::handle_DBclosed);
+    connect(locosql, &LocoSQL::DBopened, this, &MainWindow::handle_DBopened);
+    connect(locosql, &LocoSQL::DBclosed, this, &MainWindow::handle_DBclosed);
     connect(locoserial, &LocoSerial::serialOpened, this, &MainWindow::handle_serialOpened);
     connect(locoserial, &LocoSerial::serialClosed, this, &MainWindow::handle_serialClosed);
-    connect(locoserial, &LocoSerial::blockUpdated, &locosql, &LocoSQL::do_updateBlock);
-    connect(locoserial, &LocoSerial::trainUpdated, &locosql, &LocoSQL::do_updateTrain);
+    connect(locoserial, &LocoSerial::blockUpdated, locosql, &LocoSQL::do_updateBlock);
+    connect(locoserial, &LocoSerial::trainUpdated, locosql, &LocoSQL::do_updateTrain);
     connect(&locoudp, &LocoUDP::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));
     //connect(&locoudp, &LocoUDP::incomingRequest, &locoudp, &LocoUDP::do_writeDatagram);
     connect(this, &MainWindow::locoserial_open, locoserial, &LocoSerial::do_open);
@@ -72,6 +70,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&threadSerial, &QThread::finished, locoserial, &QObject::deleteLater);
     threadSerial.start();
     locoserial->run();
+    threadSQL.start();
+    locosql->run();
 
     ui->comboBox_opcodes->setEditable(false);
     ui->comboBox_opcodes->setInsertPolicy(QComboBox::InsertAtBottom);
@@ -87,9 +87,8 @@ MainWindow::~MainWindow()
     // Clean up sub-threads
     threadSerial.quit();
     threadSerial.wait();
-    /*
     threadSQL.quit();
-    threadSQL.wait();*/
+    threadSQL.wait();
     //threadUDP.quit();
     //threadUDP.wait();
 
@@ -273,12 +272,12 @@ void MainWindow::do_connectDB()
     QString username = ui->lineEdit_user->text();
     QString password = ui->lineEdit_password->text();
 
-    locosql.do_openDB(hostname, port, database, username, password);
+    locosql->do_openDB(hostname, port, database, username, password);
 }
 
 void MainWindow::do_disconnectDB()
 {
-    locosql.do_closeDB();
+    locosql->do_closeDB();
 }
 
 /* Flippity Bit

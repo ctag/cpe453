@@ -1,34 +1,42 @@
 #include "locosql.h"
 
-bool LocoSQL::debug = false;
-
 LocoSQL::LocoSQL()
 {
-    mainDB = QSqlDatabase::addDatabase("QMYSQL", "main");
-    mainQuery = QSqlQuery(mainDB);
-    reqTimer = new QTimer;
-    //reqDelay = 1000;
+    debug = false;
 }
 
 LocoSQL::~LocoSQL()
 {
     delete reqTimer;
+    mainDB->close();
+    delete mainDB;
+    delete mainQuery;
     //
+}
+
+void LocoSQL::run()
+{
+    mainDB = new QSqlDatabase;
+    *mainDB = QSqlDatabase::addDatabase("QMYSQL", "main");
+    mainQuery = new QSqlQuery;
+    *mainQuery = QSqlQuery(*mainDB);
+    reqTimer = new QTimer;
+    reqIndex = new int;
 }
 
 bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString username, QString password)
 {
-    mainDB.setHostName(hostname);
-    mainDB.setPort(port);
-    mainDB.setDatabaseName(database);
-    mainDB.setUserName(username);
-    mainDB.setPassword(password);
+    mainDB->setHostName(hostname);
+    mainDB->setPort(port);
+    mainDB->setDatabaseName(database);
+    mainDB->setUserName(username);
+    mainDB->setPassword(password);
 
     // Attempt to open database
-    if (!mainDB.open())
+    if (!mainDB->open())
     {
         qDebug() << "Opening postgresql database failed D:";
-        qDebug() << mainDB.lastError();
+        qDebug() << mainDB->lastError();
         return(false);
     }
     // Clear status tables on startup
@@ -41,7 +49,8 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
 
 void LocoSQL::do_closeDB()
 {
-    mainDB.close();
+    reqTimerStop();
+    mainDB->close();
     emit DBclosed();
 }
 
@@ -65,14 +74,14 @@ void LocoSQL::do_clearAllTables()
 
 void LocoSQL::do_clearTable(QString _table)
 {
-    if (mainDB.isOpen()) {
+    if (mainDB->isOpen()) {
         _table.prepend("DELETE FROM cpe453.");
-        mainQuery.prepare(_table);
-        mainQuery.bindValue(":table", _table);
+        mainQuery->prepare(_table);
+        mainQuery->bindValue(":table", _table);
         if (debug) qDebug() << "Deleting all rows in SQL cpe453." << _table;
-        if (!mainQuery.exec())
+        if (!mainQuery->exec())
         {
-            qDebug() << mainQuery.lastError();
+            qDebug() << mainQuery->lastError();
         }
     }
 }
@@ -86,7 +95,7 @@ int LocoSQL::get_percentFromHex(QString _hex) {
     } else if (_percent > 100) {
         _percent = 100;
     }
-    /*if (debug)*/ qDebug() << "get_percentFromHex(): " << _percent;
+    if (debug) qDebug() << "get_percentFromHex(): " << _percent;
     return(_percent);
 }
 
@@ -110,40 +119,39 @@ QString LocoSQL::get_hexFromInt(int _adr) {
 
 void LocoSQL::do_cycleReqs()
 {
-    switch(reqIndex)
+    switch(*reqIndex)
     {
     case 0:
         do_reqTrain();
-        reqIndex = 1;
+        *reqIndex = 1;
         break;
     case 1:
         do_reqPacket();
-        reqIndex = 0;
+        *reqIndex = 0;
         break;
     default:
-        reqIndex = 0;
+        *reqIndex = 0;
         break;
     }
-    //QTimer::singleShot(reqDelay, this, SLOT(do_cycleReqs()));
+}
+
+void LocoSQL::do_reqMacro()
+{
+    //
 }
 
 void LocoSQL::do_reqTrain()
 {
     if (debug) qDebug() << "Querying for throttle requests.";
-    if (!mainDB.isOpen())
+    if (!mainDB->isOpen())
     {
         // open
         return;
     }
-    mainQuery.prepare("SELECT * FROM cpe453.req_train;");
-    mainQuery.exec();
-    while (mainQuery.next())
+    mainQuery->prepare("SELECT * FROM cpe453.req_train;");
+    mainQuery->exec();
+    while (mainQuery->next())
     {
-        //if (debug) qDebug() << "TESTING SQL " << mainQuery.value("id").toString() << ":" << mainQuery.value("speed").toString();
-        /*get_percentFromHex(mainQuery.value("speed").toString());
-        get_hexFromPercent(get_percentFromHex(mainQuery.value("speed").toString()));
-        get_hexFromInt(mainQuery.value("id").toInt());*/
-        //continue;
         LocoByte _command;
         LocoPacket _speedPacket;
         LocoPacket _dirPacket;
@@ -151,9 +159,9 @@ void LocoSQL::do_reqTrain()
         LocoByte _speed;
         int _dir;
         _command.set_fromHex("A0");
-        _speed.set_fromHex(get_hexFromPercent(mainQuery.value("speed").toInt()));
-        _slot.set_fromHex(get_hexFromInt(mainQuery.value("slot").toInt()));
-        _dir = mainQuery.value("dir").toBool();
+        _speed.set_fromHex(get_hexFromPercent(mainQuery->value("speed").toInt()));
+        _slot.set_fromHex(get_hexFromInt(mainQuery->value("slot").toInt()));
+        _dir = mainQuery->value("dir").toBool();
         _speedPacket.do_appendLocoByte(_command);
         _speedPacket.do_appendLocoByte(_slot);
         _speedPacket.do_appendLocoByte(_speed);
@@ -172,16 +180,16 @@ void LocoSQL::do_reqTrain()
 void LocoSQL::do_reqPacket()
 {
     if (debug) qDebug() << "Querying for packet requests.";
-    if (!mainDB.isOpen())
+    if (!mainDB->isOpen())
     {
         // open
         return;
     }
-    mainQuery.prepare("SELECT packet FROM cpe453.req_packet;");
-    mainQuery.exec();
-    while (mainQuery.next())
+    mainQuery->prepare("SELECT packet FROM cpe453.req_packet;");
+    mainQuery->exec();
+    while (mainQuery->next())
     {
-        LocoPacket _packet(mainQuery.value("packet").toString());
+        LocoPacket _packet(mainQuery->value("packet").toString());
         if (_packet.validOP())
         {
             if (debug) qDebug() << "Found packet request: " << _packet.get_packet();
@@ -200,17 +208,17 @@ void LocoSQL::do_reqPacket()
  */
 void LocoSQL::do_updateBlock(LocoBlock _block)
 {
-    if (mainDB.isOpen()) {
-        mainQuery.prepare("INSERT INTO cpe453.track_ds (ds_id, status) "
+    if (mainDB->isOpen()) {
+        mainQuery->prepare("INSERT INTO cpe453.track_ds (ds_id, status) "
                         "VALUES (:id, :status) "
                         "ON DUPLICATE KEY "
                         "UPDATE ds_id=:id, status=:status;");
         QString _id = QString::fromLatin1(_block.get_adr());
         bool _status = _block.get_occupied();
-        mainQuery.bindValue(":id", _id);
-        mainQuery.bindValue(":status", _status);
+        mainQuery->bindValue(":id", _id);
+        mainQuery->bindValue(":status", _status);
         if (debug) qDebug() << "Updating SQL block: ";
-        mainQuery.exec();
+        mainQuery->exec();
     }
 }
 
@@ -220,22 +228,22 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
  */
 void LocoSQL::do_updateTrain (LocoTrain _train)
 {
-    if (mainDB.open()) {
+    if (mainDB->open()) {
         QString _adr = _train.get_adr().get_hex();
         QString _slot = _train.get_slot().get_hex();
         int _speed = get_percentFromHex(_train.get_speed().get_hex());
         int _dir = _train.get_direction()?1:0;
 
-        mainQuery.prepare("INSERT INTO cpe453.track_train (slot, adr, speed, dir) "
+        mainQuery->prepare("INSERT INTO cpe453.track_train (slot, adr, speed, dir) "
                           "VALUES (:slot, :adr, :speed, :dir) "
                           "ON DUPLICATE KEY "
                           "UPDATE adr=:adr, speed=:speed, dir=:dir;");
-        mainQuery.bindValue(":slot", _slot);
-        mainQuery.bindValue(":adr", _adr);
-        mainQuery.bindValue(":speed", _speed);
-        mainQuery.bindValue(":dir", _dir);
+        mainQuery->bindValue(":slot", _slot);
+        mainQuery->bindValue(":adr", _adr);
+        mainQuery->bindValue(":speed", _speed);
+        mainQuery->bindValue(":dir", _dir);
         if (debug) qDebug() << "Updating train SQL.";
-        mainQuery.exec();
+        mainQuery->exec();
     }
 }
 

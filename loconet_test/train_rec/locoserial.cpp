@@ -1,9 +1,8 @@
 #include "locoserial.h"
 
-bool LocoSerial::debug = true;
-
 LocoSerial::LocoSerial()
 {
+    debug = false;
 }
 
 LocoSerial::~LocoSerial()

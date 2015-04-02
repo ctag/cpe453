@@ -27,7 +27,6 @@ class LocoSQL : public QObject
 public:
     LocoSQL();
     ~LocoSQL();
-    static bool debug;
 
 public slots:
     bool do_openDB(QString hostname, int port, QString database, QString username, QString password);
@@ -38,10 +37,12 @@ public slots:
     void do_clearAllTables();
     void do_reqPacket();
     void do_reqTrain();
+    void do_reqMacro();
     void do_cycleReqs();
     int get_percentFromHex(QString _hex);
     QString get_hexFromPercent(int _percent);
     QString get_hexFromInt(int _adr);
+    void run();
 
 signals:
     void DBopened();
@@ -53,11 +54,12 @@ protected:
     void reqTimerStart(int _msec);
 
 private:
-    QSqlDatabase mainDB;
-    QSqlQuery mainQuery;
+    QSqlDatabase * mainDB;
+    QSqlQuery * mainQuery;
     //int reqDelay;
-    int reqIndex;
+    int * reqIndex;
     QTimer * reqTimer;
+    bool debug;
 
 };
 

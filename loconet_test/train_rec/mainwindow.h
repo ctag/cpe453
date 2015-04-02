@@ -72,7 +72,7 @@ private:
     QDateTime date;
     LocoSerial * locoserial;
     QThread threadSerial;
-    LocoSQL locosql;
+    LocoSQL * locosql;
     QThread threadSQL;
     LocoUDP locoudp;
     QThread threadUDP;
