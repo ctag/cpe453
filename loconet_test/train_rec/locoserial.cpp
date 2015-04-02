@@ -2,7 +2,10 @@
 
 LocoSerial::LocoSerial()
 {
-    debug = false;
+    debug = NULL;
+    incomingPacket = NULL;
+    outgoingPacket = NULL;
+    usbBuffer = NULL;
 }
 
 LocoSerial::~LocoSerial()
@@ -13,16 +16,17 @@ LocoSerial::~LocoSerial()
     delete readTimer;
     delete incomingPacket;
     delete outgoingPacket;
+    delete debug;
 }
 
 void LocoSerial::run()
 {
-    usbBuffer = new QSerialPort;
-    readTimer = new QTimer;
     incomingPacket = new LocoPacket;
     outgoingPacket = new LocoPacket;
     incomingPacket->clear();
     outgoingPacket->clear();
+    debug = new bool;
+    *debug = false;
 }
 
 void LocoSerial::do_write(LocoPacket _packet)
@@ -33,11 +37,14 @@ void LocoSerial::do_write(LocoPacket _packet)
 
 void LocoSerial::do_write(QByteArray _bytes)
 {
+    if (!usbBuffer) {
+        return;
+    }
     if (!usbBuffer->isOpen())
     {
         return;
     }
-    if (debug) qDebug() << "Writing to serial: " << _bytes << _bytes.toInt(0, 16);
+    if (*debug) qDebug() << "Writing to serial: " << _bytes << _bytes.toInt(0, 16);
     usbBuffer->write(_bytes);
     outgoingPacket->clear();
     outgoingPacket->do_appendByteArray(_bytes);
@@ -53,6 +60,7 @@ void LocoSerial::do_querySlot(LocoByte _slot)
 
 void LocoSerial::readTimerStart(int _msec)
 {
+    readTimer = new QTimer;
     connect(readTimer, SIGNAL(timeout()), this, SLOT(do_read()));
     readTimer->start(_msec);
 }
@@ -61,6 +69,7 @@ void LocoSerial::readTimerStop()
 {
     disconnect(readTimer, 0, 0, 0);
     readTimer->stop();
+    delete readTimer;
 }
 
 void LocoSerial::do_close()
@@ -69,11 +78,13 @@ void LocoSerial::do_close()
     disconnect(usbBuffer, 0, 0, 0);
     usbBuffer->close();
     emit serialClosed();
+    delete usbBuffer;
 }
 
 bool LocoSerial::do_open(QSerialPortInfo _port)
 {
-    usbBuffer->close(); // Make sure to close any previous connection
+    usbBuffer = new QSerialPort;
+    //usbBuffer->close(); // Make sure to close any previous connection
 
     usbBuffer->setPort(_port);
     usbBuffer->setBaudRate(57600);
@@ -82,14 +93,14 @@ bool LocoSerial::do_open(QSerialPortInfo _port)
 
     if (usbBuffer->isOpen())
     {
-        if (debug) qDebug() << "Serial port appears to have opened sucessfully.";
+        if (*debug) qDebug() << "Serial port appears to have opened sucessfully.";
         connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(do_read()));
         readTimerStart(15);
         emit serialOpened();
         return(true);
     }
 
-    if (debug) qDebug() << "Serial port failed to open.";
+    if (*debug) qDebug() << "Serial port failed to open.";
     usbBuffer->close();
     emit serialClosed();
     return(false);
@@ -105,32 +116,32 @@ void LocoSerial::do_read()
     // Read immediately if data is available
     while(usbBuffer->bytesAvailable() > 0)
     {
-        if (debug) qDebug() << "Reading byte from serial.";
+        if (*debug) qDebug() << "Reading byte from serial.";
         LocoByte _byte;
         _byte.set_fromByteArray(usbBuffer->read(1));
         if (!_byte.get_isOP() && incomingPacket->get_size() == 0)
         {
-            if (debug) qDebug() << "Skipping non opcode with empty incoming packet.";
+            if (*debug) qDebug() << "Skipping non opcode with empty incoming packet.";
             continue; // no need to assign anything but an OP to position 0
         }
         if (_byte.get_isOP())
         {
-            if (debug) qDebug() << "OP code: " << _byte.get_hex();
+            if (*debug) qDebug() << "OP code: " << _byte.get_hex();
         }
         if (_byte.get_isOP() && (incomingPacket->get_size() > 0))
         {
-            if (debug) qDebug() << "Dropping packet to catch incoming op code.";
+            if (*debug) qDebug() << "Dropping packet to catch incoming op code.";
             emit droppedPacket();
             incomingPacket->clear();
         }
         incomingPacket->do_appendLocoByte(_byte);
         //incomingPacket->do_appendByteArray(usbBuffer->read(1)); // Load in a byte from the serial buffer
-        if (debug) qDebug() << "packet:" << incomingPacket->get_size() << ":" << incomingPacket->get_finalSize();
+        if (*debug) qDebug() << "packet:" << incomingPacket->get_size() << ":" << incomingPacket->get_finalSize();
         if (incomingPacket->get_size() == incomingPacket->get_finalSize() && incomingPacket->get_size() >= 2) // packet is the right size
         {
             if (incomingPacket->validChk()) // packet has a valid checksum, bingo!
             {
-                if (debug) qDebug() << "Received a full packet! " << incomingPacket->get_packet();
+                if (*debug) qDebug() << "Received a full packet! " << incomingPacket->get_packet();
                 emit receivedPacket(*incomingPacket);
                 parse(*incomingPacket);
             } else {
@@ -141,11 +152,26 @@ void LocoSerial::do_read()
         }
         if (incomingPacket->get_size() > incomingPacket->get_finalSize() && incomingPacket->get_size() >= 2)
         {
-            if (debug) qDebug() << "Dropping packet for exceeding length stated by op code.";
+            if (*debug) qDebug() << "Dropping packet for exceeding length stated by op code.";
             emit droppedPacket();
             incomingPacket->clear();
             continue;
         }
+    }
+}
+
+void LocoSerial::do_scanTrains()
+{
+    LocoByte _slot;
+    for (int _index = 1; _index < 12; ++_index)
+    {
+        LocoPacket _packet;
+        _slot.set_fromHex(QString("%1").arg(_index, 2, 16, QChar('0')));
+        _packet.do_appendByte("BB"); // OP code
+        _packet.do_appendLocoByte(_slot);
+        _packet.do_appendByte("00");
+        _packet.do_genChecksum();
+        do_write(_packet);
     }
 }
 

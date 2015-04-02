@@ -335,7 +335,7 @@ QVector<QString> LocoPacket::get_DBopcodes ()
         }
     }
     QSqlQuery _query;
-    _query.prepare("SELECT opcode FROM opcodes;");
+    _query.prepare("SELECT * FROM opcodes;");
     if (!_query.exec())
     {
         qDebug() << _query.lastError();
@@ -344,7 +344,7 @@ QVector<QString> LocoPacket::get_DBopcodes ()
     }
     while (_query.next())
     {
-        _opcodes.append(_query.value(0).toString());
+        _opcodes.append(_query.value("opcode").toString());
     }
     return(_opcodes);
 }
@@ -361,7 +361,7 @@ QVector<QString> LocoPacket::get_DBnames ()
         }
     }
     QSqlQuery _query;
-    _query.prepare("SELECT name FROM opcodes;");
+    _query.prepare("SELECT * FROM opcodes;");
     if (!_query.exec())
     {
         qDebug() << _query.lastError();
@@ -370,7 +370,7 @@ QVector<QString> LocoPacket::get_DBnames ()
     }
     while (_query.next())
     {
-        _names.append(_query.value(0).toString());
+        _names.append(_query.value("name").toString());
     }
     return(_names);
 }

@@ -47,6 +47,7 @@ public slots:
     void do_read();
     QString parse(LocoPacket _packet);
     void run();
+    void do_scanTrains();
 
 protected:
     void readTimerStop();
@@ -83,7 +84,7 @@ private:
     QTimer * readTimer;
     LocoPacket * incomingPacket;
     LocoPacket * outgoingPacket;
-    bool debug;
+    bool * debug;
 
 };
 

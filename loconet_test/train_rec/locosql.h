@@ -38,6 +38,7 @@ public slots:
     void do_reqPacket();
     void do_reqTrain();
     void do_reqMacro();
+    void do_reqSwitch();
     void do_cycleReqs();
     int get_percentFromHex(QString _hex);
     QString get_hexFromPercent(int _percent);
@@ -48,6 +49,7 @@ signals:
     void DBopened();
     void DBclosed();
     void incomingRequest(LocoPacket _packet);
+    void scanTrains();
 
 protected:
     void reqTimerStop();
@@ -59,7 +61,8 @@ private:
     //int reqDelay;
     int * reqIndex;
     QTimer * reqTimer;
-    bool debug;
+    bool * debug;
+    bool * doDelete;
 
 };
 

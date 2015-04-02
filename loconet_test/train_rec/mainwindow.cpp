@@ -68,6 +68,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, &MainWindow::locoserial_open, locoserial, &LocoSerial::do_open);
     connect(this, &MainWindow::locoserial_write, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));
     connect(&threadSerial, &QThread::finished, locoserial, &QObject::deleteLater);
+    connect(locosql, &LocoSQL::scanTrains, locoserial, &LocoSerial::do_scanTrains);
     threadSerial.start();
     locoserial->run();
     threadSQL.start();
