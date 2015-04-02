@@ -13,6 +13,7 @@
 #include <QSerialPortInfo>
 #include <QByteArray>
 #include <QTimer>
+#include <QPointer>
 
 #include "locopacket.h"
 #include "locotrain.h"
@@ -80,8 +81,8 @@ protected:
 protected slots:
 
 private:
-    QSerialPort * usbBuffer;
-    QTimer * readTimer;
+    QPointer<QSerialPort> usbBuffer;
+    QPointer<QTimer> readTimer;
     LocoPacket * incomingPacket;
     LocoPacket * outgoingPacket;
     bool * debug;

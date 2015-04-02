@@ -5,15 +5,11 @@ LocoSerial::LocoSerial()
     debug = NULL;
     incomingPacket = NULL;
     outgoingPacket = NULL;
-    usbBuffer = NULL;
 }
 
 LocoSerial::~LocoSerial()
 {
-    usbBuffer->close();
-    readTimerStop();
-    delete usbBuffer;
-    delete readTimer;
+    do_close();
     delete incomingPacket;
     delete outgoingPacket;
     delete debug;
@@ -60,6 +56,10 @@ void LocoSerial::do_querySlot(LocoByte _slot)
 
 void LocoSerial::readTimerStart(int _msec)
 {
+    if (!readTimer) {
+        readTimerStop();
+        return;
+    }
     readTimer = new QTimer;
     connect(readTimer, SIGNAL(timeout()), this, SLOT(do_read()));
     readTimer->start(_msec);
@@ -67,18 +67,24 @@ void LocoSerial::readTimerStart(int _msec)
 
 void LocoSerial::readTimerStop()
 {
+    if (!readTimer) {
+        return;
+    }
     disconnect(readTimer, 0, 0, 0);
     readTimer->stop();
-    delete readTimer;
+    readTimer->deleteLater();
 }
 
 void LocoSerial::do_close()
 {
     readTimerStop();
+    if (!usbBuffer) {
+        return;
+    }
     disconnect(usbBuffer, 0, 0, 0);
     usbBuffer->close();
     emit serialClosed();
-    delete usbBuffer;
+    usbBuffer->deleteLater();
 }
 
 bool LocoSerial::do_open(QSerialPortInfo _port)

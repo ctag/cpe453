@@ -10,6 +10,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QTimer>
+#include <QPointer>
 
 #include "locobyte.h"
 #include "locoblock.h"
@@ -44,6 +45,7 @@ public slots:
     QString get_hexFromPercent(int _percent);
     QString get_hexFromInt(int _adr);
     void run();
+    //void reqTimerReset();
 
 signals:
     void DBopened();
@@ -60,7 +62,7 @@ private:
     QSqlQuery * mainQuery;
     //int reqDelay;
     int * reqIndex;
-    QTimer * reqTimer;
+    QPointer<QTimer> reqTimer;
     bool * debug;
     bool * doDelete;
 

@@ -11,9 +11,12 @@ LocoSQL::LocoSQL()
 
 LocoSQL::~LocoSQL()
 {
-    delete reqTimer;
-    mainDB->close();
-    delete mainDB;
+    reqTimerStop();
+    if (mainDB != NULL)
+    {
+        mainDB->close();
+        delete mainDB;
+    }
     delete mainQuery;
     delete debug;
     delete doDelete;
@@ -28,7 +31,7 @@ void LocoSQL::run()
     *mainQuery = QSqlQuery(*mainDB);
     reqIndex = new int;
     debug = new bool;
-    *debug = false;
+    *debug = true;
     doDelete = new bool;
     *doDelete = true;
 }
@@ -52,7 +55,7 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
     if (*doDelete) {
         do_clearAllTables();
     }
-    reqTimerStart(400);
+    reqTimerStart(4000);
 
     emit DBopened();
     return(true);
@@ -67,6 +70,10 @@ void LocoSQL::do_closeDB()
 
 void LocoSQL::reqTimerStart(int _msec)
 {
+    if (reqTimer)
+    {
+        return;
+    }
     reqTimer = new QTimer;
     connect(reqTimer, SIGNAL(timeout()), this, SLOT(do_cycleReqs()));
     reqTimer->start(_msec);
@@ -74,9 +81,12 @@ void LocoSQL::reqTimerStart(int _msec)
 
 void LocoSQL::reqTimerStop()
 {
+    if (!reqTimer) {
+        return;
+    }
     disconnect(reqTimer, 0, 0, 0);
     reqTimer->stop();
-    delete reqTimer;
+    reqTimer->deleteLater();
 }
 
 void LocoSQL::do_clearAllTables()
@@ -135,8 +145,6 @@ QString LocoSQL::get_hexFromInt(int _adr) {
 
 void LocoSQL::do_cycleReqs()
 {
-    do_reqMacro();
-    return;
     switch(*reqIndex)
     {
     case 0:
@@ -163,7 +171,7 @@ void LocoSQL::do_cycleReqs()
 
 void LocoSQL::do_reqMacro()
 {
-    /*if (*debug)*/ qDebug() << "Querying for macro requests.";
+    if (*debug) qDebug() << "Querying for macro requests.";
     if (!mainDB) {
         return;
     }
@@ -179,12 +187,12 @@ void LocoSQL::do_reqMacro()
         QString _macro = mainQuery->value("macro").toString();
         int _id = mainQuery->value("id").toInt();
         if (_macro == "SCAN_TRAINS") {
-            /*if (debug)*/ qDebug() << "Scanning for trains";
+            if (debug) qDebug() << "Scanning for trains";
             emit scanTrains();
         }
         if (*doDelete)
         {
-            /*if (debug)*/ qDebug() << "deleting macro id: " << _id;
+            if (debug) qDebug() << "deleting macro id: " << _id;
             mainQuery->prepare("DELETE FROM cpe453.req_macro WHERE id=:_id LIMIT 1;");
             mainQuery->bindValue(":_id", _id);
             mainQuery->exec();
@@ -235,7 +243,7 @@ void LocoSQL::do_reqSwitch()
 
 void LocoSQL::do_reqTrain()
 {
-    if (*debug) qDebug() << "Querying for throttle requests.";
+    if (*debug) qDebug() << "Querying for train requests.";
     if (!mainDB) {
         return;
     }
@@ -292,7 +300,7 @@ void LocoSQL::do_reqPacket()
         // open
         return;
     }
-    mainQuery->prepare("SELECT packet FROM cpe453.req_packet;");
+    mainQuery->prepare("SELECT * FROM cpe453.req_packet;");
     mainQuery->exec();
     while (mainQuery->next())
     {
