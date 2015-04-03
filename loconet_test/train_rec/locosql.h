@@ -34,6 +34,7 @@ public slots:
     void do_closeDB();
     void do_updateBlock(LocoBlock _block);
     void do_updateTrain(LocoTrain _train);
+    void do_updateSwitch(int _adr, bool _state);
     void do_clearTable(QString _table);
     void do_clearAllTables();
     void do_reqPacket();
@@ -51,7 +52,11 @@ signals:
     void DBopened();
     void DBclosed();
     void incomingRequest(LocoPacket _packet);
-    void scanTrains();
+    void slotScan(LocoByte _slot);
+    void slotDispatch(LocoByte _slot);
+    void slotClear(LocoByte _slot);
+    void slotReq(LocoByte _slot);
+    void slotUse(LocoByte _slot);
     void trackReset();
     void trackOn();
     void trackOff();

@@ -16,8 +16,8 @@ LocoSQL::~LocoSQL()
     {
         mainDB->close();
         delete mainDB;
+        delete mainQuery;
     }
-    delete mainQuery;
     delete debug;
     delete doDelete;
 }
@@ -27,8 +27,6 @@ void LocoSQL::run()
     qDebug() << "Initializing SQL thread.";
     mainDB = new QSqlDatabase;
     *mainDB = QSqlDatabase::addDatabase("QMYSQL", "main");
-    mainQuery = new QSqlQuery;
-    *mainQuery = QSqlQuery(*mainDB);
     reqIndex = new int;
     debug = new bool;
     *debug = false;
@@ -38,6 +36,9 @@ void LocoSQL::run()
 
 bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString username, QString password)
 {
+    mainQuery = new QSqlQuery;
+    *mainQuery = QSqlQuery(*mainDB);
+
     mainDB->setHostName(hostname);
     mainDB->setPort(port);
     mainDB->setDatabaseName(database);
@@ -55,7 +56,7 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
     if (*doDelete) {
         do_clearAllTables();
     }
-    reqTimerStart(300);
+    reqTimerStart(150);
 
     emit DBopened();
     return(true);
@@ -65,6 +66,7 @@ void LocoSQL::do_closeDB()
 {
     reqTimerStop();
     mainDB->close();
+    delete mainQuery;
     emit DBclosed();
 }
 
@@ -182,13 +184,36 @@ void LocoSQL::do_reqMacro()
     }
     mainQuery->prepare("SELECT * FROM cpe453.req_macro;");
     mainQuery->exec();
-    while (mainQuery->next())
+    if (mainQuery->next())
     {
         QString _macro = mainQuery->value("macro").toString();
         int _id = mainQuery->value("id").toInt();
-        if (_macro == "SCAN_TRAINS") {
-            if (debug) qDebug() << "Scanning for trains";
-            emit scanTrains();
+        if (_macro == "SLOT_SCAN") { // arg1 = slot #
+            if (debug) qDebug() << "Scanning slot.";
+            LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
+            emit slotScan(_arg1);
+        } else if (_macro == "SLOT_SCAN_ALL") { // no args
+            if (debug) qDebug() << "Not Implemented";
+        } else if (_macro == "SLOT_DISPATCH") { // arg1 = slot #
+            if (debug) qDebug() << "Dispatching slot.";
+            LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
+            emit slotDispatch(_arg1);
+        } else if (_macro == "SLOT_DISPATCH_ALL") {
+            if (debug) qDebug() << "Not Implemented";
+        } else if (_macro == "SLOT_CLEAR") { // arg1 = slot
+            if (debug) qDebug() << "Calling for track reset.";
+            LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
+            emit slotClear(_arg1);
+        } else if (_macro == "SLOT_CLEAR_ALL") {
+            if (debug) qDebug() << "Not Implemented";
+        } else if (_macro == "SLOT_REQ") { // arg1 = train
+            if (debug) qDebug() << "Requesting slot";
+            LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
+            emit slotReq(_arg1);
+        } else if (_macro == "SLOT_USE") { // arg1 = slot
+            if (debug) qDebug() << "Setting slot to IN_USE.";
+            LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
+            emit slotUse(_arg1);
         } else if (_macro == "TRACK_RESET") {
             if (debug) qDebug() << "Calling for track reset.";
             emit trackReset();
@@ -222,7 +247,7 @@ void LocoSQL::do_reqSwitch()
     }
     mainQuery->prepare("SELECT * FROM cpe453.req_switch;");
     mainQuery->exec();
-    while (mainQuery->next())
+    if (mainQuery->next())
     {
         LocoPacket _packet;
         LocoByte _command;
@@ -263,7 +288,7 @@ void LocoSQL::do_reqTrain()
     }
     mainQuery->prepare("SELECT * FROM cpe453.req_train;");
     mainQuery->exec();
-    while (mainQuery->next())
+    if (mainQuery->next())
     {
         LocoByte _command;
         LocoPacket _speedPacket;
@@ -311,7 +336,7 @@ void LocoSQL::do_reqPacket()
     }
     mainQuery->prepare("SELECT * FROM cpe453.req_packet;");
     mainQuery->exec();
-    while (mainQuery->next())
+    if (mainQuery->next())
     {
         LocoPacket _packet(mainQuery->value("packet").toString());
         int _id = mainQuery->value("id").toInt();
@@ -346,12 +371,12 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
         mainQuery->prepare("INSERT INTO cpe453.track_ds (ds_id, status) "
                         "VALUES (:id, :status) "
                         "ON DUPLICATE KEY "
-                        "UPDATE ds_id=:id, status=:status;");
+                        "UPDATE status=:status;");
         QString _id = QString::fromLatin1(_block.get_adr());
-        bool _status = _block.get_occupied();
+        int _status = _block.get_occupied();
         mainQuery->bindValue(":id", _id);
         mainQuery->bindValue(":status", _status);
-        if (*debug) qDebug() << "Updating SQL block: ";
+        if (*debug) qDebug() << "Updating SQL block: " << _id << ":" << _status;
         mainQuery->exec();
     }
 }
@@ -370,17 +395,39 @@ void LocoSQL::do_updateTrain (LocoTrain _train)
         QString _slot = _train.get_slot().get_hex();
         int _speed = get_percentFromHex(_train.get_speed().get_hex());
         int _dir = _train.get_direction()?1:0;
+        QString _state = _train.get_state();
 
-        mainQuery->prepare("INSERT INTO cpe453.track_train (slot, adr, speed, dir) "
-                          "VALUES (:slot, :adr, :speed, :dir) "
+        mainQuery->prepare("INSERT INTO cpe453.track_train (slot, adr, speed, dir, state) "
+                          "VALUES (:slot, :adr, :speed, :dir, :state) "
                           "ON DUPLICATE KEY "
-                          "UPDATE adr=:adr, speed=:speed, dir=:dir;");
+                          "UPDATE adr=:adr, speed=:speed, dir=:dir, state=:state;");
         mainQuery->bindValue(":slot", _slot);
         mainQuery->bindValue(":adr", _adr);
         mainQuery->bindValue(":speed", _speed);
         mainQuery->bindValue(":dir", _dir);
-        /*if (*debug)*/ qDebug() << "Updating train SQL." << _slot << ":" << _speed;
+        mainQuery->bindValue(":state", _state);
+        if (*debug) qDebug() << "Updating train SQL." << _slot << ":" << _speed;
         mainQuery->exec();
+    }
+}
+
+void LocoSQL::do_updateSwitch(int _adr, bool _state)
+{
+    if (!mainDB) {
+        return;
+    }
+    if (mainDB->open()) {
+        //QString _address = QString::number(_adr);
+
+        mainQuery->prepare("INSERT INTO cpe453.track_switch (adr, state) "
+                          "VALUES (:adr, :state) "
+                          "ON DUPLICATE KEY "
+                          "UPDATE state=:state;");
+        mainQuery->bindValue(":adr", _adr);
+        mainQuery->bindValue(":state", _state);
+        if (*debug) qDebug() << "Updating switch SQL." << _adr << ":" << _state;
+        mainQuery->exec();
+        //
     }
 }
 

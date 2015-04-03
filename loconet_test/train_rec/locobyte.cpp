@@ -320,7 +320,6 @@ QBitArray LocoByte::get_qBitArray()
 int LocoByte::get_decimal()
 {
     int _result = 0;
-    qDebug() << get_binary();
     for(int b=0; b<8/*byte.count()*/; ++b)
     {
         _result = (_result + ((byte[b]?1:0)<<(7-b)));

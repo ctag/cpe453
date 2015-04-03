@@ -64,5 +64,5 @@ bool LocoBlock::get_aux ()
 
 bool LocoBlock::get_occupied ()
 {
-    return(occupied);
+    return(occupied?1:0);
 }

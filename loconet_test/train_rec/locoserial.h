@@ -36,25 +36,28 @@ signals:
     void droppedPacket();
     void trainUpdated(LocoTrain);
     void blockUpdated(LocoBlock);
+    void switchUpdated(int _adr, bool _state);
     void serialOpened();
     void serialClosed();
     void delayWrite(QByteArray _bytes);
 
 public slots:
-    void do_write(LocoPacket _packet);
-    void do_write(QByteArray _bytes);
+    void do_writePacket(LocoPacket _packet);
+    void do_writeBytes(QByteArray _bytes);
     void do_querySlot(LocoByte _slot);
     void do_close();
     bool do_open(QSerialPortInfo _port);
     void do_read();
     QString parse(LocoPacket _packet);
     void run();
-    void do_scanTrains();
+    void do_slotScan(LocoByte _slot);
+    void do_slotDispatch(LocoByte _slot);
+    void do_slotClear(LocoByte _slot);
+    void do_slotReq(LocoByte _slot);
+    void do_slotUse(LocoByte _slot);
     void do_trackReset();
     void do_trackOn();
     void do_trackOff();
-    //void do_waitForReply();
-    //void do_waitForReplyDone();
 
 protected:
     void readTimerStop();

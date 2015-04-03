@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //connect(ui->pushButton_sendPacket, &QPushButton::clicked, locosql, &LocoSQL::do_findThrottleReq);
     connect(locoserial, &LocoSerial::receivedPacket, this, &MainWindow::do_displayPacket); // QT-5 style works
     connect(&locoudp, &LocoUDP::incomingRequest, this, &MainWindow::do_displayPacket);
-    connect(locosql, &LocoSQL::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));;
+    connect(locosql, &LocoSQL::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_writePacket));;
     //connect(locoserial, locoserial::, this, &MainWindow::do_printDescriptions);
     connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(do_connectDB()));
     connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
@@ -63,16 +63,21 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(locoserial, &LocoSerial::serialClosed, this, &MainWindow::handle_serialClosed);
     connect(locoserial, &LocoSerial::blockUpdated, locosql, &LocoSQL::do_updateBlock);
     connect(locoserial, &LocoSerial::trainUpdated, locosql, &LocoSQL::do_updateTrain);
-    connect(&locoudp, &LocoUDP::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));
+    connect(&locoudp, &LocoUDP::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_writePacket));
     //connect(&locoudp, &LocoUDP::incomingRequest, &locoudp, &LocoUDP::do_writeDatagram);
     connect(this, &MainWindow::locoserial_open, locoserial, &LocoSerial::do_open);
-    connect(this, &MainWindow::locoserial_write, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));
+    connect(this, &MainWindow::locoserial_write, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_writePacket));
     connect(&threadSerial, &QThread::finished, locoserial, &QObject::deleteLater);
     // Macros
-    connect(locosql, &LocoSQL::scanTrains, locoserial, &LocoSerial::do_scanTrains);
+    connect(locosql, &LocoSQL::slotScan, locoserial, &LocoSerial::do_slotScan);
+    connect(locosql, &LocoSQL::slotDispatch, locoserial, &LocoSerial::do_slotDispatch);
+    connect(locosql, &LocoSQL::slotReq, locoserial, &LocoSerial::do_slotReq);
+    connect(locosql, &LocoSQL::slotUse, locoserial, &LocoSerial::do_slotUse);
+    connect(locosql, &LocoSQL::slotClear, locoserial, &LocoSerial::do_slotClear);
     connect(locosql, &LocoSQL::trackReset, locoserial, &LocoSerial::do_trackReset);
     connect(locosql, &LocoSQL::trackOn, locoserial, &LocoSerial::do_trackOn);
     connect(locosql, &LocoSQL::trackOff, locoserial, &LocoSerial::do_trackOff);
+    // Kickstart threads
     threadSerial.start();
     locoserial->run();
     threadSQL.start();

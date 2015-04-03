@@ -3,10 +3,8 @@
 LocoSerial::LocoSerial()
 {
     debug = NULL;
-    //waitForReply = NULL;
     incomingPacket = NULL;
     outgoingPacket = NULL;
-    //outgoingQueue = NULL;
 }
 
 LocoSerial::~LocoSerial()
@@ -23,34 +21,17 @@ void LocoSerial::run()
     outgoingPacket = new LocoPacket;
     incomingPacket->clear();
     outgoingPacket->clear();
-    //outgoingQueue = new QVector<LocoPacket>;
-    //outgoingQueue->clear();
     debug = new bool;
     *debug = false;
-    //waitForReply = new int;
-    //*waitForReply = 0;
-    //connect(this, &LocoSerial::delayWrite, this, static_cast<void (LocoSerial::*)(QByteArray)>(&LocoSerial::do_write));
-    //static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_write));
 }
 
-void LocoSerial::do_write(LocoPacket _packet)
+void LocoSerial::do_writePacket(LocoPacket _packet)
 {
-    /*
-    if (*waitForReply > 0)
-    {
-        outgoingQueue->append(_packet);
-        return; // will write next time
-    }*/
     _packet.do_genChecksum();
-    do_write(_packet.get_QByteArray());
-    /*if (_packet.is_followOnMsg())
-    {
-        do_waitForReply();
-        do_write(_packet.get_QByteArray());
-    }*/
+    do_writeBytes(_packet.get_QByteArray());
 }
 
-void LocoSerial::do_write(QByteArray _bytes)
+void LocoSerial::do_writeBytes(QByteArray _bytes)
 {
     if (!usbBuffer) {
         return;
@@ -66,27 +47,11 @@ void LocoSerial::do_write(QByteArray _bytes)
     parse(*outgoingPacket);
 }
 
-/*
-void LocoSerial::do_waitForReply()
-{
-    ++*waitForReply;
-    QTimer::singleShot(20, this, SLOT(do_waitForReplyDone()));
-}
-
-void LocoSerial::do_waitForReplyDone()
-{
-    --*waitForReply;
-    if (*waitForReply < 0) {
-        *waitForReply = 0;
-    }
-}
-*/
-
 void LocoSerial::do_querySlot(LocoByte _slot)
 {
     QString _queryText = "BB" + _slot.get_hex() + "00";
     LocoPacket _querySlot(_queryText);
-    do_write(_querySlot); // the write() method will generate a checksum for us
+    do_writePacket(_querySlot); // the write() method will generate a checksum for us
 }
 
 void LocoSerial::readTimerStart(int _msec)
@@ -125,8 +90,6 @@ void LocoSerial::do_close()
 bool LocoSerial::do_open(QSerialPortInfo _port)
 {
     usbBuffer = new QSerialPort;
-    //usbBuffer->close(); // Make sure to close any previous connection
-
     usbBuffer->setPort(_port);
     usbBuffer->setBaudRate(57600);
     usbBuffer->setFlowControl(QSerialPort::HardwareControl);
@@ -199,26 +162,24 @@ void LocoSerial::do_read()
             continue;
         }
     }
-    /*
-    if (!outgoingQueue->isEmpty())
-    {
-        LocoPacket _fromQueue = outgoingQueue->takeFirst();
-        do_write(_fromQueue);
-    }*/
 }
+
+/**
+ * MACROS
+ */
 
 void LocoSerial::do_trackOn()
 {
     LocoPacket _packet;
     _packet.set_allFromHex("837C");
-    do_write(_packet);
+    do_writePacket(_packet);
 }
 
 void LocoSerial::do_trackOff()
 {
     LocoPacket _packet;
     _packet.set_allFromHex("827D");
-    do_write(_packet);
+    do_writePacket(_packet);
 }
 
 void LocoSerial::do_trackReset()
@@ -227,23 +188,67 @@ void LocoSerial::do_trackReset()
     QTimer::singleShot(10000, this, SLOT(do_trackOn()));
 }
 
-void LocoSerial::do_scanTrains()
+void LocoSerial::do_slotScan(LocoByte _slot)
 {
-    LocoByte _slot;
-    int _index = 2;
-    //for (int _index = 1; _index < 12; ++_index)
-    //{
-        LocoPacket _packet;
-        _slot.set_fromHex(QString("%1").arg(_index, 2, 16, QChar('0')));
-        _packet.do_appendByte("BB"); // OP code
-        _packet.do_appendLocoByte(_slot);
-        _packet.do_appendByte("00");
-        _packet.do_genChecksum();
-        do_write(_packet);
-    //}
+    if (_slot.get_decimal() < 1 || _slot.get_decimal() > 119)
+    {
+        // Invalid slot #
+        return;
+    }
+    LocoPacket _packet;
+    //_slot.set_fromHex(QString("%1").arg(_index, 2, 16, QChar('0')));
+    _packet.do_appendByte("BB"); // OP code
+    _packet.do_appendLocoByte(_slot);
+    _packet.do_appendByte("00");
+    _packet.do_genChecksum();
+    do_writePacket(_packet);
 }
 
-/*
+void LocoSerial::do_slotClear(LocoByte _slot)
+{
+    LocoPacket _packet;
+    _packet.do_appendByte("B5"); // OP code
+    _packet.do_appendLocoByte(_slot);
+    _packet.do_appendByte("03");
+    _packet.do_genChecksum();
+    do_writePacket(_packet);
+    //QTimer::singleShot(20, this, SLOT(do_slotScan(_slot)));
+    //do_slotScan(_slot);
+}
+
+void LocoSerial::do_slotDispatch(LocoByte _slot)
+{
+    LocoPacket _packet;
+    _packet.do_appendByte("BA"); // OP code
+    _packet.do_appendLocoByte(_slot);
+    _packet.do_appendByte("00");
+    _packet.do_genChecksum();
+    do_writePacket(_packet);
+    //QTimer::singleShot(20, this, SLOT(do_slotScan(_slot)));
+    //do_slotScan(_slot);
+}
+
+void LocoSerial::do_slotReq(LocoByte _adr)
+{
+    LocoPacket _packet;
+    _packet.do_appendByte("BF"); // OP code
+    _packet.do_appendByte("00");
+    _packet.do_appendLocoByte(_adr);
+    _packet.do_genChecksum();
+    do_writePacket(_packet);
+}
+
+void LocoSerial::do_slotUse(LocoByte _slot)
+{
+    LocoPacket _packet;
+    _packet.do_appendByte("BA"); // OP code
+    _packet.do_appendLocoByte(_slot);
+    _packet.do_appendLocoByte(_slot);
+    _packet.do_genChecksum();
+    do_writePacket(_packet);
+}
+
+/**
  * Packet related functions
  */
 
@@ -314,70 +319,31 @@ QString LocoSerial::parse_E7 (LocoPacket _packet)
     QString _description = "E7:";
     // Parse packet into usable variables
     bool _busy = _packet.get_locobyte(3).get_oneBit(2);
-    //bool _active = _packet.get_locobyte(3).get_oneBit(3);
+    bool _active = _packet.get_locobyte(3).get_oneBit(3);
     LocoByte _slot = _packet.get_locobyte(2);
     LocoByte _adr = _packet.get_locobyte(4);
     LocoByte _speed = _packet.get_locobyte(5);
     bool _dir = _packet.get_locobyte(6).get_oneBit(2);
 
-    if (!_busy) // There is no train in the slot
-    {
-        _description.append(" Slot " + _slot.get_hex() + " is inactive.");
-        // Find trains assigned to the slot and delete them
-        /*
-        for (int _index = 0; _index < trains.count(LocoPacket _packet); ++_index)
-        {
-            if (trains[_index].get_slot(LocoPacket _packet) == _slot) {
-                trains.remove(_index);
-            }
-        }
-        */
-    } else { // Past here we know a 'train' is in the slot
-        LocoTrain _newTrain;
-        _newTrain.set_adr(_adr);
-        _newTrain.set_reverse(_dir);
-        _newTrain.set_slot(_slot);
-        _newTrain.set_speed(_speed);
-
-        /*
-        if (_enable)
-        {
-            bool _existingTrain = false;
-            for (int _index = 0; _index < trains.count(LocoPacket _packet); ++_index)
-            {
-                if (_newTrain == trains[_index])
-                {
-                    _existingTrain = true;
-                    trains[_index] = _newTrain;
-                    emit trainUpdated(trains[_index]);
-                    _description.append(" Train["+QString::number(_index)+"] adr[" + trains[_index].get_adr(LocoPacket _packet).get_hex(LocoPacket _packet) + "]");
-                    _description.append(" has been updated.");
-                }
-            }
-            if (!_existingTrain)
-            {
-                trains.append(_newTrain);
-                emit trainUpdated(trains.last(LocoPacket _packet));
-                _description.append(" Train["+QString::number(trains.count(LocoPacket _packet)-1)+"] adr[" + trains.last(LocoPacket _packet).get_adr(LocoPacket _packet).get_hex(LocoPacket _packet) + "]");
-                _description.append(" has been added.");
-            }
-        }
-        */
-        emit trainUpdated(_newTrain);
-        _description.append(" Speed: " + _speed.get_hex() + " Slot: " + _slot.get_hex() + " Direction: " + QString::number(_dir));
+    LocoTrain _newTrain;
+    _newTrain.set_adr(_adr);
+    _newTrain.set_reverse(_dir);
+    _newTrain.set_slot(_slot);
+    _newTrain.set_speed(_speed);
+    QString _state = "NULL";
+    if (_busy && _active) {
+        _state = "IN_USE";
+    } else if (_busy && !_active) {
+        _state = "IDLE";
+    } else if (!_busy && _active) {
+        _state = "COMMON";
+    } else {
+        _state = "FREE";
     }
+    _newTrain.set_state(_state);
 
-    // query next train
-    if (_slot.get_decimal() < 12)
-    {
-        LocoPacket _packet;
-        _slot.set_fromHex(QString("%1").arg((_slot.get_decimal()+1), 2, 16, QChar('0')));
-        _packet.do_appendByte("BB"); // OP code
-        _packet.do_appendLocoByte(_slot);
-        _packet.do_appendByte("00");
-        _packet.do_genChecksum();
-        do_write(_packet);
-    }
+    emit trainUpdated(_newTrain);
+    _description.append(" Speed: " + _speed.get_hex() + " Slot: " + _slot.get_hex() + " Direction: " + QString::number(_dir)+" State: "+_state);
 
     if (_description == "E7:") {
         _description.append(" No action taken?");
@@ -496,7 +462,16 @@ QString LocoSerial::parse_B1 (LocoPacket _packet) {
 }
 
 QString LocoSerial::parse_B0 (LocoPacket _packet) {
-    QString _description = "B0: Request switch function.";
+    QString _description = "B0:";
+    LocoByte _arg1 = _packet.get_locobyte(1);
+    LocoByte _arg2 = _packet.get_locobyte(2);
+    bool _state = _arg2.get_qBitArray()[2];
+
+    QByteArray _adr;
+    _adr.append(_arg2.get_hex().mid(1,1)); // Load MS byte of address
+    _adr.append(_arg1.get_hex()); // Load LS 2 bytes of address
+
+    emit switchUpdated(_adr.toInt(0, 10), _state);
     return(_description);
 }
 
