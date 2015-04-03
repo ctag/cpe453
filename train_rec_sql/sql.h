@@ -29,16 +29,17 @@ public slots:
     void do_closeDB();
     void do_clearTable(QString _table);
     void do_clearAllTables();
-    //void do_reqTrain(int _slot, int _speed, int _dir);
+    void do_reqTrain(int _slot, int _speed, int _dir);
+    void do_listTrains();
+    void do_listBlocks();
     /*void do_reqMacro(QString _macro);
-    void do_reqMacro1(QString _macro, QString _arg1);
+    void do_reqMacro1(QString _macro, QString _arg1);*/
     void do_reqSwitch(int _adr, int _state);
-    void do_incomingRequest(LocoPacket _packet);
-    void do_slotScan(LocoByte _slot);
-    void do_slotDispatch(LocoByte _slot);
-    void do_slotClear(LocoByte _slot);
-    void do_slotReq(LocoByte _slot);
-    void do_slotUse(LocoByte _slot);*/
+    void do_slotScan(int _slot);
+    void do_slotDispatch(int _slot);
+    void do_slotClear(int _slot);
+    void do_slotReq(int _train);
+    void do_slotUse(int _slot);
     void do_trackReset();
     void do_trackOn();
     void do_trackOff();
@@ -47,6 +48,8 @@ public slots:
 signals:
     void DBopened();
     void DBclosed();
+    void trainList(QVector<int> _adrs, QVector<int> _slots, QVector<int> _speeds, QVector<int> _dirs, QVector<QString> _states);
+    void blockList(QVector<int> _ids, QVector<int> _states);
 
 protected:
     void reqTimerStop();

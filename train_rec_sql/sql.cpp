@@ -2,6 +2,10 @@
 
 const QString schema = "`cpe453`";
 const QString macro = "`req_macro`";
+const QString reqTrain = "`req_train`";
+const QString trackTrain = "`track_train`";
+const QString trackBlock = "`track_ds`";
+const QString reqSwitch = "`req_switch`";
 
 SQL::SQL()
 {
@@ -107,6 +111,174 @@ void SQL::do_trackOff()
                        "VALUES ('TRACK_OFF');");
     mainQuery->exec();
 }
+
+void SQL::do_slotReq(int _train)
+{
+    if (*debug) qDebug() << "Requesting slot for train" << _train;
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+                       "VALUES ('SLOT_REQ', '"+QString::number(_train)+"');");
+    mainQuery->exec();
+}
+
+void SQL::do_slotUse(int _slot)
+{
+    if (*debug) qDebug() << "Requesting slot for train " << _slot;
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+                       "VALUES ('SLOT_USE', '"+QString::number(_slot)+"');");
+    mainQuery->exec();
+}
+
+void SQL::do_slotScan(int _slot)
+{
+    if (*debug) qDebug() << "Requesting information about slot " << _slot;
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+                       "VALUES ('SLOT_SCAN', '"+QString::number(_slot)+"');");
+    mainQuery->exec();
+}
+
+void SQL::do_slotClear(int _slot)
+{
+    if (*debug) qDebug() << "Requesting slot be cleared " << _slot;
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+                       "VALUES ('SLOT_CLEAR', '"+QString::number(_slot)+"');");
+    mainQuery->exec();
+}
+
+void SQL::do_slotDispatch(int _slot)
+{
+    if (*debug) qDebug() << "Requesting dispatch of slot " << _slot;
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+                       "VALUES ('SLOT_DISPATCH', '"+QString::number(_slot)+"');");
+    mainQuery->exec();
+}
+
+void SQL::do_reqTrain(int _slot, int _speed, int _dir)
+{
+    if (*debug) qDebug() << "Requesting dispatch of slot " << _slot << _speed << _dir;
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqTrain+" (`slot`, `speed`, `dir`)"
+                       "VALUES (:slot, :speed, :dir);");
+    mainQuery->bindValue(":slot", _slot);
+    mainQuery->bindValue(":speed", _speed);
+    mainQuery->bindValue(":dir", _dir);
+    mainQuery->exec();
+}
+
+void SQL::do_listTrains()
+{
+    if (*debug) qDebug() << "Requesting list of all trains.";
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("SELECT * FROM "+schema+"."+trackTrain+";");
+    mainQuery->exec();
+    QVector<int> _adrs, _slots, _speeds, _dirs;
+    QVector<QString> _states;
+    while (mainQuery->next())
+    {
+        qDebug() << "train found in SQL: " << mainQuery->value("slot").toInt();
+        _adrs.append(mainQuery->value("adr").toInt());
+        _slots.append(mainQuery->value("slot").toInt());
+        _speeds.append(mainQuery->value("speed").toInt());
+        _dirs.append(mainQuery->value("dir").toInt());
+        _states.append(mainQuery->value("state").toString());
+    }
+    emit trainList(_adrs, _slots, _speeds, _dirs, _states);
+}
+
+void SQL::do_listBlocks()
+{
+    if (*debug) qDebug() << "Requesting list of all blocks.";
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("SELECT * FROM "+schema+"."+trackBlock+" WHERE status = 1;");
+    mainQuery->exec();
+    QVector<int> _ids, _positions;
+    while (mainQuery->next())
+    {
+        qDebug() << "block found in SQL: " << mainQuery->value("ds_id").toInt();
+        _ids.append(mainQuery->value("ds_id").toInt());
+        _positions.append(mainQuery->value("status").toInt());
+    }
+    emit blockList(_ids, _positions);
+}
+
+void SQL::do_reqSwitch(int _adr, int _state)
+{
+    if (*debug) qDebug() << "Requesting new state for switch " << _adr;
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqSwitch+" (`id`, `position`)"
+                       "VALUES (:adr, :state);");
+    mainQuery->bindValue(":adr", _adr);
+    mainQuery->bindValue(":state", _state);
+    mainQuery->exec();
+}
+
 
 /*
 void SQL::reqTimerStart(int _msec)

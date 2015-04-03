@@ -42,6 +42,15 @@ public slots:
     void handle_DBopened();
     void handle_DBclosed();
     void handle_setTrain();
+    void handle_slotReq();
+    void handle_slotUse();
+    void handle_slotClear();
+    void handle_slotDispatch();
+    void handle_slotScan();
+    void handle_reqTrain();
+    void handle_reqSwitch();
+    void handle_listTrains(QVector<int> _adrs, QVector<int> _slots, QVector<int> _speeds, QVector<int> _dirs, QVector<QString> _states);
+    void handle_listBlocks(QVector<int> _ids, QVector<int> _states);
 
 signals:
 
