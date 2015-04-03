@@ -41,6 +41,7 @@ public slots:
 
     void handle_DBopened();
     void handle_DBclosed();
+    void handle_setTrain();
 
 signals:
 

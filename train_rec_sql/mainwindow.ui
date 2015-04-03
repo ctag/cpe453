@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -262,6 +262,103 @@
        <attribute name="title">
         <string>Trains</string>
        </attribute>
+       <widget class="QPushButton" name="pushButton_trackOn">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>30</y>
+          <width>81</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Track On</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_trackOff">
+        <property name="geometry">
+         <rect>
+          <x>130</x>
+          <y>30</y>
+          <width>81</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Track Off</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_trackReset">
+        <property name="geometry">
+         <rect>
+          <x>230</x>
+          <y>30</y>
+          <width>81</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Track Reset</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBox_slotNum">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>100</y>
+          <width>48</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+        <property name="maximum">
+         <number>119</number>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBox_setTrainSpeed">
+        <property name="geometry">
+         <rect>
+          <x>120</x>
+          <y>100</y>
+          <width>48</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="minimum">
+         <number>0</number>
+        </property>
+        <property name="maximum">
+         <number>100</number>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_setTrainSpeed">
+        <property name="geometry">
+         <rect>
+          <x>310</x>
+          <y>100</y>
+          <width>121</width>
+          <height>22</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Set Train Speed</string>
+        </property>
+       </widget>
+       <widget class="QSpinBox" name="spinBox_trainDir">
+        <property name="geometry">
+         <rect>
+          <x>210</x>
+          <y>100</y>
+          <width>48</width>
+          <height>23</height>
+         </rect>
+        </property>
+        <property name="maximum">
+         <number>1</number>
+        </property>
+       </widget>
       </widget>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">

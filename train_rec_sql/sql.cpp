@@ -1,7 +1,7 @@
 #include "sql.h"
 
-#define SCHEMA cpe453
-#define MACRO req_macro
+const QString schema = "`cpe453`";
+const QString macro = "`req_macro`";
 
 SQL::SQL()
 {
@@ -27,7 +27,7 @@ void SQL::do_run()
     mainDB = new QSqlDatabase;
     *mainDB = QSqlDatabase::addDatabase("QMYSQL", "main");
     debug = new bool;
-    *debug = false;
+    *debug = true;
 }
 
 bool SQL::do_openDB(QString hostname, int port, QString database, QString username, QString password)
@@ -62,7 +62,50 @@ void SQL::do_closeDB()
 
 void SQL::do_trackReset()
 {
-    //
+    if (*debug) qDebug() << "Requesting track reset.";
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`)"
+                       "VALUES ('TRACK_RESET');");
+    mainQuery->exec();
+}
+
+void SQL::do_trackOn()
+{
+    if (*debug) qDebug() << "Requesting track On.";
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`)"
+                       "VALUES ('TRACK_ON');");
+    mainQuery->exec();
+}
+
+void SQL::do_trackOff()
+{
+    if (*debug) qDebug() << "Requesting track off.";
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        // open
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`)"
+                       "VALUES ('TRACK_OFF');");
+    mainQuery->exec();
 }
 
 /*

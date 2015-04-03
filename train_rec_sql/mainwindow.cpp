@@ -40,6 +40,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
     connect(locosql, &SQL::DBopened, this, &MainWindow::handle_DBopened);
     connect(locosql, &SQL::DBclosed, this, &MainWindow::handle_DBclosed);
+    connect(ui->pushButton_trackReset, SIGNAL(clicked()), locosql, SLOT(do_trackReset()));
+    connect(ui->pushButton_trackOn, SIGNAL(clicked()), locosql, SLOT(do_trackOn()));
+    connect(ui->pushButton_trackOff, SIGNAL(clicked()), locosql, SLOT(do_trackOff()));
     // Kickstart thread
     threadSQL.start();
     locosql->do_run();
@@ -91,6 +94,10 @@ void MainWindow::do_disconnectDB()
     locosql->do_closeDB();
 }
 
+void MainWindow::handle_setTrain()
+{
+    //
+}
 
 
 

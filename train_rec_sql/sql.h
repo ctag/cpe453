@@ -40,8 +40,8 @@ public slots:
     void do_slotReq(LocoByte _slot);
     void do_slotUse(LocoByte _slot);*/
     void do_trackReset();
-    //void do_trackOn();
-    //void do_trackOff();
+    void do_trackOn();
+    void do_trackOff();
     void do_run();
 
 signals:
