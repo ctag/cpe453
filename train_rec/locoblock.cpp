@@ -21,6 +21,12 @@ LocoBlock::LocoBlock (int _bdl16x, int _ds, bool _aux, bool _occupied)
     occupied = _occupied;
 }
 
+LocoBlock::LocoBlock (QString _hex, bool _aux, bool _occupied)
+{
+    set_adr(_hex, _aux);
+    occupied = _occupied;
+}
+
 LocoBlock::~LocoBlock ()
 {
 
@@ -46,9 +52,20 @@ void LocoBlock::set_adr (QByteArray _adr)
 void LocoBlock::set_adr(QString _hex, bool _aux)
 {
     aux = _aux;
-    int _decimalAdr = (_hex.toInt(0, 16)*2)+(aux?1:0); // TODO: Check aux vs 1
+    int _decimalAdr;
+    if (aux)
+    {
+        _decimalAdr = (_hex.toInt(0, 16)+1)*2;
+    } else {
+        _decimalAdr = (_hex.toInt(0, 16)*2)+1;
+    }
     ds = (_decimalAdr%16);
+    if (ds == 0)
+    {
+        ds = 16;
+    }
     bdl16x = ceil(_decimalAdr/16.0);
+    qDebug() << aux << ds << bdl16x;
 }
 
 void LocoBlock::set_adr(int _bdl16x, int _ds, bool _aux)

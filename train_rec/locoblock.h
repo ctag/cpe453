@@ -19,6 +19,7 @@ class LocoBlock
 public:
     LocoBlock();
     LocoBlock(int _bdl16x, int _ds, bool _aux, bool _occupied);
+    LocoBlock(QString _hex, bool _aux, bool _occupied);
     ~LocoBlock();
     bool operator==(LocoBlock _arg);
     //void set_name(QString _name);

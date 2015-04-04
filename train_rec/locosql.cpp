@@ -372,8 +372,7 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
                         "VALUES (:id, :status) "
                         "ON DUPLICATE KEY "
                         "UPDATE status=:status;");
-        // FIX THIS
-        QString _id = "00"; //QString::fromLatin1(_block.get_adr());
+        QString _id = QString::number(_block.get_board())+"-"+QString::number(_block.get_ds());
         int _status = _block.get_occupied();
         mainQuery->bindValue(":id", _id);
         mainQuery->bindValue(":status", _status);

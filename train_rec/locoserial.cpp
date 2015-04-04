@@ -23,9 +23,6 @@ void LocoSerial::run()
     outgoingPacket->clear();
     debug = new bool;
     *debug = false;
-    LocoPacket _pk;
-    _pk.set_allFromHex("B21B481E");
-    parse_B2(_pk);
 }
 
 void LocoSerial::do_writePacket(LocoPacket _packet)
@@ -447,61 +444,34 @@ QString LocoSerial::parse_B2 (LocoPacket _packet)
     bool _aux = _arg2.get_qBitArray()[2];
     bool _occupied = _arg2.get_qBitArray()[3];
 
-    QBitArray _adr = QBitArray(16, 0);
-    QBitArray _adr1 = QBitArray(4, 0);
-    qDebug() << _adr;
-    //_adr.resize(16);
+    LocoByte _adr1 = QBitArray(8, 0);
+    LocoByte _adr2 = QBitArray(8, 0);
     QBitArray _arg1Bits = _arg1.get_qBitArray();
     QBitArray _arg2Bits = _arg2.get_qBitArray();
-    for (int _index = 4; _index < 8; ++_index)
+    for (int _index = 4; _index < 7; ++_index)
     {
         if (_arg2Bits.at(_index) == 1)
         {
-            _adr1.setBit(_index-4); // Load MS byte of address
+            _adr1.set_oneBit(_index+1, true); // Load MS byte of address
         } else {
-            _adr1.clearBit(_index-4); // Load MS byte of address
+            _adr1.set_oneBit(_index+1, false); // Load MS byte of address
         }
     }
-    qDebug() << _adr1;
-    for (int _index = 0; _index < 8; ++_index)
+    _adr2.set_oneBit(0, _arg2Bits.at(7));
+    for (int _index = 1; _index < 8; ++_index)
     {
         if (_arg1Bits.at(_index) == 1)
         {
-            _adr.setBit(_index+4); // Load MS byte of address
+            _adr2.set_oneBit(_index, true); // Load MS byte of address
         } else {
-            _adr.clearBit(_index+4); // Load MS byte of address
+            _adr2.set_oneBit(_index, false); // Load MS byte of address
         }
     }
-    qDebug() << _adr;
-    for (int _index = 0; _index < 7; ++_index)
-    {
-        bool _bit = _adr.at(_index);
-        _adr.setBit(_index, _adr.at(7-_index));
-        _adr.setBit((7-_index), _bit);
-        _bit = _adr.at(_index+8);
-        _adr.setBit(_index, _adr.at(15-_index));
-        _adr.setBit((15-_index), _bit);
-    }
+    QString _address = _adr1.get_hex().mid(1,1) + _adr2.get_hex();
 
-    qDebug() << _adr;
+    LocoBlock _newBlock(_address, _aux, _occupied);
 
-    // Resulting byte array
-    QByteArray _byteArray;
-
-    // Convert from QBitArray to QByteArray
-    for(int b=0; b<_adr1.count(); ++b)
-    {
-        _byteArray[b/8] = (_byteArray[b/8] | ((_adr1[b]?1:0)<<(b%8)));
-    }
-
-    qDebug() << "here: " << _adr1 << _byteArray.toHex();
-    return "";
-
-    //_adr.append(_arg1.get_hex()); // Load LS 2 bytes of address
-
-    //LocoBlock _newBlock(_adr, _aux, _occupied);
-
-    //emit blockUpdated(_newBlock);
+    emit blockUpdated(_newBlock);
 
     _description.append(" AUX: " + QString::number(_aux) + " OCC: " + QString::number(_occupied) + ".");
     return(_description);
