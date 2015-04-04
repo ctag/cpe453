@@ -93,7 +93,7 @@ void LocoSQL::reqTimerStop()
 
 void LocoSQL::do_clearAllTables()
 {
-    do_clearTable("track_ds");
+    //do_clearTable("track_ds"); // Don't clear if DS are entered beforehand
     do_clearTable("track_train");
 }
 
@@ -368,10 +368,13 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
         return;
     }
     if (mainDB->isOpen()) {
-        mainQuery->prepare("INSERT INTO cpe453.track_ds (ds_id, status) "
+        // This query will insert a DS if it isn't already in the table
+        /*mainQuery->prepare("INSERT INTO cpe453.track_ds (ds_id, status) "
                         "VALUES (:id, :status) "
                         "ON DUPLICATE KEY "
-                        "UPDATE status=:status;");
+                        "UPDATE status=:status;");*/
+        // This query will ignore DS which are not listed in the table
+        mainQuery->prepare("UPDATE cpe453.track_ds SET `status`=':status' WHERE `ds_id`=':id';");
         QString _id = QString::number(_block.get_board())+"-"+QString::number(_block.get_ds());
         int _status = _block.get_occupied();
         mainQuery->bindValue(":id", _id);

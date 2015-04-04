@@ -49,7 +49,7 @@ signals:
     void DBopened();
     void DBclosed();
     void trainList(QVector<int> _adrs, QVector<int> _slots, QVector<int> _speeds, QVector<int> _dirs, QVector<QString> _states);
-    void blockList(QVector<int> _ids, QVector<int> _states);
+    void blockList(QVector<QString> _ids, QVector<int> _states);
 
 protected:
     void reqTimerStop();

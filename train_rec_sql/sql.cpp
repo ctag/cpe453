@@ -249,13 +249,14 @@ void SQL::do_listBlocks()
         // open
         return;
     }
-    mainQuery->prepare("SELECT * FROM "+schema+"."+trackBlock+" WHERE status = 1;");
+    mainQuery->prepare("SELECT * FROM "+schema+"."+trackBlock+";");
     mainQuery->exec();
-    QVector<int> _ids, _positions;
+    QVector<QString> _ids;
+    QVector<int> _positions;
     while (mainQuery->next())
     {
         qDebug() << "block found in SQL: " << mainQuery->value("ds_id").toInt();
-        _ids.append(mainQuery->value("ds_id").toInt());
+        _ids.append(mainQuery->value("ds_id").toString());
         _positions.append(mainQuery->value("status").toInt());
     }
     emit blockList(_ids, _positions);

@@ -138,14 +138,14 @@ void MainWindow::handle_listTrains(QVector<int> _adrs, QVector<int> _slots, QVec
     }
 }
 
-void MainWindow::handle_listBlocks(QVector<int> _ids, QVector<int> _positions)
+void MainWindow::handle_listBlocks(QVector<QString> _ids, QVector<int> _positions)
 {
     qDebug() << "Loading blockList element with a new set of trains.";
     ui->plainTextEdit_listBlocks->clear();
     while (!_ids.isEmpty())
     {
         QString _block = "Block: ";
-        _block.append(QString::number(_ids.takeFirst()));
+        _block.append(_ids.takeFirst());
         _block.append(" State: ");
         _block.append(QString::number(_positions.takeFirst()));
         ui->plainTextEdit_listBlocks->appendPlainText(_block);
