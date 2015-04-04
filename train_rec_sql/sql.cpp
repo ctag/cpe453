@@ -279,7 +279,6 @@ void SQL::do_reqSwitch(int _adr, int _state)
     mainQuery->exec();
 }
 
-
 /*
 void SQL::reqTimerStart(int _msec)
 {
