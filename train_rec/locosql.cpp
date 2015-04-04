@@ -374,7 +374,7 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
                         "ON DUPLICATE KEY "
                         "UPDATE status=:status;");*/
         // This query will ignore DS which are not listed in the table
-        mainQuery->prepare("UPDATE cpe453.track_ds SET `status`=':status' WHERE `ds_id`=':id';");
+        mainQuery->prepare("UPDATE `cpe453`.`track_ds` SET `status`=:status WHERE `ds_id`=:id;");
         QString _id = QString::number(_block.get_board())+"-"+QString::number(_block.get_ds());
         int _status = _block.get_occupied();
         mainQuery->bindValue(":id", _id);
