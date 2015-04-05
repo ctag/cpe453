@@ -6,6 +6,7 @@
 #include <QChar>
 #include <QUdpSocket>
 #include <QByteArray>
+#include <QPointer>
 
 #include "locobyte.h"
 #include "locoblock.h"
@@ -26,18 +27,16 @@ public:
     static bool debug;
 
 public slots:
-    void do_openSocket(int _port);
+    void do_run(int _port);
     void do_closeSocket();
     void do_readPendingDatagram();
-    void do_writeDatagram(LocoPacket _packet);
 
 signals:
     void incomingRequest(LocoPacket _packet);
 
 protected:
-    QUdpSocket socket;
-    LocoPacket request;
-
+    QPointer<QUdpSocket> socket;
+    LocoPacket * request;
 };
 
 #endif // LOCOUDP_H

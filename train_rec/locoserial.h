@@ -49,7 +49,7 @@ public slots:
     bool do_open(QSerialPortInfo _port);
     void do_read();
     QString parse(LocoPacket _packet);
-    void run();
+    void do_run();
     void do_slotScan(LocoByte _slot);
     void do_slotDispatch(LocoByte _slot);
     void do_slotClear(LocoByte _slot);

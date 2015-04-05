@@ -45,7 +45,7 @@ public slots:
     int get_percentFromHex(QString _hex);
     QString get_hexFromPercent(int _percent);
     QString get_hexFromInt(int _adr);
-    void run();
+    void do_run();
     //void reqTimerReset();
 
 signals:

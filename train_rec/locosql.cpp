@@ -22,9 +22,8 @@ LocoSQL::~LocoSQL()
     delete doDelete;
 }
 
-void LocoSQL::run()
+void LocoSQL::do_run()
 {
-    qDebug() << "Initializing SQL thread.";
     mainDB = new QSqlDatabase;
     *mainDB = QSqlDatabase::addDatabase("QMYSQL", "main");
     reqIndex = new int;
@@ -32,6 +31,7 @@ void LocoSQL::run()
     *debug = false;
     doDelete = new bool;
     *doDelete = true;
+    qDebug() << "SQL thread initialized.";
 }
 
 bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString username, QString password)

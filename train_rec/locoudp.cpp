@@ -9,30 +9,37 @@ LocoUDP::LocoUDP()
 
 LocoUDP::~LocoUDP()
 {
-    socket.close();
+    do_closeSocket();
 }
 
-void LocoUDP::do_openSocket(int _port)
+void LocoUDP::do_run(int _port)
 {
-    socket.bind(QHostAddress::LocalHost, _port);
-    connect(&socket, SIGNAL(readyRead()), this, SLOT(do_readPendingDatagram()));
+    socket = new QUdpSocket;
+    request = new LocoPacket;
+    socket->bind(QHostAddress::LocalHost, _port);
+    connect(socket, SIGNAL(readyRead()), this, SLOT(do_readPendingDatagram()));
+    qDebug() << "UDP thread initialized.";
 }
 
 void LocoUDP::do_closeSocket()
 {
-    socket.close();
+    if (socket)
+    {
+        socket->close();
+        socket->deleteLater();
+    }
 }
 
 void LocoUDP::do_readPendingDatagram()
 {
-    while (socket.hasPendingDatagrams())
+    while (socket->hasPendingDatagrams())
     {
         QByteArray datagram;
-        datagram.resize(socket.pendingDatagramSize());
+        datagram.resize(socket->pendingDatagramSize());
         QHostAddress sender;
         quint16 senderPort;
 
-        socket.readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
+        socket->readDatagram(datagram.data(), datagram.size(), &sender, &senderPort);
 
         QString _hex(datagram);
         LocoPacket _packet(_hex);
@@ -45,15 +52,6 @@ void LocoUDP::do_readPendingDatagram()
             emit incomingRequest(_packet);
         }
     }
-}
-
-void LocoUDP::do_writeDatagram(LocoPacket _packet)
-{
-    QByteArray datagram;
-    datagram.resize(_packet.get_size());
-    QHostAddress address("127.0.0.1");
-    quint16 port = 7756;
-    socket.writeDatagram(datagram.data(), datagram.size(), address, port);
 }
 
 

@@ -15,7 +15,7 @@ LocoSerial::~LocoSerial()
     delete debug;
 }
 
-void LocoSerial::run()
+void LocoSerial::do_run()
 {
     incomingPacket = new LocoPacket;
     outgoingPacket = new LocoPacket;
@@ -23,6 +23,7 @@ void LocoSerial::run()
     outgoingPacket->clear();
     debug = new bool;
     *debug = false;
+    qDebug() << "Serial thread initialized.";
 }
 
 void LocoSerial::do_writePacket(LocoPacket _packet)
