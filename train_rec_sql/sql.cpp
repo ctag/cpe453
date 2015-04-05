@@ -258,7 +258,7 @@ void SQL::do_listBlocks()
     {
         return;
     }
-    mainQuery->prepare("SELECT * FROM "+schema+"."+trackBlock+";");
+    mainQuery->prepare("SELECT * FROM "+schema+"."+trackBlock+" ORDER BY `status` DESC, `ds_id` ASC;");
     mainQuery->exec();
     QVector<QString> _ids;
     QVector<int> _positions;
