@@ -57,9 +57,8 @@ void LocoSerial::do_querySlot(LocoByte _slot)
 
 void LocoSerial::readTimerStart(int _msec)
 {
-    if (!readTimer) {
+    if (readTimer) {
         readTimerStop();
-        return;
     }
     readTimer = new QTimer;
     connect(readTimer, SIGNAL(timeout()), this, SLOT(do_read()));

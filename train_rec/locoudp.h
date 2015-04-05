@@ -24,11 +24,11 @@ class LocoUDP : public QObject
 public:
     LocoUDP();
     ~LocoUDP();
-    static bool debug;
 
 public slots:
-    void do_run(int _port);
-    void do_closeSocket();
+    void do_run();
+    void do_socketOpen(int _port);
+    void do_socketClose();
     void do_readPendingDatagram();
 
 signals:
@@ -37,6 +37,7 @@ signals:
 protected:
     QPointer<QUdpSocket> socket;
     LocoPacket * request;
+    bool * debug;
 };
 
 #endif // LOCOUDP_H

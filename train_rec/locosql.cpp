@@ -7,6 +7,7 @@ LocoSQL::LocoSQL()
     mainDB = NULL;
     mainQuery = NULL;
     reqIndex = NULL;
+    reqTimer = NULL;
 }
 
 LocoSQL::~LocoSQL()
@@ -36,9 +37,6 @@ void LocoSQL::do_run()
 
 bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString username, QString password)
 {
-    mainQuery = new QSqlQuery;
-    *mainQuery = QSqlQuery(*mainDB);
-
     mainDB->setHostName(hostname);
     mainDB->setPort(port);
     mainDB->setDatabaseName(database);
@@ -52,6 +50,11 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
         qDebug() << mainDB->lastError();
         return(false);
     }
+
+    // Setup query
+    mainQuery = new QSqlQuery;
+    *mainQuery = QSqlQuery(*mainDB);
+
     // Clear status tables on startup
     if (*doDelete) {
         do_clearAllTables();
@@ -65,8 +68,19 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
 void LocoSQL::do_closeDB()
 {
     reqTimerStop();
-    mainDB->close();
-    delete mainQuery;
+    if (mainDB == NULL || mainQuery == NULL)
+    {
+        return;
+    }
+    if (mainDB->isOpen())
+    {
+        if (mainQuery != NULL)
+        {
+            delete mainQuery;
+            mainQuery = NULL;
+        }
+        mainDB->close();
+    }
     emit DBclosed();
 }
 
@@ -74,7 +88,7 @@ void LocoSQL::reqTimerStart(int _msec)
 {
     if (reqTimer)
     {
-        return;
+        reqTimerStop();
     }
     reqTimer = new QTimer;
     connect(reqTimer, SIGNAL(timeout()), this, SLOT(do_cycleReqs()));
@@ -99,7 +113,7 @@ void LocoSQL::do_clearAllTables()
 
 void LocoSQL::do_clearTable(QString _table)
 {
-    if (!mainDB) {
+    if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
     if (mainDB->isOpen()) {
@@ -174,12 +188,11 @@ void LocoSQL::do_cycleReqs()
 void LocoSQL::do_reqMacro()
 {
     if (*debug) qDebug() << "Querying for macro requests.";
-    if (!mainDB) {
+    if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
     mainQuery->prepare("SELECT * FROM cpe453.req_macro;");
@@ -237,12 +250,11 @@ void LocoSQL::do_reqMacro()
 void LocoSQL::do_reqSwitch()
 {
     if (*debug) qDebug() << "Querying for switch requests.";
-    if (!mainDB) {
+    if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
     mainQuery->prepare("SELECT * FROM cpe453.req_switch;");
@@ -278,7 +290,7 @@ void LocoSQL::do_reqSwitch()
 void LocoSQL::do_reqTrain()
 {
     if (*debug) qDebug() << "Querying for train requests.";
-    if (!mainDB) {
+    if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
     if (!mainDB->isOpen())
@@ -326,12 +338,11 @@ void LocoSQL::do_reqTrain()
 void LocoSQL::do_reqPacket()
 {
     if (*debug) qDebug() << "Querying for packet requests.";
-    if (!mainDB) {
+    if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
     mainQuery->prepare("SELECT * FROM cpe453.req_packet;");
@@ -364,7 +375,7 @@ void LocoSQL::do_reqPacket()
  */
 void LocoSQL::do_updateBlock(LocoBlock _block)
 {
-    if (!mainDB) {
+    if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
     if (mainDB->isOpen()) {
@@ -390,10 +401,10 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
  */
 void LocoSQL::do_updateTrain (LocoTrain _train)
 {
-    if (!mainDB) {
+    if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
-    if (mainDB->open()) {
+    if (mainDB->isOpen()) {
         QString _adr = _train.get_adr().get_hex();
         QString _slot = _train.get_slot().get_hex();
         int _speed = get_percentFromHex(_train.get_speed().get_hex());
@@ -416,10 +427,10 @@ void LocoSQL::do_updateTrain (LocoTrain _train)
 
 void LocoSQL::do_updateSwitch(int _adr, bool _state)
 {
-    if (!mainDB) {
+    if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
-    if (mainDB->open()) {
+    if (mainDB->isOpen()) {
         //QString _address = QString::number(_adr);
 
         mainQuery->prepare("INSERT INTO cpe453.track_switch (adr, state) "

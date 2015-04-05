@@ -32,9 +32,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(locosql, &SQL::DBclosed, this, &MainWindow::handle_DBclosed);
 
     // Request Sig/Slots
-    connect(ui->pushButton_trackReset, SIGNAL(clicked()), locosql, SLOT(do_trackReset()));
-    connect(ui->pushButton_trackOn, SIGNAL(clicked()), locosql, SLOT(do_trackOn()));
-    connect(ui->pushButton_trackOff, SIGNAL(clicked()), locosql, SLOT(do_trackOff()));
+    connect(ui->pushButton_trackReset, SIGNAL(clicked()), locosql, SLOT(req_trackReset()));
+    connect(ui->pushButton_trackOn, SIGNAL(clicked()), locosql, SLOT(req_trackOn()));
+    connect(ui->pushButton_trackOff, SIGNAL(clicked()), locosql, SLOT(req_trackOff()));
     connect(ui->pushButton_slotReq, SIGNAL(clicked()), this, SLOT(handle_slotReq()));
     connect(ui->pushButton_slotScan, SIGNAL(clicked()), this, SLOT(handle_slotScan()));
     connect(ui->pushButton_slotUse, SIGNAL(clicked()), this, SLOT(handle_slotUse()));

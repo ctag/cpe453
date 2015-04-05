@@ -68,7 +68,6 @@ protected:
 private:
     QSqlDatabase * mainDB;
     QSqlQuery * mainQuery;
-    //int reqDelay;
     int * reqIndex;
     QPointer<QTimer> reqTimer;
     bool * debug;

@@ -42,13 +42,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_serialDisconnect, SIGNAL(clicked()), locoserial, SLOT(do_close()));
     connect(ui->pushButton_sendPacket, SIGNAL(clicked()), this, SLOT(do_sendSerial()));
     connect(ui->pushButton_connect, SIGNAL(clicked()), this, SLOT(do_connectDB()));
-    connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
+    connect(ui->pushButton_disconnect, SIGNAL(clicked()), locosql, SLOT(do_closeDB()));
 
     // UDP
     connect(locoudp, &LocoUDP::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_writePacket));
     connect(locoudp, &LocoUDP::incomingRequest, this, &MainWindow::do_displayPacket);
+    connect(&threadUDP, &QThread::finished, locoudp, &QObject::deleteLater);
 
     // Serial
+    connect(this, &MainWindow::locoserial_open, locoserial, &LocoSerial::do_open);
+    connect(this, &MainWindow::locoserial_write, locoserial, &LocoSerial::do_writePacket);
     connect(locoserial, &LocoSerial::receivedPacket, this, &MainWindow::do_displayPacket); // QT-5 style works
     connect(locoserial, &LocoSerial::serialOpened, this, &MainWindow::handle_serialOpened);
     connect(locoserial, &LocoSerial::serialClosed, this, &MainWindow::handle_serialClosed);
@@ -58,6 +61,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Macros / locoSQL
     connect(locosql, &LocoSQL::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_writePacket));
+    connect(this, &MainWindow::locosql_open, locosql, &LocoSQL::do_openDB);
     connect(locosql, &LocoSQL::DBopened, this, &MainWindow::handle_DBopened);
     connect(locosql, &LocoSQL::DBclosed, this, &MainWindow::handle_DBclosed);
     connect(locosql, &LocoSQL::slotScan, locoserial, &LocoSerial::do_slotScan);
@@ -68,6 +72,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(locosql, &LocoSQL::trackReset, locoserial, &LocoSerial::do_trackReset);
     connect(locosql, &LocoSQL::trackOn, locoserial, &LocoSerial::do_trackOn);
     connect(locosql, &LocoSQL::trackOff, locoserial, &LocoSerial::do_trackOff);
+    connect(&threadUDP, &QThread::finished, locoudp, &QObject::deleteLater);
 
     // Kickstart threads
     threadSerial.start();
@@ -75,7 +80,8 @@ MainWindow::MainWindow(QWidget *parent) :
     threadSQL.start();
     locosql->do_run();
     threadUDP.start();
-    locoudp->do_run(7755);
+    locoudp->do_run();
+    locoudp->do_socketOpen(7755);
 
     // Configure interface
     ui->comboBox_opcodes->setEditable(false);
@@ -218,7 +224,8 @@ void MainWindow::do_openSerial()
 {
     int _portIndex = ui->comboBox_serialList->currentIndex();
     QSerialPortInfo _device = usbPorts.availablePorts().at(_portIndex);
-    locoserial->do_open(_device);
+    //locoserial->do_open(_device);
+    emit locoserial_open(_device);
 }
 
 void MainWindow::handle_serialClosed()
@@ -241,7 +248,8 @@ void MainWindow::do_sendSerial()
 
     ui->textBrowser_packets->append(outgoingPacket.get_packet().toLatin1());
 
-    locoserial->do_writePacket(outgoingPacket);
+    //locoserial->do_writePacket(outgoingPacket);
+    emit locoserial_write(outgoingPacket);
 
     if (debug) qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
     if (debug) qDebug() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
@@ -276,12 +284,8 @@ void MainWindow::do_connectDB()
     QString username = ui->lineEdit_user->text();
     QString password = ui->lineEdit_password->text();
 
-    locosql->do_openDB(hostname, port, database, username, password);
-}
-
-void MainWindow::do_disconnectDB()
-{
-    locosql->do_closeDB();
+    //locosql->do_openDB(hostname, port, database, username, password);
+    emit locosql_open(hostname, port, database, username, password);
 }
 
 /**

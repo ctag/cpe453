@@ -1,7 +1,5 @@
 #include "locoudp.h"
 
-bool LocoUDP::debug = false;
-
 LocoUDP::LocoUDP()
 {
     //
@@ -9,24 +7,33 @@ LocoUDP::LocoUDP()
 
 LocoUDP::~LocoUDP()
 {
-    do_closeSocket();
+    do_socketClose();
+    socket->deleteLater();
 }
 
-void LocoUDP::do_run(int _port)
+void LocoUDP::do_run()
 {
     socket = new QUdpSocket;
     request = new LocoPacket;
-    socket->bind(QHostAddress::LocalHost, _port);
+    debug = new bool;
+    *debug = false;
     connect(socket, SIGNAL(readyRead()), this, SLOT(do_readPendingDatagram()));
     qDebug() << "UDP thread initialized.";
 }
 
-void LocoUDP::do_closeSocket()
+void LocoUDP::do_socketOpen(int _port)
+{
+    if (!socket)
+    {
+        socket->bind(QHostAddress::LocalHost, _port);
+    }
+}
+
+void LocoUDP::do_socketClose()
 {
     if (socket)
     {
         socket->close();
-        socket->deleteLater();
     }
 }
 

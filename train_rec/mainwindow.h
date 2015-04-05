@@ -47,7 +47,6 @@ public slots:
     void do_openSerial();
     void do_sendSerial();
     void do_connectDB();
-    void do_disconnectDB();
     void do_displayPacket(LocoPacket);
     void do_printDescriptions(QString);
     void do_loadOPComboBox();
@@ -61,6 +60,7 @@ public slots:
 signals:
     void locoserial_open(QSerialPortInfo _device);
     void locoserial_write(LocoPacket outgoingPacket);
+    void locosql_open(QString hostname, int port, QString database, QString username, QString password);
 
 private:
     Ui::MainWindow *ui;
