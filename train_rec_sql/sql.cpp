@@ -1,11 +1,25 @@
 #include "sql.h"
 
-const QString schema = "`cpe453`";
-const QString macro = "`req_macro`";
-const QString reqTrain = "`req_train`";
-const QString trackTrain = "`track_train`";
-const QString trackBlock = "`track_ds`";
-const QString reqSwitch = "`req_switch`";
+/**
+ * @brief SQL Class
+ * This class is designed to be used as a sub-thread to a main QT program.
+ * To use it, implement it similarly as shown here, and emit signals from
+ * the main application when you wish to operate on the SQL tables.
+ */
+
+/**
+ * @brief SQL Consts
+ * These constants allow for rapid tuning of SQL queries.
+ * Backticks are used to ensure proper parsing of SQL statement,
+ * remove them as you see fit.
+ */
+const QString schema = "`cpe453`"; // Schema for all tables.
+const QString reqMacro = "`req_macro`"; // Table name for macro requests.
+const QString reqTrain = "`req_train`"; // Table name for train/slot requests.
+const QString reqSwitch = "`req_switch`"; // Table name for switch position requests.
+const QString reqPacket = "`req_packet`"; // Table name for raw packet requests.
+const QString trackTrain = "`track_train`"; // Table name for list of scanned trains/slots.
+const QString trackBlock = "`track_ds`"; // Table name for list of Detection Sections
 
 SQL::SQL()
 {
@@ -36,9 +50,7 @@ void SQL::do_run()
 
 bool SQL::do_openDB(QString hostname, int port, QString database, QString username, QString password)
 {
-    mainQuery = new QSqlQuery;
-    *mainQuery = QSqlQuery(*mainDB);
-
+    // Set database parameters handed over from the GUI
     mainDB->setHostName(hostname);
     mainDB->setPort(port);
     mainDB->setDatabaseName(database);
@@ -53,18 +65,26 @@ bool SQL::do_openDB(QString hostname, int port, QString database, QString userna
         return(false);
     }
 
-    emit DBopened();
-    return(true);
+    // Apparently QSqlQuery objects shouldn't exist ouside of a connected database's scope..
+    mainQuery = new QSqlQuery;
+    *mainQuery = QSqlQuery(*mainDB);
+
+    emit DBopened(); // Phone home with the good news.
+    return(true); // Currently unimplemented.
 }
 
 void SQL::do_closeDB()
 {
+    if (mainDB == NULL)
+    {
+        return; // Nothing to be done?
+    }
     mainDB->close();
     delete mainQuery;
     emit DBclosed();
 }
 
-void SQL::do_trackReset()
+void SQL::req_trackReset()
 {
     if (*debug) qDebug() << "Requesting track reset.";
     if (!mainDB) {
@@ -72,15 +92,14 @@ void SQL::do_trackReset()
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
-    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`)"
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`)"
                        "VALUES ('TRACK_RESET');");
     mainQuery->exec();
 }
 
-void SQL::do_trackOn()
+void SQL::req_trackOn()
 {
     if (*debug) qDebug() << "Requesting track On.";
     if (!mainDB) {
@@ -88,15 +107,14 @@ void SQL::do_trackOn()
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
-    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`)"
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`)"
                        "VALUES ('TRACK_ON');");
     mainQuery->exec();
 }
 
-void SQL::do_trackOff()
+void SQL::req_trackOff()
 {
     if (*debug) qDebug() << "Requesting track off.";
     if (!mainDB) {
@@ -104,15 +122,14 @@ void SQL::do_trackOff()
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
-    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`)"
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`)"
                        "VALUES ('TRACK_OFF');");
     mainQuery->exec();
 }
 
-void SQL::do_slotReq(int _train)
+void SQL::req_slotReq(int _train)
 {
     if (*debug) qDebug() << "Requesting slot for train" << _train;
     if (!mainDB) {
@@ -120,15 +137,14 @@ void SQL::do_slotReq(int _train)
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
-    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
                        "VALUES ('SLOT_REQ', '"+QString::number(_train)+"');");
     mainQuery->exec();
 }
 
-void SQL::do_slotUse(int _slot)
+void SQL::req_slotUse(int _slot)
 {
     if (*debug) qDebug() << "Requesting slot for train " << _slot;
     if (!mainDB) {
@@ -136,15 +152,14 @@ void SQL::do_slotUse(int _slot)
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
-    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
                        "VALUES ('SLOT_USE', '"+QString::number(_slot)+"');");
     mainQuery->exec();
 }
 
-void SQL::do_slotScan(int _slot)
+void SQL::req_slotScan(int _slot)
 {
     if (*debug) qDebug() << "Requesting information about slot " << _slot;
     if (!mainDB) {
@@ -152,15 +167,14 @@ void SQL::do_slotScan(int _slot)
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
-    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
                        "VALUES ('SLOT_SCAN', '"+QString::number(_slot)+"');");
     mainQuery->exec();
 }
 
-void SQL::do_slotClear(int _slot)
+void SQL::req_slotClear(int _slot)
 {
     if (*debug) qDebug() << "Requesting slot be cleared " << _slot;
     if (!mainDB) {
@@ -168,15 +182,14 @@ void SQL::do_slotClear(int _slot)
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
-    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
                        "VALUES ('SLOT_CLEAR', '"+QString::number(_slot)+"');");
     mainQuery->exec();
 }
 
-void SQL::do_slotDispatch(int _slot)
+void SQL::req_slotDispatch(int _slot)
 {
     if (*debug) qDebug() << "Requesting dispatch of slot " << _slot;
     if (!mainDB) {
@@ -184,15 +197,14 @@ void SQL::do_slotDispatch(int _slot)
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
-    mainQuery->prepare("INSERT INTO "+schema+"."+macro+" (`macro`, `arg1`)"
+    mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
                        "VALUES ('SLOT_DISPATCH', '"+QString::number(_slot)+"');");
     mainQuery->exec();
 }
 
-void SQL::do_reqTrain(int _slot, int _speed, int _dir)
+void SQL::req_train(int _slot, int _speed, int _dir)
 {
     if (*debug) qDebug() << "Requesting dispatch of slot " << _slot << _speed << _dir;
     if (!mainDB) {
@@ -200,7 +212,6 @@ void SQL::do_reqTrain(int _slot, int _speed, int _dir)
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
     mainQuery->prepare("INSERT INTO "+schema+"."+reqTrain+" (`slot`, `speed`, `dir`)"
@@ -219,7 +230,6 @@ void SQL::do_listTrains()
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
     mainQuery->prepare("SELECT * FROM "+schema+"."+trackTrain+";");
@@ -235,7 +245,7 @@ void SQL::do_listTrains()
         _dirs.append(mainQuery->value("dir").toInt());
         _states.append(mainQuery->value("state").toString());
     }
-    emit trainList(_adrs, _slots, _speeds, _dirs, _states);
+    emit trainsList(_adrs, _slots, _speeds, _dirs, _states);
 }
 
 void SQL::do_listBlocks()
@@ -246,7 +256,6 @@ void SQL::do_listBlocks()
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
     mainQuery->prepare("SELECT * FROM "+schema+"."+trackBlock+";");
@@ -259,10 +268,10 @@ void SQL::do_listBlocks()
         _ids.append(mainQuery->value("ds_id").toString());
         _positions.append(mainQuery->value("status").toInt());
     }
-    emit blockList(_ids, _positions);
+    emit blocksList(_ids, _positions);
 }
 
-void SQL::do_reqSwitch(int _adr, int _state)
+void SQL::req_switch(int _adr, int _state)
 {
     if (*debug) qDebug() << "Requesting new state for switch " << _adr;
     if (!mainDB) {
@@ -270,7 +279,6 @@ void SQL::do_reqSwitch(int _adr, int _state)
     }
     if (!mainDB->isOpen())
     {
-        // open
         return;
     }
     mainQuery->prepare("INSERT INTO "+schema+"."+reqSwitch+" (`id`, `position`)"
@@ -279,29 +287,6 @@ void SQL::do_reqSwitch(int _adr, int _state)
     mainQuery->bindValue(":state", _state);
     mainQuery->exec();
 }
-
-/*
-void SQL::reqTimerStart(int _msec)
-{
-    if (reqTimer)
-    {
-        return;
-    }
-    reqTimer = new QTimer;
-    connect(reqTimer, SIGNAL(timeout()), this, SLOT(do_cycleReqs()));
-    reqTimer->start(_msec);
-}
-
-void SQL::reqTimerStop()
-{
-    if (!reqTimer) {
-        return;
-    }
-    disconnect(reqTimer, 0, 0, 0);
-    reqTimer->stop();
-    reqTimer->deleteLater();
-}
-*/
 
 void SQL::do_clearAllTables()
 {
@@ -325,214 +310,3 @@ void SQL::do_clearTable(QString _table)
         }
     }
 }
-/*
-void SQL::do_reqMacro()
-{
-    if (*debug) qDebug() << "Querying for macro request.";
-    if (!mainDB) {
-        return;
-    }
-    if (!mainDB->isOpen())
-    {
-        // open
-        return;
-    }
-    mainQuery->prepare("SELECT * FROM cpe453.req_macro;");
-    mainQuery->exec();
-    if (mainQuery->next())
-    {
-    }
-}
-
-void SQL::do_reqSwitch()
-{
-    if (*debug) qDebug() << "Querying for switch requests.";
-    if (!mainDB) {
-        return;
-    }
-    if (!mainDB->isOpen())
-    {
-        // open
-        return;
-    }
-    mainQuery->prepare("SELECT * FROM cpe453.req_switch;");
-    mainQuery->exec();
-    if (mainQuery->next())
-    {
-        LocoPacket _packet;
-        LocoByte _command;
-        LocoByte _id;
-        int _idInt;
-        LocoByte _position;
-        int _positionInt;
-        _command.set_fromHex("B0");
-        _idInt = mainQuery->value("id").toInt();
-        _id.set_fromHex(get_hexFromInt(_idInt-1));
-        _positionInt = mainQuery->value("position").toInt();
-        _position.set_fromHex(get_hexFromInt((((_positionInt)*2)+1)*16));
-        _packet.do_appendLocoByte(_command);
-        _packet.do_appendLocoByte(_id);
-        _packet.do_appendLocoByte(_position);
-        _packet.do_genChecksum();
-        if (*debug) qDebug() << "Found switch request: " << _packet.get_packet();
-        emit incomingRequest(_packet);
-        if (*doDelete)
-        {
-            mainQuery->prepare("DELETE FROM cpe453.req_switch WHERE id=:_id LIMIT 1;");
-            mainQuery->bindValue(":_id", _idInt);
-            mainQuery->exec();
-        }
-    }
-}
-
-void SQL::do_reqTrain()
-{
-    if (*debug) qDebug() << "Querying for train requests.";
-    if (!mainDB) {
-        return;
-    }
-    if (!mainDB->isOpen())
-    {
-        // open
-        return;
-    }
-    mainQuery->prepare("SELECT * FROM cpe453.req_train;");
-    mainQuery->exec();
-    if (mainQuery->next())
-    {
-        LocoByte _command;
-        LocoPacket _speedPacket;
-        LocoPacket _dirPacket;
-        LocoByte _slot;
-        int _slotInt;
-        LocoByte _speed;
-        int _dir;
-        _command.set_fromHex("A0");
-        _speed.set_fromHex(get_hexFromPercent(mainQuery->value("speed").toInt()));
-        _slotInt = mainQuery->value("slot").toInt();
-        _slot.set_fromHex(get_hexFromInt(_slotInt));
-        _dir = mainQuery->value("dir").toBool();
-        _speedPacket.do_appendLocoByte(_command);
-        _speedPacket.do_appendLocoByte(_slot);
-        _speedPacket.do_appendLocoByte(_speed);
-        _speedPacket.do_genChecksum();
-        emit incomingRequest(_speedPacket);
-        if (*debug) qDebug() << "Found speed request. " << _speedPacket.get_packet();
-        _command.set_fromHex("A1");
-        _dirPacket.do_appendLocoByte(_command);
-        _dirPacket.do_appendLocoByte(_slot);
-        _dirPacket.do_appendByte(QString::number(((_dir)?2:0)+1)+"0");
-        emit incomingRequest(_dirPacket);
-        if (*debug) qDebug() << "Found dir request. " << _dirPacket.get_packet();
-        if (*doDelete)
-        {
-            mainQuery->prepare("DELETE FROM cpe453.req_train WHERE slot=:_slot LIMIT 1;");
-            mainQuery->bindValue(":_slot", _slotInt);
-            mainQuery->exec();
-        }
-    }
-}
-
-void SQL::do_reqPacket()
-{
-    if (*debug) qDebug() << "Querying for packet requests.";
-    if (!mainDB) {
-        return;
-    }
-    if (!mainDB->isOpen())
-    {
-        // open
-        return;
-    }
-    mainQuery->prepare("SELECT * FROM cpe453.req_packet;");
-    mainQuery->exec();
-    if (mainQuery->next())
-    {
-        LocoPacket _packet(mainQuery->value("packet").toString());
-        int _id = mainQuery->value("id").toInt();
-        if (_packet.validOP())
-        {
-            if (*debug) qDebug() << "Found packet request: " << _packet.get_packet();
-            emit incomingRequest(_packet);
-        }
-        if (*doDelete)
-        {
-            mainQuery->prepare("DELETE FROM cpe453.req_packet WHERE id=:_id LIMIT 1;");
-            mainQuery->bindValue(":_id", _id);
-            mainQuery->exec();
-        }
-    }
-}
-*/
-
-/*
- * Status updating methods
- */
-
-/*
-void SQL::do_updateBlock(LocoBlock _block)
-{
-    if (!mainDB) {
-        return;
-    }
-    if (mainDB->isOpen()) {
-        mainQuery->prepare("INSERT INTO cpe453.track_ds (ds_id, status) "
-                        "VALUES (:id, :status) "
-                        "ON DUPLICATE KEY "
-                        "UPDATE status=:status;");
-        QString _id = QString::fromLatin1(_block.get_adr());
-        int _status = _block.get_occupied();
-        mainQuery->bindValue(":id", _id);
-        mainQuery->bindValue(":status", _status);
-        if (*debug) qDebug() << "Updating SQL block: " << _id << ":" << _status;
-        mainQuery->exec();
-    }
-}
-
-void SQL::do_updateTrain (LocoTrain _train)
-{
-    if (!mainDB) {
-        return;
-    }
-    if (mainDB->open()) {
-        QString _adr = _train.get_adr().get_hex();
-        QString _slot = _train.get_slot().get_hex();
-        int _speed = get_percentFromHex(_train.get_speed().get_hex());
-        int _dir = _train.get_direction()?1:0;
-        QString _state = _train.get_state();
-
-        mainQuery->prepare("INSERT INTO cpe453.track_train (slot, adr, speed, dir, state) "
-                          "VALUES (:slot, :adr, :speed, :dir, :state) "
-                          "ON DUPLICATE KEY "
-                          "UPDATE adr=:adr, speed=:speed, dir=:dir, state=:state;");
-        mainQuery->bindValue(":slot", _slot);
-        mainQuery->bindValue(":adr", _adr);
-        mainQuery->bindValue(":speed", _speed);
-        mainQuery->bindValue(":dir", _dir);
-        mainQuery->bindValue(":state", _state);
-        if (*debug) qDebug() << "Updating train SQL." << _slot << ":" << _speed;
-        mainQuery->exec();
-    }
-}
-
-void SQL::do_updateSwitch(int _adr, bool _state)
-{
-    if (!mainDB) {
-        return;
-    }
-    if (mainDB->open()) {
-        //QString _address = QString::number(_adr);
-
-        mainQuery->prepare("INSERT INTO cpe453.track_switch (adr, state) "
-                          "VALUES (:adr, :state) "
-                          "ON DUPLICATE KEY "
-                          "UPDATE state=:state;");
-        mainQuery->bindValue(":adr", _adr);
-        mainQuery->bindValue(":state", _state);
-        if (*debug) qDebug() << "Updating switch SQL." << _adr << ":" << _state;
-        mainQuery->exec();
-        //
-    }
-}
-*/
-
