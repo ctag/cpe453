@@ -145,7 +145,7 @@ QString LocoSQL::get_hexFromPercent(int _percent) {
     if (_percent < 2) {
         return("00");
     }
-    _percent = _percent*1.25;
+    _percent = ceil(_percent*1.25);
     if (*debug) qDebug() << "Percent " << _percent;
     QString _hex =  QString("%1").arg(_percent, 2, 16, QChar('0')); //QString::number(_percent, 16);
     if (*debug) qDebug() << "get_hexFromPercent(): " << _hex;
