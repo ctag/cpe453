@@ -1,19 +1,18 @@
 #include "mywidget.h"
-//#include "mainwindow.h"
 
-mywidget::mywidget(QWidget *parent):QLabel(parent)
+mywidget::mywidget(QWidget *parent): QGraphicsView(parent)
 {
-    this->setMouseTracking(true);
-    this->startPos = QPoint();
-    this->endPos = QPoint();
+    this->setEnabled(true);
+
     leftDown = false;
     rightDown = false;
-    connectsToPrevious = false;
-    originclick=true;
-    firstclick=false;
-    secondclick=false;
 
-}
+    connectsToPrevious = false;
+    track_rad_state=false;
+    scene = new QGraphicsScene(0,0,300,300);
+    this->setScene(scene);
+    id_counter=0;
+ }
 
 mywidget::~mywidget(){
 
@@ -21,204 +20,66 @@ mywidget::~mywidget(){
 
 //click
 void mywidget::mousePressEvent(QMouseEvent *event){
+    QGraphicsView::mousePressEvent(event);
+    QPointF p = mapToScene(event->pos());
 
-    if(track_rad_state==true){
-    if (event->buttons() & Qt::LeftButton)
-    {
-        if(!connectsToPrevious){
-                   QLine line = QLine(startPos, endPos);
-                   lines.append(line);
-                   startPos = event->pos();
-                   endPos = event->pos();
-                  update();
-                }
-            leftDown = true;
-          }
+    if(event->buttons() & Qt::RightButton){
+         activeNode = new myitem(p,id_counter);
 
-         else if (event->buttons() & Qt::RightButton){
-            rightDown = true;
-         }
-    }
-    if(switch_rad_state==true)
-    {
-        if (event->buttons() & Qt::LeftButton)
-        {
-            if(!connectsToPrevious){
-                       QLine line = QLine(startPos, endPos);
-                       lines.append(line);
-                       startPos = event->pos();
-                       endPos = event->pos();
-                      update();
-                      originclick=true;
+         startPos = activeNode->pos();
+              scene->addItem(activeNode);
+               id_counter++;
+         nodeList.append(activeNode);
+         update();
+     }
+    if( event->buttons() & Qt::LeftButton)
+        leftDown=true;
 
-                     }
+  }
 
-                 leftDown = true;
-              }
-
-             else if (event->buttons() & Qt::RightButton){
-                rightDown = true;
-             }
-
-    }
-
-
-
-}
-
-
-//click & drag
-void mywidget::mouseMoveEvent(QMouseEvent *event){
-
-    if(track_rad_state==true){
-        if (leftDown & connectsToPrevious)
-            {
-                endPos = event->pos();
-                update();
-            }
-        else if (connectsToPrevious)
-            {
-                endPos = event->pos();
-                update();
-            }
-        else if (leftDown){
-                startPos = event->pos();
-                endPos = event->pos();
-                update();
-            }
-        }
-
-    if(switch_rad_state==true)
-    {
-         if (connectsToPrevious)
-            {
-                endPos = event->pos();
-                update();
-            }
-         else if (leftDown){
-                 startPos = event->pos();
-                 endPos = event->pos();
-                 update();
-             }
-    }
-
-
-}
-
-//release
 void mywidget::mouseReleaseEvent(QMouseEvent *event){
-   if(track_rad_state==true){
+    QGraphicsView::mouseReleaseEvent(event);
+    if(leftDown)
+        leftDown=!leftDown;
+}
 
-    if (leftDown){
-        leftDown = !leftDown;
-        endPos = event->pos();
-        QLine line = QLine(startPos, event->pos());
-        lines.append(line);
+void mywidget::mouseMoveEvent(QMouseEvent *event){
+    QGraphicsView::mouseMoveEvent(event);
+    if(itemAt(event->pos())){
+         activeNode=dynamic_cast<myitem *>(itemAt(event->pos()));
+     }
+}
 
-        //begin next line
-        startPos = event->pos();
-        endPos = event->pos();
-        connectsToPrevious = true;
+void mywidget::switch_button_clicked(){
+    if(!nodeList.isEmpty() && activeNode->isSelected()){
+         activeNode->isSwitch=!activeNode->isSwitch;
+          activeNode->isNode=false;
+         update();}
+}
 
+void mywidget::node_button_clicked(){
+    if(!nodeList.isEmpty()  && activeNode->isSelected()){
+         activeNode->isNode=!activeNode->isNode;
+         activeNode->isSwitch=false;
+         update();}
+
+}
+
+void mywidget::delete_button_clicked(){
+     if(activeNode->isSelected())
+         scene->removeItem(activeNode);
+         update();
+}
+
+void mywidget::keyPressEvent(QKeyEvent *event){
+     QGraphicsView::keyPressEvent(event);
+    qDebug() << event->key();
+    if(activeNode->isSelected() && event->key() == Qt::Key_Delete){
+        scene->removeItem(activeNode);
+        update();
     }
-    else if(rightDown){
-        //clear selection
-        rightDown = !rightDown;
-        endPos = startPos;
-        connectsToPrevious = false;
-    }
-    update();
-    }
-   if(switch_rad_state==true){
-       if (leftDown){
-           leftDown = !leftDown;
-           endPos = event->pos();
-           QLine line = QLine(startPos, event->pos());
-           lines.append(line);
-
-           //begin next line
-          if(originclick==true)
-         {
-              qDebug() <<"Fumborigin";
-          endPos = event->pos();
-          connectsToPrevious = true;
-          originclick=false;
-          firstclick=true;
-          }
-          else if (firstclick)
-          {
-            qDebug() << "first";
-            endPos = event->pos();
-            firstclick=false;
-            secondclick=true;
-             update();
-
-          }
-          else if (secondclick)
-          {  qDebug() << "second";
-            secondclick=false;
-            endPos = event->pos();
-             update();
-             connectsToPrevious=false;
-          }
-
-
-       }
-       else if(rightDown){
-           //clear selection
-           rightDown = !rightDown;
-           endPos = startPos;
-           if(firstclick)
-           connectsToPrevious = false;
-           else if (secondclick)
-              connectsToPrevious=true;
-       }
-       update();
-   }
 }
 
-void mywidget::drawLines(QPainter *p){
-
-   if(track_rad_state==true||switch_rad_state==true){
-    if (!startPos.isNull() && !endPos.isNull())
-    { p->setRenderHint(QPainter::Antialiasing, true);//added
-      p->drawLine(startPos, endPos);
-    }
-
-    p->drawLines(lines);
-    }
-
-}
-void mywidget::paintEvent(QPaintEvent *event){  
-
-     QPainter p(this);
-
-    QPen pen;
-    pen.setColor(Qt::black);
-
-    pen.setWidth(3);
-    p.setPen(pen);
-    drawLines(&p);
-
-}
-
-void mywidget::get_rad_rad(bool status){
- track_rad_state=status;
- detection_rad_state=false;
- switch_rad_state=false;
-
-}
-
-void mywidget::get_det_rad(bool status){
- detection_rad_state=status;
- track_rad_state=false;
- switch_rad_state=false;
-
-}
-
-void mywidget::get_switch_rad(bool status){
-    detection_rad_state=false;
-    track_rad_state=false;
-    switch_rad_state=true;
-}
-
+void mywidget::get_track_rad(bool status){
+    track_rad_state=status;
+ }

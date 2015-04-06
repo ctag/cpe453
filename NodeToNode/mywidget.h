@@ -7,60 +7,66 @@
 #include "QMoveEvent"
 #include "QGraphicsSceneMouseEvent"
 #include <QMouseEvent>
+#include <QGraphicsLineItem>
 #include <QPoint>
-#include <QPixmap>
+#include <QGraphicsView>
 #include <QPainter>
 #include <QDebug>
 #include <QDialog>
+#include <QLine>
 #include <QVBoxLayout>
 #include <QLabel>
-#include <QAction>
 #include <QRadioButton>
 #include <QList>
-//#include "mainwindow.h"
-  class mywidget : public QLabel
+#include "myitem.h"
+class mywidget : public QGraphicsView
 {
     Q_OBJECT
 public:
     explicit mywidget(QWidget *parent = 0);
       ~mywidget();
+    myitem *previousNode;
 
+    myitem *activeNode;
+    int activeItemID;
+    QGraphicsItem* selectedNode;
+    int id_counter;
+    QGraphicsScene* scene;
+
+    bool track_rad_state;
+
+    QPointF startPos;
+    QPointF endPos;
+    QList<myitem*> nodeList;
+
+ QGraphicsLineItem *line;
+ QLineF *testline;
 
 private:
-    QPoint startPos;
-    QPoint endPos;
-    QPoint switch_startPos;
-    QPoint switch_endPos;
+
     bool firstclick;
     bool secondclick;
     bool originclick;
-    bool isSwitch;
-
-
 
     bool leftDown;
     bool rightDown;
     bool connectsToPrevious;
-    QVector<QLine> lines;
-
-    bool track_rad_state;
-    bool detection_rad_state;
-    bool switch_rad_state;
-    //QLinkedList<int> mypoints;
 
 protected:
     void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
-    void paintEvent(QPaintEvent *paintEvent);
-    void drawLines(QPainter *p);
+
+    void mouseMoveEvent(QMouseEvent *event);
+    void keyPressEvent(QKeyEvent *event);
 
 public slots:
-    void get_rad_rad(bool status);
-    void get_det_rad(bool status);
-    void get_switch_rad(bool status);
+     void get_track_rad(bool status);
+    //  void get_det_rad(bool status);
+    //  void get_switch_rad(bool status);
+      void delete_button_clicked();
+      void switch_button_clicked();
+      void node_button_clicked();
 signals:
-   // void request_rad_status(bool);
 
 };
 
