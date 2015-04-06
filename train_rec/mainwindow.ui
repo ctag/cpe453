@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_packets">
        <attribute name="title">
@@ -442,6 +442,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="lineEdit_query">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>SELECT * FROM public.testsql</string>
             </property>

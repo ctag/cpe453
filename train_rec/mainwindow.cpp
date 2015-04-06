@@ -220,14 +220,6 @@ void MainWindow::handle_serialOpened()
     ui->pushButton_serialRefreshList->setEnabled(false);
 }
 
-void MainWindow::do_openSerial()
-{
-    int _portIndex = ui->comboBox_serialList->currentIndex();
-    QSerialPortInfo _device = usbPorts.availablePorts().at(_portIndex);
-    //locoserial->do_open(_device);
-    emit locoserial_open(_device);
-}
-
 void MainWindow::handle_serialClosed()
 {
     ui->textBrowser_console->append("Serial port closed :D");
@@ -235,6 +227,13 @@ void MainWindow::handle_serialClosed()
     ui->pushButton_serialDisconnect->setEnabled(false);
     ui->comboBox_serialList->setEnabled(true);
     ui->pushButton_serialRefreshList->setEnabled(true);
+}
+
+void MainWindow::do_openSerial()
+{
+    int _portIndex = ui->comboBox_serialList->currentIndex();
+    QSerialPortInfo _device = usbPorts.availablePorts().at(_portIndex);
+    emit locoserial_open(_device);
 }
 
 void MainWindow::do_sendSerial()
@@ -245,10 +244,9 @@ void MainWindow::do_sendSerial()
         qDebug() << "Packet isn't right `_`";
         return;
     }
-
     ui->textBrowser_packets->append(outgoingPacket.get_packet().toLatin1());
 
-    //locoserial->do_writePacket(outgoingPacket);
+    // Only interact with a thread via Sig/Slots.
     emit locoserial_write(outgoingPacket);
 
     if (debug) qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
