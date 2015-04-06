@@ -2,10 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "QLine"
-#include "QEvent"
-#include "QMoveEvent"
-#include "QGraphicsSceneMouseEvent"
+#include <QLine>
+#include <QEvent>
+#include <QMoveEvent>
+#include <QGraphicsScene>
 #include <QMouseEvent>
 #include <QPoint>
 #include <QPixmap>
@@ -16,7 +16,11 @@
 #include <QLabel>
 #include <QAction>
 #include <QRadioButton>
-#include "mywidget.h"
+#include <QThread>
+
+#include "sql.h"
+#include "vertex.h"
+
  namespace Ui {
 class MainWindow;
 }
@@ -28,29 +32,31 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+    QPoint mappedPos;
 
 private:
-    mywidget my;
     Ui::MainWindow *ui;
-
-        //GUI
-
-
-protected:
-    /*    void mousePressEvent(QMouseEvent *event);
-        void mouseMoveEvent(QMouseEvent *event);
-        void mouseReleaseEvent(QMouseEvent *event);//added
-        void paintEvent(QPaintEvent *paintEvent);
-        void drawLines(QPainter *p);
-*/
+    vertex *activeNode;
+    QGraphicsScene* scene;
+    QList<vertex> nodeList;
+    bool connectsToPrevious;
+    SQL * locosql;
+    QThread threadSQL;
 
  private slots:
-        void check_rad();
+    // det_node_pressed();
+    //void switch_pressed();
+    void check_rad();
+    void handle_DBopened();
+    void handle_DBclosed();
+    void do_connectDB();
+    void do_disconnectDB();
+
  signals:
         void rad_track_status(bool status);
         void rad_det_status(bool status);
         void rad_switch_status(bool status);
+        void rad_grab_status(bool status);
 
 };
 
