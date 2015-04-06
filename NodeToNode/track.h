@@ -2,7 +2,6 @@
 #define TRACK_H
 
 #include <QLabel>
-#include <QLine>
 #include <QEvent>
 #include <QMoveEvent>
 #include <QGraphicsSceneMouseEvent>
@@ -15,12 +14,12 @@
 #include <QDialog>
 #include <QLine>
 #include <QVBoxLayout>
-#include <QLabel>
 #include <QRadioButton>
 #include <QList>
 #include <QDateTime>
 
 #include "vertex.h"
+#include "edge.h"
 
 class track : public QGraphicsView
 {
@@ -39,9 +38,8 @@ public:
     QPointF startPos;
     QPointF endPos;
     QList<vertex*> nodeList;
-    QGraphicsLineItem *line;
-    QLineF *testline;
 
+    edge * line;
 private:
     bool firstclick;
     bool secondclick;
@@ -61,14 +59,12 @@ protected:
 
 public slots:
     void get_track_rad(bool status);
-    //void get_det_rad(bool status);
-    //void get_switch_rad(bool status);
     void delete_button_clicked();
     void switch_button_clicked();
     void node_button_clicked();
 
 signals:
-
+ //   void positionChange(QPointF );
 };
 
 #endif // TRACK_H

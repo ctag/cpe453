@@ -20,7 +20,6 @@ track::track(QWidget *parent): QGraphicsView(parent)
     activeNode = NULL;
     previousNode = NULL;
     selectedNode = NULL;
-    testline = NULL;
     line = NULL;
 
     debugMsg("Loaded graphics widget.");
@@ -55,8 +54,7 @@ void track::mousePressEvent(QMouseEvent *event)
          nodeList.append(activeNode);
          update();
      }
-    if( event->buttons() & Qt::LeftButton)
-        leftDown=true;
+
 
   }
 
@@ -67,12 +65,16 @@ void track::mouseReleaseEvent(QMouseEvent *event)
         leftDown=!leftDown;
 }
 
-void track::mouseMoveEvent(QMouseEvent *event)
-{
+void track::mouseMoveEvent(QMouseEvent *event){
     QGraphicsView::mouseMoveEvent(event);
-    if(itemAt(event->pos())){
+    endPos=mapToScene(event->pos());
+    if(!nodeList.isEmpty() && itemAt(event->pos())){
          activeNode=dynamic_cast<vertex *>(itemAt(event->pos()));
-     }
+        /*if(activeNode->isSelected()){
+            if(activeNode->ItemPositionHasChanged)
+                //emit positionChange(endPos);
+        }*/
+    }
 }
 
 void track::switch_button_clicked(){
@@ -94,23 +96,33 @@ void track::node_button_clicked(){
 
 void track::delete_button_clicked()
 {
-     if(activeNode->isSelected())
-         scene->removeItem(activeNode);
-         update();
+    if(!nodeList.isEmpty()){
+        for(int i=0;i<nodeList.size();i++){
+           if(nodeList.at(i)->isSelected()){
+              activeNode=nodeList.at(i);
+              scene->removeItem(activeNode);
+              nodeList.removeAt(i);
+               i--;
+            update();
+           }
+        }
+    }
 }
 
 void track::keyPressEvent(QKeyEvent *event)
 {
-     QGraphicsView::keyPressEvent(event);
-    qDebug() << event->key();
-    if (!activeNode)
-    {
-        return;
-    }
-    if(activeNode->isSelected() && event->key() == Qt::Key_Delete){
-        scene->removeItem(activeNode);
-        update();
-    }
+    QGraphicsView::keyPressEvent(event);
+    if(!nodeList.isEmpty() && event->key() == Qt::Key_Delete){
+       for(int i=0;i<nodeList.size();i++){
+          if(nodeList.at(i)->isSelected()){
+             activeNode=nodeList.at(i);
+             scene->removeItem(activeNode);
+             nodeList.removeAt(i);
+              i--;
+           update();
+          }
+       }
+   }
 }
 
 void track::get_track_rad(bool status)
