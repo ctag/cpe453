@@ -6,19 +6,19 @@ myitem::myitem(QPointF eventPos, int itemID)
     doDebug = true; // Set this to enable/disable debugging messages.
     dateTime = QDateTime::currentDateTime();
 
-     setFlag(ItemIsSelectable);
+    setFlag(ItemIsSelectable);
     setFlag(ItemIsMovable);
     setAcceptHoverEvents(true);
     isNode=false;
     isSwitch=false;
-     // this->mypoint= QPointF();
+    //this->mypoint= QPointF();
     mypoint = eventPos;
     nodeID =  itemID;
     rect = boundingRect();
     draw_track=false;
 
     debugMsg("Loaded myitem type.");
-  }
+}
 
 void myitem::debugMsg(QString _msg)
 {
@@ -28,14 +28,14 @@ void myitem::debugMsg(QString _msg)
     }
 }
 
-QRectF myitem::boundingRect() const {
+QRectF myitem::boundingRect() const
+{
     return QRectF(mypoint.x()-8,mypoint.y()-7,30,30);
    // qDebug() << mypoint;
 }
 
-void myitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
-
-
+void myitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
     if(isSelected()){
         if(isSwitch){
             QBrush brush(Qt::cyan);
@@ -65,8 +65,8 @@ void myitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
             painter->drawText(mypoint.x()-8,mypoint.y()-8, QString::number(nodeID));
             update();
         }
-     }
 
+    }
     else if(isNode){
         QBrush brush(Qt::yellow);
         QPen pen(Qt::black,3);
@@ -85,7 +85,7 @@ void myitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         painter->drawText(mypoint.x()-8,mypoint.y()-8, QString::number(nodeID)+"_Switch");
         update();
     }
-   else{
+    else{
     QBrush brush(Qt::blue);
     QPen pen(Qt::black, 3);
     painter->setPen(pen);
@@ -96,12 +96,14 @@ void myitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     }
 }
 
-void myitem::hoverEnterEvent(QGraphicsSceneHoverEvent *event){
+void myitem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
      rect=rect.adjusted(0,0,5,5);
      update();
-  }
+}
 
-void myitem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event){
+void myitem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
      rect=rect.adjusted(0,0,-5,-5);
      update();
 }
