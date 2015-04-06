@@ -20,7 +20,6 @@ mywidget::mywidget(QWidget *parent): QGraphicsView(parent)
     activeNode = NULL;
     previousNode = NULL;
     selectedNode = NULL;
-    scene = NULL;
     testline = NULL;
     line = NULL;
 
