@@ -261,10 +261,10 @@ void MainWindow::do_sendSerial()
 
 void MainWindow::handle_DBopened()
 {
-    ui->textBrowser_sql->append("Database opened. Connection test appears successful :)");
+    ui->textBrowser_sql->append("Database opened. Connection appears successful :)");
     ui->pushButton_connect->setEnabled(false);
     ui->pushButton_disconnect->setEnabled(true);
-    ui->pushButton_runQuery->setEnabled(true);
+    //ui->pushButton_runQuery->setEnabled(true);
 }
 
 void MainWindow::handle_DBclosed()
@@ -272,7 +272,7 @@ void MainWindow::handle_DBclosed()
     ui->textBrowser_sql->append("Database closed.");
     ui->pushButton_connect->setEnabled(true);
     ui->pushButton_disconnect->setEnabled(false);
-    ui->pushButton_runQuery->setEnabled(false);
+    //ui->pushButton_runQuery->setEnabled(false);
 }
 
 void MainWindow::do_connectDB()
