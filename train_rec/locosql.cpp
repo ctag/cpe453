@@ -1,5 +1,8 @@
 #include "locosql.h"
 
+/*
+ * SQL Constants
+ */
 const QString schema = "`cpe453`"; // Schema for all tables.
 const QString reqMacro = "`req_macro`"; // Table name for macro requests.
 const QString reqTrain = "`req_train`"; // Table name for train/slot requests.

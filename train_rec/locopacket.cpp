@@ -18,10 +18,7 @@ QSqlDatabase LocoPacket::packetDB = QSqlDatabase::addDatabase("QSQLITE");
 LocoPacket::LocoPacket()
 {
     clear();
-    if (!packetDB.isOpen())
-    {
-        do_openDB();
-    }
+    do_openDB();
 }
 
 /*
@@ -34,34 +31,20 @@ LocoPacket::LocoPacket(QString _hex)
 
     if ((_hex.count()%2) != 0)
     {
-        if (debug) qDebug() << "Hex packet is malformed! D:";
+        qDebug() << "Hex packet is malformed! D:";
         locobyte_array.clear();
         return;
     }
     clear();
     set_allFromHex(_hex);
-    if (hasOP())
-    {
-        if (debug) qDebug() << "Valid OP code x)";
-    }
-    if (validChk())
-    {
-        if (debug) qDebug() << "Valid Checksum x)";
-    }
-    if (!packetDB.isOpen())
-    {
-        do_openDB();
-    }
+    do_openDB();
 }
 
 LocoPacket::LocoPacket(QByteArray _bytearray)
 {
     clear();
     do_appendByteArray(_bytearray);
-    if (!packetDB.isOpen())
-    {
-        do_openDB();
-    }
+    do_openDB();
 }
 
 void LocoPacket::clear()
@@ -71,6 +54,10 @@ void LocoPacket::clear()
 
 bool LocoPacket::do_openDB()
 {
+    if (packetDB.isOpen())
+    {
+        return(true);
+    }
     packetDB.setDatabaseName("packets.sqlite");
     if (!packetDB.open())
     {
@@ -96,6 +83,8 @@ void LocoPacket::set_allFromHex(QString _hex)
 {
     _hex = _hex.remove(" ");
     _hex = _hex.remove(":");
+    _hex = _hex.remove("-");
+    _hex = _hex.remove(",");
 
     if ((_hex.count()%2) != 0)
     {
@@ -411,7 +400,8 @@ QByteArray LocoPacket::get_QByteArray()
     return (_byteArray);
 }
 
-/* Sometimes I wonder /
+/**
+ * Sometimes I wonder /
  * Whether my code should wander /
  * Those tretcherous glades /
  */

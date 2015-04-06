@@ -58,10 +58,6 @@ public:
     void clear();
     static bool debug;
 
-public slots:
-
-signals:
-
 protected:
     QString do_xor(LocoByte _byte1, LocoByte _byte2);
     bool do_openDB();
