@@ -2,6 +2,9 @@
 
 mywidget::mywidget(QWidget *parent): QGraphicsView(parent)
 {
+    doDebug = true;
+    dateTime = QDateTime::currentDateTime();
+
     this->setEnabled(true);
 
     leftDown = false;
@@ -12,14 +15,34 @@ mywidget::mywidget(QWidget *parent): QGraphicsView(parent)
     scene = new QGraphicsScene(0,0,300,300);
     this->setScene(scene);
     id_counter=0;
+
+    // Protect undeclared pointers.
+    activeNode = NULL;
+    previousNode = NULL;
+    selectedNode = NULL;
+    scene = NULL;
+    testline = NULL;
+    line = NULL;
+
+    debugMsg("Loaded graphics widget.");
  }
 
-mywidget::~mywidget(){
+mywidget::~mywidget()
+{
+    //
+}
 
+void mywidget::debugMsg(QString _msg)
+{
+    if (doDebug)
+    {
+        qDebug() << dateTime.toString("[HH:mm:ss:zzz] ") + _msg;
+    }
 }
 
 //click
-void mywidget::mousePressEvent(QMouseEvent *event){
+void mywidget::mousePressEvent(QMouseEvent *event)
+{
     QGraphicsView::mousePressEvent(event);
     QPointF p = mapToScene(event->pos());
 
@@ -37,13 +60,15 @@ void mywidget::mousePressEvent(QMouseEvent *event){
 
   }
 
-void mywidget::mouseReleaseEvent(QMouseEvent *event){
+void mywidget::mouseReleaseEvent(QMouseEvent *event)
+{
     QGraphicsView::mouseReleaseEvent(event);
     if(leftDown)
         leftDown=!leftDown;
 }
 
-void mywidget::mouseMoveEvent(QMouseEvent *event){
+void mywidget::mouseMoveEvent(QMouseEvent *event)
+{
     QGraphicsView::mouseMoveEvent(event);
     if(itemAt(event->pos())){
          activeNode=dynamic_cast<myitem *>(itemAt(event->pos()));
@@ -51,35 +76,44 @@ void mywidget::mouseMoveEvent(QMouseEvent *event){
 }
 
 void mywidget::switch_button_clicked(){
-    if(!nodeList.isEmpty() && activeNode->isSelected()){
+    if(!nodeList.isEmpty() && activeNode->isSelected())
+    {
          activeNode->isSwitch=!activeNode->isSwitch;
           activeNode->isNode=false;
          update();}
 }
 
 void mywidget::node_button_clicked(){
-    if(!nodeList.isEmpty()  && activeNode->isSelected()){
+    if(!nodeList.isEmpty()  && activeNode->isSelected())
+    {
          activeNode->isNode=!activeNode->isNode;
          activeNode->isSwitch=false;
          update();}
 
 }
 
-void mywidget::delete_button_clicked(){
+void mywidget::delete_button_clicked()
+{
      if(activeNode->isSelected())
          scene->removeItem(activeNode);
          update();
 }
 
-void mywidget::keyPressEvent(QKeyEvent *event){
+void mywidget::keyPressEvent(QKeyEvent *event)
+{
      QGraphicsView::keyPressEvent(event);
     qDebug() << event->key();
+    if (!activeNode)
+    {
+        return;
+    }
     if(activeNode->isSelected() && event->key() == Qt::Key_Delete){
         scene->removeItem(activeNode);
         update();
     }
 }
 
-void mywidget::get_track_rad(bool status){
+void mywidget::get_track_rad(bool status)
+{
     track_rad_state=status;
- }
+}
