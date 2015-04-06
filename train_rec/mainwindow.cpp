@@ -19,13 +19,14 @@
  * get_ to retrieve a member variable or variant
  * do_ to complete a task or slot
  * is_ to query a state of the object
- * handle_ to take care of a signal
+ * handle_ to take care of a signal, similar to do_
+ * do_run() in each thread class allows for proper instantiation of child variables
  */
 
 /**
  * Program Structure:
  * Four threads: GUI, UDP, SQL, and Serial/USB
- * All interaction should be via Signals/Slots.
+ * All interaction should be via Signals/Slots through the GUI thread.
  */
 
 bool MainWindow::debug = false;
@@ -249,6 +250,7 @@ void MainWindow::do_printDescriptions(QString description)
 
 void MainWindow::handle_serialOpened()
 {
+    ui->textBrowser_console->append(timeStamp() + "Serial port opened x)");
     ui->pushButton_serialConnect->setEnabled(false);
     ui->pushButton_serialDisconnect->setEnabled(true);
     ui->comboBox_serialList->setEnabled(false);
@@ -276,7 +278,7 @@ void MainWindow::do_sendSerial()
     outgoingPacket.set_allFromHex(ui->lineEdit_packet->text());
     if (!outgoingPacket.validChk())
     {
-        qDebug() << timeStamp() << "Packet isn't right `_`";
+        qDebug() << timeStamp() << "Packet isn't right ~_~;";
         return;
     }
     ui->textBrowser_packets->append(timeStamp() + "Asking for write: " + outgoingPacket.get_packet().toLatin1());
