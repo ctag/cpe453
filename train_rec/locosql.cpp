@@ -1,5 +1,17 @@
 #include "locosql.h"
 
+/*
+ * SQL Constants
+ */
+const QString schema = "`cpe453`"; // Schema for all tables.
+const QString reqMacro = "`req_macro`"; // Table name for macro requests.
+const QString reqTrain = "`req_train`"; // Table name for train/slot requests.
+const QString reqSwitch = "`req_switch`"; // Table name for switch position requests.
+const QString reqPacket = "`req_packet`"; // Table name for raw packet requests.
+const QString trackTrain = "`track_train`"; // Table name for list of scanned trains/slots.
+const QString trackBlock = "`track_ds`"; // Table name for list of Detection Sections
+const QString trackSwitch = "`track_switch`"; // Table name for list of Detection Sections
+
 LocoSQL::LocoSQL()
 {
     debug = NULL;
@@ -59,7 +71,10 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
     if (*doDelete) {
         do_clearAllTables();
     }
-    reqTimerStart(150);
+
+    // At 80ms, generates ~15KB/s of traffic to SQL server.
+    // This value can be deprecated by hosting train_rec and SQL on the same machine.
+    reqTimerStart(80); // Wait Xms between SQL scans
 
     emit DBopened();
     return(true);
@@ -129,7 +144,7 @@ void LocoSQL::do_clearTable(QString _table)
 }
 
 int LocoSQL::get_percentFromHex(QString _hex) {
-    /*if (*debug)*/ qDebug() << "percentfromhex: " << _hex;
+    if (*debug) qDebug() << "percentfromhex: " << _hex;
     int _percent = _hex.toInt(0, 16);
     _percent = _percent*0.8;
     if (_percent < 0) {
@@ -137,7 +152,7 @@ int LocoSQL::get_percentFromHex(QString _hex) {
     } else if (_percent > 100) {
         _percent = 100;
     }
-    /*if (*debug)*/ qDebug() << "get_percentFromHex(): " << _percent;
+    if (*debug) qDebug() << "get_percentFromHex(): " << _percent;
     return(_percent);
 }
 
@@ -195,7 +210,7 @@ void LocoSQL::do_reqMacro()
     {
         return;
     }
-    mainQuery->prepare("SELECT * FROM cpe453.req_macro;");
+    mainQuery->prepare("SELECT * FROM "+schema+"."+reqMacro+";");
     mainQuery->exec();
     if (mainQuery->next())
     {
@@ -240,7 +255,7 @@ void LocoSQL::do_reqMacro()
         if (*doDelete)
         {
             if (debug) qDebug() << "deleting macro id: " << _id;
-            mainQuery->prepare("DELETE FROM cpe453.req_macro WHERE id=:_id LIMIT 1;");
+            mainQuery->prepare("DELETE FROM "+schema+"."+reqMacro+" WHERE id=:_id LIMIT 1;");
             mainQuery->bindValue(":_id", _id);
             mainQuery->exec();
         }
@@ -257,7 +272,7 @@ void LocoSQL::do_reqSwitch()
     {
         return;
     }
-    mainQuery->prepare("SELECT * FROM cpe453.req_switch;");
+    mainQuery->prepare("SELECT * FROM "+schema+"."+reqSwitch+";");
     mainQuery->exec();
     if (mainQuery->next())
     {
@@ -280,7 +295,7 @@ void LocoSQL::do_reqSwitch()
         emit incomingRequest(_packet);
         if (*doDelete)
         {
-            mainQuery->prepare("DELETE FROM cpe453.req_switch WHERE id=:_id LIMIT 1;");
+            mainQuery->prepare("DELETE FROM "+schema+"."+reqSwitch+" WHERE id=:_id LIMIT 1;");
             mainQuery->bindValue(":_id", _idInt);
             mainQuery->exec();
         }
@@ -298,7 +313,7 @@ void LocoSQL::do_reqTrain()
         // open
         return;
     }
-    mainQuery->prepare("SELECT * FROM cpe453.req_train;");
+    mainQuery->prepare("SELECT * FROM "+schema+"."+reqTrain+";");
     mainQuery->exec();
     if (mainQuery->next())
     {
@@ -328,7 +343,7 @@ void LocoSQL::do_reqTrain()
         if (*debug) qDebug() << "Found dir request. " << _dirPacket.get_packet();
         if (*doDelete)
         {
-            mainQuery->prepare("DELETE FROM cpe453.req_train WHERE slot=:_slot LIMIT 1;");
+            mainQuery->prepare("DELETE FROM "+schema+"."+reqTrain+" WHERE slot=:_slot LIMIT 1;");
             mainQuery->bindValue(":_slot", _slotInt);
             mainQuery->exec();
         }
@@ -345,7 +360,7 @@ void LocoSQL::do_reqPacket()
     {
         return;
     }
-    mainQuery->prepare("SELECT * FROM cpe453.req_packet;");
+    mainQuery->prepare("SELECT * FROM "+schema+"."+reqPacket+";");
     mainQuery->exec();
     if (mainQuery->next())
     {
@@ -358,7 +373,7 @@ void LocoSQL::do_reqPacket()
         }
         if (*doDelete)
         {
-            mainQuery->prepare("DELETE FROM cpe453.req_packet WHERE id=:_id LIMIT 1;");
+            mainQuery->prepare("DELETE FROM "+schema+"."+reqPacket+" WHERE id=:_id LIMIT 1;");
             mainQuery->bindValue(":_id", _id);
             mainQuery->exec();
         }
@@ -380,12 +395,12 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
     }
     if (mainDB->isOpen()) {
         // This query will insert a DS if it isn't already in the table
-        /*mainQuery->prepare("INSERT INTO cpe453.track_ds (ds_id, status) "
+        /*mainQuery->prepare("INSERT INTO "+schema+"."+trackBlock+" (ds_id, status) "
                         "VALUES (:id, :status) "
                         "ON DUPLICATE KEY "
                         "UPDATE status=:status;");*/
         // This query will ignore DS which are not listed in the table
-        mainQuery->prepare("UPDATE `cpe453`.`track_ds` SET `status`=:status WHERE `ds_id`=:id;");
+        mainQuery->prepare("UPDATE "+schema+"."+trackBlock+" SET `status`=:status WHERE `ds_id`=:id;");
         QString _id = QString::number(_block.get_board())+"-"+QString::number(_block.get_ds());
         int _status = _block.get_occupied();
         mainQuery->bindValue(":id", _id);
@@ -411,7 +426,7 @@ void LocoSQL::do_updateTrain (LocoTrain _train)
         int _dir = _train.get_direction()?1:0;
         QString _state = _train.get_state();
 
-        mainQuery->prepare("INSERT INTO cpe453.track_train (slot, adr, speed, dir, state) "
+        mainQuery->prepare("INSERT INTO "+schema+"."+trackTrain+" (slot, adr, speed, dir, state) "
                           "VALUES (:slot, :adr, :speed, :dir, :state) "
                           "ON DUPLICATE KEY "
                           "UPDATE adr=:adr, speed=:speed, dir=:dir, state=:state;");
@@ -433,7 +448,7 @@ void LocoSQL::do_updateSwitch(int _adr, bool _state)
     if (mainDB->isOpen()) {
         //QString _address = QString::number(_adr);
 
-        mainQuery->prepare("INSERT INTO cpe453.track_switch (adr, state) "
+        mainQuery->prepare("INSERT INTO "+schema+"."+trackSwitch+" (adr, state) "
                           "VALUES (:adr, :state) "
                           "ON DUPLICATE KEY "
                           "UPDATE state=:state;");

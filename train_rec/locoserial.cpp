@@ -164,7 +164,7 @@ void LocoSerial::do_read()
     }
 }
 
-/**
+/*
  * MACROS
  */
 
@@ -248,7 +248,7 @@ void LocoSerial::do_slotUse(LocoByte _slot)
     do_writePacket(_packet);
 }
 
-/**
+/*
  * Packet related functions
  */
 
@@ -452,9 +452,9 @@ QString LocoSerial::parse_B2 (LocoPacket _packet)
     {
         if (_arg2Bits.at(_index) == 1)
         {
-            _adr1.set_oneBit(_index+1, true); // Load MS byte of address
+            _adr1.set_oneBit(_index+1, true); // Load MS nyble of address
         } else {
-            _adr1.set_oneBit(_index+1, false); // Load MS byte of address
+            _adr1.set_oneBit(_index+1, false); // Load MS nyble of address
         }
     }
     _adr2.set_oneBit(0, _arg2Bits.at(7));
@@ -462,9 +462,9 @@ QString LocoSerial::parse_B2 (LocoPacket _packet)
     {
         if (_arg1Bits.at(_index) == 1)
         {
-            _adr2.set_oneBit(_index, true); // Load MS byte of address
+            _adr2.set_oneBit(_index, true); // Load LS byte of address
         } else {
-            _adr2.set_oneBit(_index, false); // Load MS byte of address
+            _adr2.set_oneBit(_index, false); // Load LS byte of address
         }
     }
     QString _address = _adr1.get_hex().mid(1,1) + _adr2.get_hex();
