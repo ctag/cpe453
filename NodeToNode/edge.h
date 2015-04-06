@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QGraphicsLineItem>
+#include <QPainter>
 
 class edge : public QObject,QGraphicsLineItem
 {
