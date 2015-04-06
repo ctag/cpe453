@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -293,8 +293,8 @@
          <rect>
           <x>10</x>
           <y>50</y>
-          <width>172</width>
-          <height>45</height>
+          <width>186</width>
+          <height>52</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
@@ -326,8 +326,8 @@
          <rect>
           <x>10</x>
           <y>10</y>
-          <width>256</width>
-          <height>24</height>
+          <width>276</width>
+          <height>29</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
@@ -359,8 +359,8 @@
          <rect>
           <x>10</x>
           <y>110</y>
-          <width>290</width>
-          <height>45</height>
+          <width>307</width>
+          <height>52</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
@@ -429,8 +429,8 @@
          <rect>
           <x>10</x>
           <y>170</y>
-          <width>171</width>
-          <height>109</height>
+          <width>186</width>
+          <height>128</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_5">
@@ -491,8 +491,8 @@
          <rect>
           <x>20</x>
           <y>30</y>
-          <width>206</width>
-          <height>45</height>
+          <width>219</width>
+          <height>52</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_6">
@@ -558,6 +558,24 @@
         </property>
        </widget>
       </widget>
+      <widget class="QWidget" name="tab_5">
+       <attribute name="title">
+        <string>Threads</string>
+       </attribute>
+       <widget class="QPushButton" name="pushButton_thread_beginSQL">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>30</y>
+          <width>141</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start SQL Thread</string>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -568,7 +586,7 @@
      <x>0</x>
      <y>0</y>
      <width>718</width>
-     <height>19</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

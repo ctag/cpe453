@@ -30,6 +30,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_disconnect, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
     connect(locosql, &SQL::DBopened, this, &MainWindow::handle_DBopened);
     connect(locosql, &SQL::DBclosed, this, &MainWindow::handle_DBclosed);
+    // Handle Initializing from Sig/Slot
+    connect(ui->pushButton_thread_beginSQL, SIGNAL(clicked()), locosql, SLOT(do_run()));
+    connect(ui->pushButton_thread_beginSQL, SIGNAL(clicked(bool)), ui->pushButton_thread_beginSQL, SLOT(setEnabled(bool)));
 
     // Request Sig/Slots
     connect(ui->pushButton_trackReset, SIGNAL(clicked()), locosql, SLOT(req_trackReset()));
@@ -51,7 +54,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // Kickstart thread
     threadSQL.start();
-    locosql->do_run();
 
     qDebug() << "Interface loaded.";
 }
