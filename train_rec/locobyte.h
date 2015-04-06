@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QChar>
 #include <QBitArray>
+#include <QTime>
 #include <cmath>
 
 namespace std {
@@ -18,6 +19,7 @@ public:
     LocoByte(QString _hex);
     LocoByte(QBitArray _bits);
     ~LocoByte();
+    QString timeStamp();
     bool operator==(LocoByte _arg);
     void operator=(QBitArray _arg);
     QString get_binary();

@@ -13,6 +13,7 @@
 #include <QSerialPortInfo>
 #include <QByteArray>
 #include <QTimer>
+#include <QTime>
 #include <QPointer>
 
 #include "locopacket.h"
@@ -30,16 +31,19 @@ class LocoSerial : public QObject
 public:
     LocoSerial();
     ~LocoSerial();
+    QString timeStamp();
 
 signals:
     void receivedPacket(LocoPacket);
+    void writtenPacket(LocoPacket);
+    void writtenBytes(QByteArray);
     void droppedPacket();
     void trainUpdated(LocoTrain);
     void blockUpdated(LocoBlock);
     void switchUpdated(int _adr, bool _state);
     void serialOpened();
     void serialClosed();
-    void delayWrite(QByteArray _bytes);
+    //void delayWrite(QByteArray _bytes);
 
 public slots:
     void do_writePacket(LocoPacket _packet);

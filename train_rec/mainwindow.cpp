@@ -2,8 +2,10 @@
 #include "ui_mainwindow.h"
 
 /**
- * train_rec - Control a Digitrax track from the internet
- * Christopher Bero
+ * train_rec - "Train Receiver"
+ * Control a Digitrax track from the internet
+ * 
+ * Christopher Bero [csb0019@uah.edu]
  * Team 4A
  *
  * I've tried hard not to step on any copyrights associated with Digitrax code,
@@ -18,6 +20,12 @@
  * do_ to complete a task or slot
  * is_ to query a state of the object
  * handle_ to take care of a signal
+ */
+
+/**
+ * Program Structure:
+ * Four threads: GUI, UDP, SQL, and Serial/USB
+ * All interaction should be via Signals/Slots.
  */
 
 bool MainWindow::debug = false;
@@ -55,18 +63,25 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // UDP
     connect(locoudp, &LocoUDP::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_writePacket));
-    connect(locoudp, &LocoUDP::incomingRequest, this, &MainWindow::do_displayPacket);
+    connect(locoudp, &LocoUDP::incomingRequest, this, &MainWindow::do_packetReceived);
     connect(&threadUDP, &QThread::finished, locoudp, &QObject::deleteLater);
+    // Handle Initializing from Sig/Slot
+    connect(ui->pushButton_thread_beginUDP, SIGNAL(clicked()), locoudp, SLOT(do_run()));
+    connect(ui->pushButton_thread_beginUDP, SIGNAL(clicked(bool)), ui->pushButton_thread_beginUDP, SLOT(setEnabled(bool)));
 
     // Serial
     connect(this, &MainWindow::locoserial_open, locoserial, &LocoSerial::do_open);
     connect(this, &MainWindow::locoserial_write, locoserial, &LocoSerial::do_writePacket);
-    connect(locoserial, &LocoSerial::receivedPacket, this, &MainWindow::do_displayPacket); // QT-5 style works
+    connect(locoserial, &LocoSerial::receivedPacket, this, &MainWindow::do_packetReceived); // QT-5 style works
+    connect(locoserial, &LocoSerial::writtenBytes, this, &MainWindow::do_bytesWritten);
     connect(locoserial, &LocoSerial::serialOpened, this, &MainWindow::handle_serialOpened);
     connect(locoserial, &LocoSerial::serialClosed, this, &MainWindow::handle_serialClosed);
     connect(locoserial, &LocoSerial::blockUpdated, locosql, &LocoSQL::do_updateBlock);
     connect(locoserial, &LocoSerial::trainUpdated, locosql, &LocoSQL::do_updateTrain);
     connect(&threadSerial, &QThread::finished, locoserial, &QObject::deleteLater);
+    // Handle Initializing from Sig/Slot
+    connect(ui->pushButton_thread_beginSerial, SIGNAL(clicked()), locoserial, SLOT(do_run()));
+    connect(ui->pushButton_thread_beginSerial, SIGNAL(clicked(bool)), ui->pushButton_thread_beginSerial, SLOT(setEnabled(bool)));
 
     // Macros / locoSQL
     connect(locosql, &LocoSQL::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_writePacket));
@@ -82,15 +97,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(locosql, &LocoSQL::trackOn, locoserial, &LocoSerial::do_trackOn);
     connect(locosql, &LocoSQL::trackOff, locoserial, &LocoSerial::do_trackOff);
     connect(&threadUDP, &QThread::finished, locoudp, &QObject::deleteLater);
+    // Handle Initializing from Sig/Slot
+    connect(ui->pushButton_thread_beginSQL, SIGNAL(clicked()), locosql, SLOT(do_run()));
+    connect(ui->pushButton_thread_beginSQL, SIGNAL(clicked(bool)), ui->pushButton_thread_beginSQL, SLOT(setEnabled(bool)));
 
     // Kickstart threads
     threadSerial.start();
-    locoserial->do_run();
     threadSQL.start();
-    locosql->do_run();
     threadUDP.start();
-    locoudp->do_run();
-    locoudp->do_socketOpen(7755);
 
     // Configure interface
     ui->comboBox_opcodes->setEditable(false);
@@ -98,7 +112,7 @@ MainWindow::MainWindow(QWidget *parent) :
     do_loadOPComboBox();
     do_refreshSerialList();
 
-    if (debug) qDebug() << "Interface loaded.";
+    if (debug) qDebug() << timeStamp() << "Interface loaded.";
 }
 
 MainWindow::~MainWindow()
@@ -117,6 +131,11 @@ MainWindow::~MainWindow()
 /*
  * MAINWINDOW METHODS
  */
+
+QString MainWindow::timeStamp()
+{
+    return(QTime::currentTime().toString("[HH:mm:ss:zzz] "));
+}
 
 void MainWindow::do_enableArgs()
 {
@@ -152,7 +171,7 @@ void MainWindow::do_genPacket()
     _packet->do_genChecksum();
 
     outgoingPacket = *_packet;
-    ui->textBrowser_packets->append(_packet->get_packet());
+    ui->textBrowser_packets->append(timeStamp() + "Generated: " + _packet->get_packet());
     ui->lineEdit_packet->setText(_packet->get_packet());
 }
 
@@ -164,7 +183,7 @@ void MainWindow::do_loadOPComboBox()
     QVector<QString> _names = _tmp.get_DBnames();
     if (_opcodes.count() != _names.count())
     {
-        qDebug() << "database opcodes and names don't match.";
+        qDebug() << timeStamp() << "database opcodes and names don't match.";
         return;
     }
     for (int _index = 0; _index < _opcodes.count(); ++_index)
@@ -196,25 +215,32 @@ void MainWindow::do_refreshSerialList()
     }
 }
 
-void MainWindow::do_displayPacket(LocoPacket _packet)
+void MainWindow::do_packetReceived(LocoPacket _packet)
 {
-    if (debug) qDebug() << "Reading packet to text browser. " << _packet.get_packet();
-    ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz ") + _packet.get_packet());
+    if (debug) qDebug() << timeStamp() << "Reading packet to text browser. " << _packet.get_packet();
+    ui->textBrowser_console->append(timeStamp() + _packet.get_packet());
     // Sort packets for easier reading
     QString _op = _packet.get_OPcode();
     if (_op == "B2")
     {
-        ui->textBrowser_sorted_b2->append(_packet.get_packet());
+        ui->textBrowser_sorted_b2->append(timeStamp() + _packet.get_packet());
     } else if (_op == "A0") {
-        ui->textBrowser_sorted_a0->append(_packet.get_packet());
+        ui->textBrowser_sorted_a0->append(timeStamp() + _packet.get_packet());
     } else if (_op == "E7") {
-        ui->textBrowser_sorted_e7->append(_packet.get_packet());
+        ui->textBrowser_sorted_e7->append(timeStamp() + _packet.get_packet());
     }
+}
+
+void MainWindow::do_bytesWritten(QByteArray _bytes)
+{
+    QString _byteText = QString::fromLatin1(_bytes.toHex());
+    if (debug) qDebug() << timeStamp() << "Writing bytes to text browser. " << _byteText;
+    ui->textBrowser_packets->append(timeStamp() + "Written: " +  _byteText);
 }
 
 void MainWindow::do_printDescriptions(QString description)
 {
-    ui->textBrowser_console->append(QTime::currentTime().toString("HH:mm:ss:zzz ") + description);
+    ui->textBrowser_console->append(timeStamp() + description);
 }
 
 /*
@@ -231,7 +257,7 @@ void MainWindow::handle_serialOpened()
 
 void MainWindow::handle_serialClosed()
 {
-    ui->textBrowser_console->append("Serial port closed :D");
+    ui->textBrowser_console->append(timeStamp() + "Serial port closed :D");
     ui->pushButton_serialConnect->setEnabled(true);
     ui->pushButton_serialDisconnect->setEnabled(false);
     ui->comboBox_serialList->setEnabled(true);
@@ -250,16 +276,16 @@ void MainWindow::do_sendSerial()
     outgoingPacket.set_allFromHex(ui->lineEdit_packet->text());
     if (!outgoingPacket.validChk())
     {
-        qDebug() << "Packet isn't right `_`";
+        qDebug() << timeStamp() << "Packet isn't right `_`";
         return;
     }
-    ui->textBrowser_packets->append(outgoingPacket.get_packet().toLatin1());
+    ui->textBrowser_packets->append(timeStamp() + "Asking for write: " + outgoingPacket.get_packet().toLatin1());
 
     // Only interact with a thread via Sig/Slots.
     emit locoserial_write(outgoingPacket);
 
-    if (debug) qDebug() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
-    if (debug) qDebug() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
+    if (debug) qDebug() << timeStamp() << "Firing off to serial: " << outgoingPacket.get_packet().toLatin1();
+    if (debug) qDebug() << timeStamp() << outgoingPacket.get_QByteArray() << outgoingPacket.get_QBitArray();
 }
 
 /*
@@ -268,18 +294,26 @@ void MainWindow::do_sendSerial()
 
 void MainWindow::handle_DBopened()
 {
-    ui->textBrowser_sql->append("Database opened. Connection appears successful :)");
+    ui->textBrowser_sql->append(timeStamp() + "Database opened. Connection appears successful :)");
     ui->pushButton_connect->setEnabled(false);
+    ui->lineEdit_database->setEnabled(false);
+    ui->lineEdit_hostname->setEnabled(false);
+    ui->lineEdit_password->setEnabled(false);
+    ui->lineEdit_user->setEnabled(false);
+    ui->spinBox_port->setEnabled(false);
     ui->pushButton_disconnect->setEnabled(true);
-    //ui->pushButton_runQuery->setEnabled(true);
 }
 
 void MainWindow::handle_DBclosed()
 {
-    ui->textBrowser_sql->append("Database closed.");
+    ui->textBrowser_sql->append(timeStamp() + "Database closed.");
     ui->pushButton_connect->setEnabled(true);
+    ui->lineEdit_database->setEnabled(true);
+    ui->lineEdit_hostname->setEnabled(true);
+    ui->lineEdit_password->setEnabled(true);
+    ui->lineEdit_user->setEnabled(true);
+    ui->spinBox_port->setEnabled(true);
     ui->pushButton_disconnect->setEnabled(false);
-    //ui->pushButton_runQuery->setEnabled(false);
 }
 
 void MainWindow::do_connectDB()
@@ -291,14 +325,8 @@ void MainWindow::do_connectDB()
     QString username = ui->lineEdit_user->text();
     QString password = ui->lineEdit_password->text();
 
-    //locosql->do_openDB(hostname, port, database, username, password);
     emit locosql_open(hostname, port, database, username, password);
 }
-
-/**
- * Flippity Bit
- * That code was shi<malloc_error>
- */
 
 
 

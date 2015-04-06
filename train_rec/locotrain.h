@@ -5,6 +5,8 @@
 #include <QDebug>
 #include <QChar>
 #include <QBitArray>
+#include <QTime>
+
 #include "locobyte.h"
 
 namespace std {
@@ -16,6 +18,7 @@ class LocoTrain
 public:
     LocoTrain();
     ~LocoTrain();
+    QString timeStamp();
     bool operator==(LocoTrain _arg);
     void set_name(QString _name);
     void set_adr(LocoByte _adr);

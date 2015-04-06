@@ -7,6 +7,7 @@
 #include <QUdpSocket>
 #include <QByteArray>
 #include <QPointer>
+#include <QTime>
 
 #include "locobyte.h"
 #include "locoblock.h"
@@ -24,6 +25,7 @@ class LocoUDP : public QObject
 public:
     LocoUDP();
     ~LocoUDP();
+    QString timeStamp();
 
 public slots:
     void do_run();

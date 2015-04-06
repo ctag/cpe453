@@ -11,8 +11,6 @@
 #include <QComboBox>
 #include <QIODevice>
 #include <QTimer>
-#include <QDateTime>
-#include <QDate>
 #include <QTime>
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -38,6 +36,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    QString timeStamp();
     static bool debug;
 
 public slots:
@@ -47,7 +46,8 @@ public slots:
     void do_openSerial();
     void do_sendSerial();
     void do_connectDB();
-    void do_displayPacket(LocoPacket);
+    void do_packetReceived(LocoPacket);
+    void do_bytesWritten(QByteArray);
     void do_printDescriptions(QString);
     void do_loadOPComboBox();
     void do_OPfromComboBox();
@@ -67,7 +67,6 @@ private:
     LocoPacket outgoingPacket;
     LocoPacket incomingPacket;
     QSerialPortInfo usbPorts;
-    QDateTime date;
     LocoSerial * locoserial;
     QThread threadSerial;
     LocoSQL * locosql;

@@ -11,6 +11,11 @@ LocoUDP::~LocoUDP()
     socket->deleteLater();
 }
 
+QString LocoUDP::timeStamp()
+{
+    return(QTime::currentTime().toString("[HH:mm:ss:zzz] "));
+}
+
 void LocoUDP::do_run()
 {
     socket = new QUdpSocket;
@@ -18,7 +23,8 @@ void LocoUDP::do_run()
     debug = new bool;
     *debug = false;
     connect(socket, SIGNAL(readyRead()), this, SLOT(do_readPendingDatagram()));
-    qDebug() << "UDP thread initialized.";
+    do_socketOpen(7755);
+    qDebug() << timeStamp() << "UDP thread initialized.";
 }
 
 void LocoUDP::do_socketOpen(int _port)
@@ -51,11 +57,11 @@ void LocoUDP::do_readPendingDatagram()
         QString _hex(datagram);
         LocoPacket _packet(_hex);
 
-        if (debug) qDebug() << "New UDP datagram: " << _packet.get_packet();
+        if (debug) qDebug() << timeStamp() << "New UDP datagram: " << _packet.get_packet();
 
         if (_packet.validOP())
         {
-          if (debug) qDebug() << "Emitting UDP packet.";
+          if (debug) qDebug() << timeStamp() << "Emitting UDP packet.";
             emit incomingRequest(_packet);
         }
     }

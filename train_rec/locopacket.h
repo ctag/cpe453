@@ -10,6 +10,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QTime>
 
 #include "locobyte.h"
 //#include "locotrain.h"
@@ -33,6 +34,7 @@ public:
     LocoPacket(QString _hex);
     LocoPacket(QByteArray _bytearray);
     ~LocoPacket();
+    QString timeStamp();
     bool operator==(LocoPacket _arg);
     QString get_packet();
     QByteArray get_QByteArray();

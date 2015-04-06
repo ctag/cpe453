@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab_packets">
        <attribute name="title">
@@ -464,6 +464,53 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Threads</string>
+       </attribute>
+       <widget class="QPushButton" name="pushButton_thread_beginUDP">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>30</y>
+          <width>151</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start UDP Thread</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_thread_beginSerial">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>70</y>
+          <width>151</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="text">
+         <string>Start Serial Thread</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_thread_beginSQL">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>110</y>
+          <width>151</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start SQL Thread</string>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -474,7 +521,7 @@
      <x>0</x>
      <y>0</y>
      <width>718</width>
-     <height>19</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>

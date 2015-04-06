@@ -29,7 +29,12 @@ LocoBlock::LocoBlock (QString _hex, bool _aux, bool _occupied)
 
 LocoBlock::~LocoBlock ()
 {
+    //
+}
 
+QString LocoBlock::timeStamp()
+{
+    return(QTime::currentTime().toString("[HH:mm:ss:zzz] "));
 }
 
 bool LocoBlock::operator== (LocoBlock _arg)
@@ -65,7 +70,7 @@ void LocoBlock::set_adr(QString _hex, bool _aux)
         ds = 16;
     }
     bdl16x = ceil(_decimalAdr/16.0);
-    qDebug() << aux << ds << bdl16x;
+    if (debug) qDebug() << timeStamp() << aux << ds << bdl16x;
 }
 
 void LocoBlock::set_adr(int _bdl16x, int _ds, bool _aux)
@@ -122,7 +127,7 @@ int LocoBlock::get_bdl16x()
 
 int LocoBlock::get_board()
 {
-    qDebug() << "Get board: " << bdl16x%10;
+    if (debug) qDebug() << timeStamp() << "Get board: " << bdl16x%10;
     return(bdl16x%10);
 }
 

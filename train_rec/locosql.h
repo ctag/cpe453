@@ -11,6 +11,7 @@
 #include <QSqlError>
 #include <QTimer>
 #include <QPointer>
+#include <QTime>
 
 #include "locobyte.h"
 #include "locoblock.h"
@@ -28,6 +29,7 @@ class LocoSQL : public QObject
 public:
     LocoSQL();
     ~LocoSQL();
+    QString timeStamp();
 
 public slots:
     bool do_openDB(QString hostname, int port, QString database, QString username, QString password);

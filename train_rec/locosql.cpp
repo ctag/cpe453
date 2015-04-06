@@ -35,6 +35,11 @@ LocoSQL::~LocoSQL()
     delete doDelete;
 }
 
+QString LocoSQL::timeStamp()
+{
+    return(QTime::currentTime().toString("[HH:mm:ss:zzz] "));
+}
+
 void LocoSQL::do_run()
 {
     mainDB = new QSqlDatabase;
@@ -44,7 +49,7 @@ void LocoSQL::do_run()
     *debug = false;
     doDelete = new bool;
     *doDelete = true;
-    qDebug() << "SQL thread initialized.";
+    qDebug() << timeStamp() << "SQL thread initialized.";
 }
 
 bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString username, QString password)
@@ -58,8 +63,8 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
     // Attempt to open database
     if (!mainDB->open())
     {
-        qDebug() << "Opening postgresql database failed D:";
-        qDebug() << mainDB->lastError();
+        qDebug() << timeStamp() << "Opening postgresql database failed D:";
+        qDebug() << timeStamp() << mainDB->lastError();
         return(false);
     }
 
@@ -135,16 +140,16 @@ void LocoSQL::do_clearTable(QString _table)
         _table.prepend("DELETE FROM cpe453.");
         mainQuery->prepare(_table);
         mainQuery->bindValue(":table", _table);
-        if (*debug) qDebug() << "Deleting all rows in SQL cpe453." << _table;
+        if (*debug) qDebug() << timeStamp() << "Deleting all rows in SQL cpe453." << _table;
         if (!mainQuery->exec())
         {
-            qDebug() << mainQuery->lastError();
+            qDebug() << timeStamp() << mainQuery->lastError();
         }
     }
 }
 
 int LocoSQL::get_percentFromHex(QString _hex) {
-    if (*debug) qDebug() << "percentfromhex: " << _hex;
+    if (*debug) qDebug() << timeStamp() << "percentfromhex: " << _hex;
     int _percent = _hex.toInt(0, 16);
     _percent = _percent*0.8;
     if (_percent < 0) {
@@ -152,7 +157,7 @@ int LocoSQL::get_percentFromHex(QString _hex) {
     } else if (_percent > 100) {
         _percent = 100;
     }
-    if (*debug) qDebug() << "get_percentFromHex(): " << _percent;
+    if (*debug) qDebug() << timeStamp() << "get_percentFromHex(): " << _percent;
     return(_percent);
 }
 
@@ -161,16 +166,16 @@ QString LocoSQL::get_hexFromPercent(int _percent) {
         return("00");
     }
     _percent = ceil(_percent*1.25);
-    if (*debug) qDebug() << "Percent " << _percent;
+    if (*debug) qDebug() << timeStamp() << "Percent " << _percent;
     QString _hex =  QString("%1").arg(_percent, 2, 16, QChar('0')); //QString::number(_percent, 16);
-    if (*debug) qDebug() << "get_hexFromPercent(): " << _hex;
+    if (*debug) qDebug() << timeStamp() << "get_hexFromPercent(): " << _hex;
     get_percentFromHex(_hex);
     return(_hex);
 }
 
 QString LocoSQL::get_hexFromInt(int _adr) {
     QString _hex =  QString("%1").arg(_adr, 2, 16, QChar('0'));//QString::number(_adr, 16);
-    if (*debug) qDebug() << "get_hexFromInt(): " << _hex;
+    if (*debug) qDebug() << timeStamp() << "get_hexFromInt(): " << _hex;
     return(_hex);
 }
 
@@ -202,7 +207,7 @@ void LocoSQL::do_cycleReqs()
 
 void LocoSQL::do_reqMacro()
 {
-    if (*debug) qDebug() << "Querying for macro requests.";
+    if (*debug) qDebug() << timeStamp() << "Querying for macro requests.";
     if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
@@ -217,44 +222,44 @@ void LocoSQL::do_reqMacro()
         QString _macro = mainQuery->value("macro").toString();
         int _id = mainQuery->value("id").toInt();
         if (_macro == "SLOT_SCAN") { // arg1 = slot #
-            if (debug) qDebug() << "Scanning slot.";
+            if (debug) qDebug() << timeStamp() << "Scanning slot.";
             LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
             emit slotScan(_arg1);
         } else if (_macro == "SLOT_SCAN_ALL") { // no args
-            if (debug) qDebug() << "Not Implemented";
+            if (debug) qDebug() << timeStamp() << "Not Implemented";
         } else if (_macro == "SLOT_DISPATCH") { // arg1 = slot #
-            if (debug) qDebug() << "Dispatching slot.";
+            if (debug) qDebug() << timeStamp() << "Dispatching slot.";
             LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
             emit slotDispatch(_arg1);
         } else if (_macro == "SLOT_DISPATCH_ALL") {
-            if (debug) qDebug() << "Not Implemented";
+            if (debug) qDebug() << timeStamp() << "Not Implemented";
         } else if (_macro == "SLOT_CLEAR") { // arg1 = slot
-            if (debug) qDebug() << "Calling for track reset.";
+            if (debug) qDebug() << timeStamp() << "Calling for track reset.";
             LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
             emit slotClear(_arg1);
         } else if (_macro == "SLOT_CLEAR_ALL") {
-            if (debug) qDebug() << "Not Implemented";
+            if (debug) qDebug() << timeStamp() << "Not Implemented";
         } else if (_macro == "SLOT_REQ") { // arg1 = train
-            if (debug) qDebug() << "Requesting slot";
+            if (debug) qDebug() << timeStamp() << "Requesting slot";
             LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
             emit slotReq(_arg1);
         } else if (_macro == "SLOT_USE") { // arg1 = slot
-            if (debug) qDebug() << "Setting slot to IN_USE.";
+            if (debug) qDebug() << timeStamp() << "Setting slot to IN_USE.";
             LocoByte _arg1 = get_hexFromInt(mainQuery->value("arg1").toInt());
             emit slotUse(_arg1);
         } else if (_macro == "TRACK_RESET") {
-            if (debug) qDebug() << "Calling for track reset.";
+            if (debug) qDebug() << timeStamp() << "Calling for track reset.";
             emit trackReset();
         } else if (_macro == "TRACK_ON") {
-            if (debug) qDebug() << "Calling for track on.";
+            if (debug) qDebug() << timeStamp() << "Calling for track on.";
             emit trackOn();
         } else if (_macro == "TRACK_OFF") {
-            if (debug) qDebug() << "Calling for track off.";
+            if (debug) qDebug() << timeStamp() << "Calling for track off.";
             emit trackOff();
         }
         if (*doDelete)
         {
-            if (debug) qDebug() << "deleting macro id: " << _id;
+            if (debug) qDebug() << timeStamp() << "deleting macro id: " << _id;
             mainQuery->prepare("DELETE FROM "+schema+"."+reqMacro+" WHERE id=:_id LIMIT 1;");
             mainQuery->bindValue(":_id", _id);
             mainQuery->exec();
@@ -264,7 +269,7 @@ void LocoSQL::do_reqMacro()
 
 void LocoSQL::do_reqSwitch()
 {
-    if (*debug) qDebug() << "Querying for switch requests.";
+    if (*debug) qDebug() << timeStamp() << "Querying for switch requests.";
     if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
@@ -291,7 +296,7 @@ void LocoSQL::do_reqSwitch()
         _packet.do_appendLocoByte(_id);
         _packet.do_appendLocoByte(_position);
         _packet.do_genChecksum();
-        if (*debug) qDebug() << "Found switch request: " << _packet.get_packet();
+        if (*debug) qDebug() << timeStamp() << "Found switch request: " << _packet.get_packet();
         emit incomingRequest(_packet);
         if (*doDelete)
         {
@@ -304,7 +309,7 @@ void LocoSQL::do_reqSwitch()
 
 void LocoSQL::do_reqTrain()
 {
-    if (*debug) qDebug() << "Querying for train requests.";
+    if (*debug) qDebug() << timeStamp() << "Querying for train requests.";
     if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
@@ -334,13 +339,13 @@ void LocoSQL::do_reqTrain()
         _speedPacket.do_appendLocoByte(_speed);
         _speedPacket.do_genChecksum();
         emit incomingRequest(_speedPacket);
-        if (*debug) qDebug() << "Found speed request. " << _speedPacket.get_packet();
+        if (*debug) qDebug() << timeStamp() << "Found speed request. " << _speedPacket.get_packet();
         _command.set_fromHex("A1");
         _dirPacket.do_appendLocoByte(_command);
         _dirPacket.do_appendLocoByte(_slot);
         _dirPacket.do_appendByte(QString::number(((_dir)?2:0)+1)+"0");
         emit incomingRequest(_dirPacket);
-        if (*debug) qDebug() << "Found dir request. " << _dirPacket.get_packet();
+        if (*debug) qDebug() << timeStamp() << "Found dir request. " << _dirPacket.get_packet();
         if (*doDelete)
         {
             mainQuery->prepare("DELETE FROM "+schema+"."+reqTrain+" WHERE slot=:_slot LIMIT 1;");
@@ -352,7 +357,7 @@ void LocoSQL::do_reqTrain()
 
 void LocoSQL::do_reqPacket()
 {
-    if (*debug) qDebug() << "Querying for packet requests.";
+    if (*debug) qDebug() << timeStamp() << "Querying for packet requests.";
     if (mainDB == NULL || mainQuery == NULL) {
         return;
     }
@@ -368,7 +373,7 @@ void LocoSQL::do_reqPacket()
         int _id = mainQuery->value("id").toInt();
         if (_packet.validOP())
         {
-            if (*debug) qDebug() << "Found packet request: " << _packet.get_packet();
+            if (*debug) qDebug() << timeStamp() << "Found packet request: " << _packet.get_packet();
             emit incomingRequest(_packet);
         }
         if (*doDelete)
@@ -405,7 +410,7 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
         int _status = _block.get_occupied();
         mainQuery->bindValue(":id", _id);
         mainQuery->bindValue(":status", _status);
-        if (*debug) qDebug() << "Updating SQL block: " << _id << ":" << _status;
+        if (*debug) qDebug() << timeStamp() << "Updating SQL block: " << _id << ":" << _status;
         mainQuery->exec();
     }
 }
@@ -435,7 +440,7 @@ void LocoSQL::do_updateTrain (LocoTrain _train)
         mainQuery->bindValue(":speed", _speed);
         mainQuery->bindValue(":dir", _dir);
         mainQuery->bindValue(":state", _state);
-        if (*debug) qDebug() << "Updating train SQL." << _slot << ":" << _speed;
+        if (*debug) qDebug() << timeStamp() << "Updating train SQL." << _slot << ":" << _speed;
         mainQuery->exec();
     }
 }
@@ -454,7 +459,7 @@ void LocoSQL::do_updateSwitch(int _adr, bool _state)
                           "UPDATE state=:state;");
         mainQuery->bindValue(":adr", _adr);
         mainQuery->bindValue(":state", _state);
-        if (*debug) qDebug() << "Updating switch SQL." << _adr << ":" << _state;
+        if (*debug) qDebug() << timeStamp() << "Updating switch SQL." << _adr << ":" << _state;
         mainQuery->exec();
         //
     }

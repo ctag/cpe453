@@ -7,6 +7,7 @@
 #include <QBitArray>
 #include <QByteArray>
 #include <QBitArray>
+#include <QTime>
 
 #include "locobyte.h"
 
@@ -21,6 +22,7 @@ public:
     LocoBlock(int _bdl16x, int _ds, bool _aux, bool _occupied);
     LocoBlock(QString _hex, bool _aux, bool _occupied);
     ~LocoBlock();
+    QString timeStamp();
     bool operator==(LocoBlock _arg);
     //void set_name(QString _name);
     void set_adr(QString _hex, bool _aux);

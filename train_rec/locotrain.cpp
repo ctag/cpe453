@@ -16,6 +16,11 @@ LocoTrain::~LocoTrain ()
 
 }
 
+QString LocoTrain::timeStamp()
+{
+    return(QTime::currentTime().toString("[HH:mm:ss:zzz] "));
+}
+
 bool LocoTrain::operator ==(LocoTrain _arg)
 {
     return((this->get_adr() == _arg.get_adr()) && (this->get_slot() == _arg.get_slot()));
