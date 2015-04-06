@@ -2,6 +2,15 @@
 #include "ui_mainwindow.h"
 
 /**
+ * train_rec - Control a Digitrax track from the internet
+ * Christopher Bero
+ * Team 4A
+ *
+ * I've tried hard not to step on any copyrights associated with Digitrax code,
+ * don't sue me please.
+ */
+
+/**
  * Conventions:
  * Underscores indicate a local variable to a function
  * set_ to change a member variable
