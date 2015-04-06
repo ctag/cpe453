@@ -1,5 +1,5 @@
-#ifndef MYITEM_H
-#define MYITEM_H
+#ifndef VERTEX_H
+#define VERTEX_H
 
 #include <QGraphicsItem>
 #include <QPainter>
@@ -9,12 +9,12 @@
 #include <QDebug>
 #include <QDateTime>
 
- class myitem :  public QGraphicsItem
+ class vertex :  public QGraphicsItem
 {
 
 public:
-    myitem(QPointF eventPos, int itemID);
-    ~myitem();
+    vertex(QPointF eventPos, int itemID);
+    ~vertex();
     QPointF mypoint;
     int xposition;
     int yposition;
@@ -45,4 +45,4 @@ signals:
 
  };
 
-#endif // MYITEM_H
+#endif // VERTEX_H

@@ -1,7 +1,7 @@
-#include "myitem.h"
+#include "vertex.h"
 //#include "mywidget.h" // No recursing
 
-myitem::myitem(QPointF eventPos, int itemID)
+vertex::vertex(QPointF eventPos, int itemID)
 {
     doDebug = true; // Set this to enable/disable debugging messages.
     dateTime = QDateTime::currentDateTime();
@@ -20,12 +20,12 @@ myitem::myitem(QPointF eventPos, int itemID)
     debugMsg("Loaded myitem type.");
 }
 
-myitem::~myitem()
+vertex::~vertex()
 {
     //
 }
 
-void myitem::debugMsg(QString _msg)
+void vertex::debugMsg(QString _msg)
 {
     if (doDebug)
     {
@@ -33,13 +33,13 @@ void myitem::debugMsg(QString _msg)
     }
 }
 
-QRectF myitem::boundingRect() const
+QRectF vertex::boundingRect() const
 {
     return QRectF(mypoint.x()-8,mypoint.y()-7,30,30);
    // qDebug() << mypoint;
 }
 
-void myitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     if(isSelected()){
         if(isSwitch){
@@ -101,13 +101,13 @@ void myitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     }
 }
 
-void myitem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+void vertex::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
      rect=rect.adjusted(0,0,5,5);
      update();
 }
 
-void myitem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+void vertex::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
      rect=rect.adjusted(0,0,-5,-5);
      update();

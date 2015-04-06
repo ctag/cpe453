@@ -1,5 +1,5 @@
-#ifndef MYWIDGET_H
-#define MYWIDGET_H
+#ifndef TRACK_H
+#define TRACK_H
 
 #include <QLabel>
 #include <QLine>
@@ -20,17 +20,17 @@
 #include <QList>
 #include <QDateTime>
 
-#include "myitem.h"
+#include "vertex.h"
 
-class mywidget : public QGraphicsView
+class track : public QGraphicsView
 {
     Q_OBJECT
 
 public:
-    explicit mywidget(QWidget *parent = 0);
-    ~mywidget();
-    myitem *previousNode;
-    myitem *activeNode;
+    explicit track(QWidget *parent = 0);
+    ~track();
+    vertex *previousNode;
+    vertex *activeNode;
     int activeItemID;
     QGraphicsItem* selectedNode;
     int id_counter;
@@ -38,7 +38,7 @@ public:
     bool track_rad_state;
     QPointF startPos;
     QPointF endPos;
-    QList<myitem*> nodeList;
+    QList<vertex*> nodeList;
     QGraphicsLineItem *line;
     QLineF *testline;
 
@@ -71,4 +71,4 @@ signals:
 
 };
 
-#endif // MYWIDGET_H
+#endif // TRACK_H

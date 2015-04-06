@@ -66,7 +66,7 @@
           <number>0</number>
          </property>
          <item>
-          <widget class="mywidget" name="mytraintrack">
+          <widget class="track" name="mytraintrack">
            <property name="cursor" stdset="0">
             <cursorShape>CrossCursor</cursorShape>
            </property>
@@ -943,7 +943,7 @@
                <bool>true</bool>
               </property>
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="tab_1">
                <property name="palette">
@@ -1451,7 +1451,7 @@
                  <rect>
                   <x>5</x>
                   <y>10</y>
-                  <width>151</width>
+                  <width>180</width>
                   <height>61</height>
                  </rect>
                 </property>
@@ -1498,7 +1498,7 @@
      <x>0</x>
      <y>0</y>
      <width>778</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -1549,9 +1549,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>mywidget</class>
+   <class>track</class>
    <extends>QGraphicsView</extends>
-   <header>mywidget.h</header>
+   <header location="global">track.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

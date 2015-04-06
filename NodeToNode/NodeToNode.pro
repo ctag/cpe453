@@ -16,12 +16,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    mywidget.cpp \
-    myitem.cpp
+    vertex.cpp \
+    track.cpp
 
 HEADERS  += mainwindow.h \
-    mywidget.h \
-    myitem.h
+    vertex.h \
+    track.h
 
 FORMS    += mainwindow.ui \
 

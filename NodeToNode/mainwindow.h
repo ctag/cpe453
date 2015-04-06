@@ -2,10 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "QLine"
-#include "QEvent"
-#include "QMoveEvent"
-#include "QGraphicsScene"
+#include <QLine>
+#include <QEvent>
+#include <QMoveEvent>
+#include <QGraphicsScene>
 #include <QMouseEvent>
 #include <QPoint>
 #include <QPixmap>
@@ -16,7 +16,9 @@
 #include <QLabel>
 #include <QAction>
 #include <QRadioButton>
- #include "myitem.h"
+
+#include "vertex.h"
+
  namespace Ui {
 class MainWindow;
 }
@@ -32,9 +34,9 @@ public:
      QPoint mappedPos;
 private:
      Ui::MainWindow *ui;
-    myitem *activeNode;
+    vertex *activeNode;
     QGraphicsScene* scene;
-    QList<myitem> nodeList;
+    QList<vertex> nodeList;
     bool connectsToPrevious;
 
 

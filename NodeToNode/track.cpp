@@ -1,6 +1,6 @@
-#include "mywidget.h"
+#include "track.h"
 
-mywidget::mywidget(QWidget *parent): QGraphicsView(parent)
+track::track(QWidget *parent): QGraphicsView(parent)
 {
     doDebug = true; // Set this to turn on and off debug messages.
     dateTime = QDateTime::currentDateTime(); // Used for post-analysis.
@@ -26,12 +26,12 @@ mywidget::mywidget(QWidget *parent): QGraphicsView(parent)
     debugMsg("Loaded graphics widget.");
  }
 
-mywidget::~mywidget()
+track::~track()
 {
     //
 }
 
-void mywidget::debugMsg(QString _msg)
+void track::debugMsg(QString _msg)
 {
     if (doDebug)
     {
@@ -40,13 +40,13 @@ void mywidget::debugMsg(QString _msg)
 }
 
 //click
-void mywidget::mousePressEvent(QMouseEvent *event)
+void track::mousePressEvent(QMouseEvent *event)
 {
     QGraphicsView::mousePressEvent(event);
     QPointF p = mapToScene(event->pos());
 
     if(event->buttons() & Qt::RightButton){
-         activeNode = new myitem(p,id_counter);
+         activeNode = new vertex(p,id_counter);
 
          startPos = activeNode->pos();
          scene->addItem(activeNode);
@@ -60,22 +60,22 @@ void mywidget::mousePressEvent(QMouseEvent *event)
 
   }
 
-void mywidget::mouseReleaseEvent(QMouseEvent *event)
+void track::mouseReleaseEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseReleaseEvent(event);
     if(leftDown)
         leftDown=!leftDown;
 }
 
-void mywidget::mouseMoveEvent(QMouseEvent *event)
+void track::mouseMoveEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseMoveEvent(event);
     if(itemAt(event->pos())){
-         activeNode=dynamic_cast<myitem *>(itemAt(event->pos()));
+         activeNode=dynamic_cast<vertex *>(itemAt(event->pos()));
      }
 }
 
-void mywidget::switch_button_clicked(){
+void track::switch_button_clicked(){
     if(!nodeList.isEmpty() && activeNode->isSelected())
     {
          activeNode->isSwitch=!activeNode->isSwitch;
@@ -83,7 +83,7 @@ void mywidget::switch_button_clicked(){
          update();}
 }
 
-void mywidget::node_button_clicked(){
+void track::node_button_clicked(){
     if(!nodeList.isEmpty()  && activeNode->isSelected())
     {
          activeNode->isNode=!activeNode->isNode;
@@ -92,14 +92,14 @@ void mywidget::node_button_clicked(){
 
 }
 
-void mywidget::delete_button_clicked()
+void track::delete_button_clicked()
 {
      if(activeNode->isSelected())
          scene->removeItem(activeNode);
          update();
 }
 
-void mywidget::keyPressEvent(QKeyEvent *event)
+void track::keyPressEvent(QKeyEvent *event)
 {
      QGraphicsView::keyPressEvent(event);
     qDebug() << event->key();
@@ -113,7 +113,7 @@ void mywidget::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void mywidget::get_track_rad(bool status)
+void track::get_track_rad(bool status)
 {
     track_rad_state=status;
 }
