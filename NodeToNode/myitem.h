@@ -6,6 +6,8 @@
 #include <QMouseEvent>
 #include <QGraphicsScene>
 #include <QGraphicsSceneHoverEvent>
+#include <QDebug>
+#include <QDateTime>
 
  class myitem :  public QGraphicsItem
 {
@@ -29,6 +31,11 @@ protected:
     //void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+    void debugMsg(QString _msg);
+
+private:
+    bool doDebug;
+    QDateTime dateTime;
 
 public slots:
     void set_stuff();

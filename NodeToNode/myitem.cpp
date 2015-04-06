@@ -1,8 +1,11 @@
-#include <QDebug>
 #include "myitem.h"
- #include "mywidget.h"
+//#include "mywidget.h" // No recursing
+
 myitem::myitem(QPointF eventPos, int itemID)
 {
+    doDebug = true; // Set this to enable/disable debugging messages.
+    dateTime = QDateTime::currentDateTime();
+
      setFlag(ItemIsSelectable);
     setFlag(ItemIsMovable);
     setAcceptHoverEvents(true);
@@ -13,13 +16,22 @@ myitem::myitem(QPointF eventPos, int itemID)
     nodeID =  itemID;
     rect = boundingRect();
     draw_track=false;
+
+    debugMsg("Loaded myitem type.");
   }
+
+void myitem::debugMsg(QString _msg)
+{
+    if (doDebug)
+    {
+        qDebug() << dateTime.toString("[HH:mm:ss:zzz] ") + _msg;
+    }
+}
+
 QRectF myitem::boundingRect() const {
     return QRectF(mypoint.x()-8,mypoint.y()-7,30,30);
    // qDebug() << mypoint;
 }
-
-
 
 void myitem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
 

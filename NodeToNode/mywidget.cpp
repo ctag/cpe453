@@ -2,8 +2,8 @@
 
 mywidget::mywidget(QWidget *parent): QGraphicsView(parent)
 {
-    doDebug = true;
-    dateTime = QDateTime::currentDateTime();
+    doDebug = true; // Set this to turn on and off debug messages.
+    dateTime = QDateTime::currentDateTime(); // Used for post-analysis.
 
     this->setEnabled(true);
 
