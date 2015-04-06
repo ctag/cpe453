@@ -1,5 +1,4 @@
 #include "vertex.h"
-//#include "mywidget.h" // No recursing
 
 vertex::vertex(QPointF eventPos, int itemID)
 {
@@ -36,7 +35,6 @@ void vertex::debugMsg(QString _msg)
 QRectF vertex::boundingRect() const
 {
     return QRectF(mypoint.x()-8,mypoint.y()-7,30,30);
-   // qDebug() << mypoint;
 }
 
 void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

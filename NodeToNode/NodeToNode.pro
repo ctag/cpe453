@@ -17,11 +17,13 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     vertex.cpp \
-    track.cpp
+    track.cpp \
+    sql.cpp
 
 HEADERS  += mainwindow.h \
     vertex.h \
-    track.h
+    track.h \
+    sql.h
 
 FORMS    += mainwindow.ui \
 
