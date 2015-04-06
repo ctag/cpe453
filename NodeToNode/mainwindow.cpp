@@ -18,12 +18,21 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->horizontalLayout->setMargin(0);
     ui->tabWidget->setTabText(0,"Layout Options");
 
+    // Database Sig/Slots
+    connect(ui->pushButton_connect_2, SIGNAL(clicked()), this, SLOT(do_connectDB()));
+    connect(ui->pushButton_disconnect_2, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
+    connect(locosql, &SQL::DBopened, this, &MainWindow::handle_DBopened);
+    connect(locosql, &SQL::DBclosed, this, &MainWindow::handle_DBclosed);
 
     connect(ui->rad_track_piece,SIGNAL(clicked()),this,SLOT(check_rad()));//
     connect(this,SIGNAL(rad_track_status(bool)),ui->mytraintrack,SLOT(get_track_rad(bool)));
     connect(ui->deleteButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(delete_button_clicked()));
     connect(ui->switchButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(switch_button_clicked()));
     connect(ui->nodeButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(node_button_clicked()));
+
+    // Kickstart thread
+    threadSQL.start();
+    locosql->do_run();
 }
 
 MainWindow::~MainWindow()
