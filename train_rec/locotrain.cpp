@@ -1,6 +1,6 @@
 #include "locotrain.h"
 
-bool LocoTrain::debug = true;
+bool LocoTrain::debug = false;
 
 LocoTrain::LocoTrain ()
 {
@@ -14,6 +14,11 @@ LocoTrain::LocoTrain ()
 LocoTrain::~LocoTrain ()
 {
 
+}
+
+QString LocoTrain::timeStamp()
+{
+    return(QTime::currentTime().toString("[HH:mm:ss:zzz] "));
 }
 
 bool LocoTrain::operator ==(LocoTrain _arg)
@@ -46,6 +51,16 @@ void LocoTrain::set_speed (LocoByte _speed)
     speed = _speed;
 }
 
+void LocoTrain::set_state(QString _state)
+{
+    state = _state;
+}
+
+QString LocoTrain::get_state()
+{
+    return(state);
+}
+
 LocoByte LocoTrain::get_adr ()
 {
     return (adr);
@@ -58,7 +73,7 @@ LocoByte LocoTrain::get_slot ()
 
 LocoByte LocoTrain::get_speed ()
 {
-    return(slot);
+    return(speed);
 }
 
 bool LocoTrain::get_direction ()

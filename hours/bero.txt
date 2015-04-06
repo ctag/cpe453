@@ -1,4 +1,16 @@
 
+
+21-3 5hr
+	testing usb connection and writing udp class
+20-3 4hr
+	working on threads
+19-3 6.3hr
+	retooling program for threaded handling of sql tables.
+
+# Sprint 4
+Many hours
+
+
 # Sprint 3
 total: 
 03-3 5.3hr

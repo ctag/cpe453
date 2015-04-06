@@ -33,3 +33,6 @@ build-*
 #QtCtreator Qml
 *.qmlproject.user
 *.qmlproject.user.*
+
+LibreOffice docs
+.~lock*

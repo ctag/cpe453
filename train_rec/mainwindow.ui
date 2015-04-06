@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>6</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab_packets">
        <attribute name="title">
@@ -104,44 +104,6 @@
              </widget>
             </item>
            </layout>
-          </item>
-          <item>
-           <layout class="QFormLayout" name="formLayout_4">
-            <item row="0" column="0">
-             <widget class="QSpinBox" name="spinBox_timerPeriod">
-              <property name="value">
-               <number>10</number>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QPushButton" name="pushButton_timerToggle">
-              <property name="text">
-               <string>Start Timer</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QPushButton" name="pushButton_resetTrack">
-              <property name="text">
-               <string>Reset Track</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Previous Packets: </string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QComboBox" name="comboBox_packetHistory"/>
           </item>
           <item>
            <layout class="QFormLayout" name="formLayout_3">
@@ -254,155 +216,6 @@
          <widget class="QTextBrowser" name="textBrowser_sorted_e7"/>
         </item>
        </layout>
-      </widget>
-      <widget class="QWidget" name="tab_train">
-       <attribute name="title">
-        <string>Train</string>
-       </attribute>
-       <widget class="QPushButton" name="pushButton_train_find">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>81</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Find Trains</string>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="comboBox_trainsAvailable">
-        <property name="geometry">
-         <rect>
-          <x>30</x>
-          <y>60</y>
-          <width>131</width>
-          <height>22</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_train_select">
-        <property name="geometry">
-         <rect>
-          <x>180</x>
-          <y>60</y>
-          <width>91</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Select Train</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_train_forward">
-        <property name="geometry">
-         <rect>
-          <x>40</x>
-          <y>120</y>
-          <width>81</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Set Forward</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_train_backward">
-        <property name="geometry">
-         <rect>
-          <x>160</x>
-          <y>120</y>
-          <width>91</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Set Backward</string>
-        </property>
-       </widget>
-       <widget class="QSlider" name="horizontalSlider">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>210</y>
-          <width>251</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-       <widget class="QTextBrowser" name="textBrowser_trains">
-        <property name="geometry">
-         <rect>
-          <x>340</x>
-          <y>30</y>
-          <width>256</width>
-          <height>192</height>
-         </rect>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab_switch">
-       <attribute name="title">
-        <string>Switch</string>
-       </attribute>
-       <widget class="QSpinBox" name="spinBox_switch_id">
-        <property name="geometry">
-         <rect>
-          <x>70</x>
-          <y>50</y>
-          <width>48</width>
-          <height>23</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_switch_select">
-        <property name="geometry">
-         <rect>
-          <x>150</x>
-          <y>50</y>
-          <width>101</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Select Switch</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_switch_left">
-        <property name="geometry">
-         <rect>
-          <x>80</x>
-          <y>140</y>
-          <width>81</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Switch Left</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="pushButton_switch_right">
-        <property name="geometry">
-         <rect>
-          <x>200</x>
-          <y>140</y>
-          <width>101</width>
-          <height>22</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Switch Right</string>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab_block">
-       <attribute name="title">
-        <string>Block</string>
-       </attribute>
       </widget>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -520,6 +333,9 @@
               </item>
               <item alignment="Qt::AlignLeft">
                <widget class="QLineEdit" name="lineEdit_schema">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>public</string>
                 </property>
@@ -538,6 +354,9 @@
               </item>
               <item alignment="Qt::AlignLeft">
                <widget class="QLineEdit" name="lineEdit_table">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>testsql</string>
                 </property>
@@ -610,52 +429,6 @@
             </property>
            </spacer>
           </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_tableText">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Table Text</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_11">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButton_queryModel">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="text">
-             <string>Query Model</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
          </layout>
         </item>
         <item row="2" column="0">
@@ -669,6 +442,9 @@
           </item>
           <item>
            <widget class="QLineEdit" name="lineEdit_query">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>SELECT * FROM public.testsql</string>
             </property>
@@ -688,6 +464,53 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Threads</string>
+       </attribute>
+       <widget class="QPushButton" name="pushButton_thread_beginUDP">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>30</y>
+          <width>151</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start UDP Thread</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_thread_beginSerial">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>70</y>
+          <width>151</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::StrongFocus</enum>
+        </property>
+        <property name="text">
+         <string>Start Serial Thread</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_thread_beginSQL">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>110</y>
+          <width>151</width>
+          <height>27</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Start SQL Thread</string>
+        </property>
+       </widget>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -698,7 +521,7 @@
      <x>0</x>
      <y>0</y>
      <width>718</width>
-     <height>19</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
