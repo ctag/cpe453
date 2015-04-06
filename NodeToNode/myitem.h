@@ -14,6 +14,7 @@
 
 public:
     myitem(QPointF eventPos, int itemID);
+    ~myitem();
     QPointF mypoint;
     int xposition;
     int yposition;

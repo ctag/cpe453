@@ -20,6 +20,11 @@ myitem::myitem(QPointF eventPos, int itemID)
     debugMsg("Loaded myitem type.");
 }
 
+myitem::~myitem()
+{
+    //
+}
+
 void myitem::debugMsg(QString _msg)
 {
     if (doDebug)

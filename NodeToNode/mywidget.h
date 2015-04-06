@@ -2,10 +2,10 @@
 #define MYWIDGET_H
 
 #include <QLabel>
-#include "QLine"
-#include "QEvent"
-#include "QMoveEvent"
-#include "QGraphicsSceneMouseEvent"
+#include <QLine>
+#include <QEvent>
+#include <QMoveEvent>
+#include <QGraphicsSceneMouseEvent>
 #include <QMouseEvent>
 #include <QGraphicsLineItem>
 #include <QPoint>

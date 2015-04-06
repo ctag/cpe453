@@ -49,8 +49,9 @@ void mywidget::mousePressEvent(QMouseEvent *event)
          activeNode = new myitem(p,id_counter);
 
          startPos = activeNode->pos();
-              scene->addItem(activeNode);
-               id_counter++;
+         scene->addItem(activeNode);
+         id_counter++;
+
          nodeList.append(activeNode);
          update();
      }
