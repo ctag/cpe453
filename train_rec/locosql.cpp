@@ -256,6 +256,53 @@ void LocoSQL::do_reqMacro()
         } else if (_macro == "TRACK_OFF") {
             if (debug) qDebug() << timeStamp() << "Calling for track off.";
             emit trackOff();
+        } else if (_macro == "TRAIN_REQ") {
+            if (debug) qDebug() << timeStamp() << "Calling for train req.";
+            // Local variables
+            int _adr = mainQuery->value("arg1").toInt();
+            int _speed = mainQuery->value("arg2").toInt();
+            int _dir = 0;
+            QVector<int> _slots;
+
+            // Set dir
+            if (_speed < 0) {
+                _dir = 1;
+                _speed = abs(_speed);
+            }
+
+            // Request a slot for the given train address
+            mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
+                               "VALUES ('SLOT_REQ', '"+_adr+"');");
+            mainQuery->exec();
+
+            // Find slots associated with train address
+            mainQuery->prepare("SELECT * FROM "+schema+"."+trackTrain+" WHERE adr=:_adr;");
+            mainQuery->bindValue(":_adr", _adr);
+            mainQuery->exec();
+
+            // Build list of associated slots
+            while (mainQuery->next())
+            {
+                int _slot = mainQuery->value("slot").toInt();
+                _slots.push_back(_slot);
+            }
+
+            // Iterate to scan slots and push requests
+            while (!_slots.isEmpty())
+            {
+                mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
+                                   "VALUES ('SLOT_USE', '"+_slots.first()+"');");
+                mainQuery->exec();
+                mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
+                                   "VALUES ('SLOT_SCAN', '"+_slots.first()+"');");
+                mainQuery->exec();
+                mainQuery->prepare("INSERT INTO "+schema+"."+reqTrain+" (`slot`, `speed`, `dir`)"
+                                   "VALUES (:slot, :speed, :dir);");
+                mainQuery->bindValue(":slot", _slots.takeFirst());
+                mainQuery->bindValue(":speed", _speed);
+                mainQuery->bindValue(":dir", _dir);
+                mainQuery->exec();
+            }
         }
         if (*doDelete)
         {
