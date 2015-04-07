@@ -3,9 +3,9 @@
 /*
  * Bounding format:
  * Entire Object:
- * x: 30 + 2xpen + 2px
+ * x: 30 + 2xpen + 2px + textWidth
  * y: 40 + 2xpen + 2px
- * Text: 30px (+ 30px) by 10px
+ * Text: 30px (+ textWidth) by 10px
  * Painting: 30px by 30px
  */
 
@@ -24,11 +24,12 @@ vertex::vertex(QPointF eventPos, int itemID)
     nodeID =  itemID;
     rect = boundingRect();
     draw_track=false;
-    penSize = 2; // 2 px pen size
-    margin = 3;
-    textWidth = 30;
 
-    debugMsg("Loaded myitem type.");
+    penSize = 2; // 2px pen size
+    margin = 3; // 3px between obj and text
+    textWidth = 30; // 30px extra space to write text
+
+    debugMsg("Loaded new vertex.");
 }
 
 vertex::~vertex()
@@ -108,7 +109,6 @@ void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         painter->drawEllipse(drawRect());
         painter->drawText(textRect(), QString::number(nodeID));
     }
-
     update();
 }
 
