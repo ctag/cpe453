@@ -38,8 +38,8 @@ public:
     QPointF startPos;
     QPointF endPos;
     QList<vertex*> nodeList;
-
     edge * line;
+
 private:
     bool firstclick;
     bool secondclick;

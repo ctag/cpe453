@@ -39,64 +39,38 @@ QRectF vertex::boundingRect() const
 
 void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    if(isSelected()){
-        if(isSwitch){
-            QBrush brush(Qt::cyan);
-            QPen pen(Qt::black, 3);
-            painter->setPen(pen);
-            painter->setBrush(brush);
-            painter->drawRect(rect.adjusted(0,0,-15,-15));
-            painter->drawText(mypoint.x()-8,mypoint.y()-8, QString::number(nodeID)+"_Switch");
-            update();
-        }
-        else if (isNode){
-            QBrush brush(Qt::cyan);
-            QPen pen(Qt::black, 3);
-            painter->setPen(pen);
-            painter->setBrush(brush);
-            painter->drawEllipse(rect.adjusted(0,0,-15,-15));
-            painter->drawText(mypoint.x()-8,mypoint.y()-8, QString::number(nodeID)+"_Node");
+    QBrush * brush = NULL;
+    QPen pen(Qt::black, 2);
+    painter->setPen(pen);
 
-            update();
-        }
-        else{
-            QBrush brush(Qt::cyan);
-            QPen pen(Qt::black, 3);
-            painter->setPen(pen);
-            painter->setBrush(brush);
-            painter->drawEllipse(rect.adjusted(0,0,-15,-15));
-            painter->drawText(mypoint.x()-8,mypoint.y()-8, QString::number(nodeID));
-            update();
-        }
-
+    if(isSelected())
+    {
+        brush = new QBrush(Qt::cyan);
     }
-    else if(isNode){
-        QBrush brush(Qt::yellow);
-        QPen pen(Qt::black,3);
-        painter->setPen(pen);
-        painter->setBrush(brush);
+    if (isNode) {
+        if (brush == NULL) {
+            brush = new QBrush(Qt::yellow);
+        }
+        painter->setBrush(*brush);
         painter->drawEllipse(rect.adjusted(0,0,-15,-15));
         painter->drawText(mypoint.x()-8,mypoint.y()-8, QString::number(nodeID)+"_Node");
-        update();
-    }
-    else if(isSwitch){
-        QBrush brush(Qt::green);
-        QPen pen(Qt::black,3);
-        painter->setPen(pen);
-        painter->setBrush(brush);
+    } else if (isSwitch) {
+        if (brush == NULL) {
+            brush = new QBrush(Qt::green);
+        }
+        painter->setBrush(*brush);
         painter->drawRect(rect.adjusted(0,0,-15,-15));
         painter->drawText(mypoint.x()-8,mypoint.y()-8, QString::number(nodeID)+"_Switch");
-        update();
+    } else {
+        if (brush == NULL) {
+            brush = new QBrush(Qt::blue);
+        }
+        painter->setBrush(*brush);
+        painter->drawEllipse(rect.adjusted(0,0,-15,-15));
+        painter->drawText(mypoint.x()-8,mypoint.y()-8, QString::number(nodeID));
     }
-    else{
-    QBrush brush(Qt::blue);
-    QPen pen(Qt::black, 3);
-    painter->setPen(pen);
-    painter->setBrush(brush);
-    painter->drawEllipse(rect.adjusted(0,0,-15,-15));
-    painter->drawText(mypoint.x()-8,mypoint.y()-8, QString::number(nodeID));
+
     update();
-    }
 }
 
 void vertex::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
