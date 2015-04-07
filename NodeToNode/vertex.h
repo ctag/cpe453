@@ -19,11 +19,16 @@ public:
     int xposition;
     int yposition;
     QRectF boundingRect() const;
+    QRectF drawRect();
+    QRectF textRect();
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
     bool isSwitch;
     bool isNode;
     bool draw_track;
     int nodeID;
+    int penSize; // width of pen brush
+    int margin; // distance between text and painting
+    int textWidth; // Extra space for text
     QRectF rect;
 
 protected:
