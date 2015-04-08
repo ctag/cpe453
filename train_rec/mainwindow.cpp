@@ -67,8 +67,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(locoudp, &LocoUDP::incomingRequest, this, &MainWindow::do_packetReceived);
     connect(&threadUDP, &QThread::finished, locoudp, &QObject::deleteLater);
     // Handle Initializing from Sig/Slot
-    connect(ui->pushButton_thread_beginUDP, SIGNAL(clicked()), locoudp, SLOT(do_run()));
-    connect(ui->pushButton_thread_beginUDP, SIGNAL(clicked(bool)), ui->pushButton_thread_beginUDP, SLOT(setEnabled(bool)));
+    //connect(ui->pushButton_thread_beginUDP, SIGNAL(clicked()), locoudp, SLOT(do_run()));
+    //connect(ui->pushButton_thread_beginUDP, SIGNAL(clicked(bool)), ui->pushButton_thread_beginUDP, SLOT(setEnabled(bool)));
 
     // Serial
     connect(this, &MainWindow::locoserial_open, locoserial, &LocoSerial::do_open);
@@ -81,8 +81,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(locoserial, &LocoSerial::trainUpdated, locosql, &LocoSQL::do_updateTrain);
     connect(&threadSerial, &QThread::finished, locoserial, &QObject::deleteLater);
     // Handle Initializing from Sig/Slot
-    connect(ui->pushButton_thread_beginSerial, SIGNAL(clicked()), locoserial, SLOT(do_run()));
-    connect(ui->pushButton_thread_beginSerial, SIGNAL(clicked(bool)), ui->pushButton_thread_beginSerial, SLOT(setEnabled(bool)));
+    //connect(ui->pushButton_thread_beginSerial, SIGNAL(clicked()), locoserial, SLOT(do_run()));
+    //connect(ui->pushButton_thread_beginSerial, SIGNAL(clicked(bool)), ui->pushButton_thread_beginSerial, SLOT(setEnabled(bool)));
 
     // Macros / locoSQL
     connect(locosql, &LocoSQL::incomingRequest, locoserial, static_cast<void (LocoSerial::*)(LocoPacket)>(&LocoSerial::do_writePacket));
@@ -99,13 +99,16 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(locosql, &LocoSQL::trackOff, locoserial, &LocoSerial::do_trackOff);
     connect(&threadUDP, &QThread::finished, locoudp, &QObject::deleteLater);
     // Handle Initializing from Sig/Slot
-    connect(ui->pushButton_thread_beginSQL, SIGNAL(clicked()), locosql, SLOT(do_run()));
-    connect(ui->pushButton_thread_beginSQL, SIGNAL(clicked(bool)), ui->pushButton_thread_beginSQL, SLOT(setEnabled(bool)));
+    //connect(ui->pushButton_thread_beginSQL, SIGNAL(clicked()), locosql, SLOT(do_run()));
+    //connect(ui->pushButton_thread_beginSQL, SIGNAL(clicked(bool)), ui->pushButton_thread_beginSQL, SLOT(setEnabled(bool)));
 
     // Kickstart threads
     threadSerial.start();
+    locoserial->do_run(); // Auto start locoserial
     threadSQL.start();
+    locosql->do_run(); // Auto start locosql
     threadUDP.start();
+    locoudp->do_run(); // Auto start locoudp
 
     // Configure interface
     ui->comboBox_opcodes->setEditable(false);

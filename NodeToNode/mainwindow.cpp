@@ -6,9 +6,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //create List
+    // create List
 
-    //GUI
+    // GUI
 
     // Declaring thread association
     locosql = new SQL;
