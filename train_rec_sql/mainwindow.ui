@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -164,7 +164,15 @@
            </layout>
           </item>
           <item>
-           <widget class="QTextBrowser" name="textBrowser_sql"/>
+           <widget class="QTextBrowser" name="textBrowser_sql">
+            <property name="html">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You must connect to SQL before the program will work!&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -562,18 +570,30 @@
        <attribute name="title">
         <string>Threads</string>
        </attribute>
-       <widget class="QPushButton" name="pushButton_thread_beginSQL">
+       <widget class="QGroupBox" name="groupBox">
         <property name="geometry">
          <rect>
           <x>30</x>
-          <y>30</y>
-          <width>141</width>
-          <height>27</height>
+          <y>20</y>
+          <width>138</width>
+          <height>63</height>
          </rect>
         </property>
-        <property name="text">
-         <string>Start SQL Thread</string>
+        <property name="title">
+         <string>Thread Autostarted</string>
         </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="pushButton_thread_beginSQL">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>Start SQL Thread</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </widget>
      </widget>
@@ -586,7 +606,7 @@
      <x>0</x>
      <y>0</y>
      <width>718</width>
-     <height>25</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>
