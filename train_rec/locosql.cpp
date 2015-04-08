@@ -447,12 +447,12 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
     }
     if (mainDB->isOpen()) {
         // This query will insert a DS if it isn't already in the table
-        /*mainQuery->prepare("INSERT INTO "+schema+"."+trackBlock+" (ds_id, status) "
+        /*mainQuery->prepare("INSERT INTO "+schema+"."+trackBlock+" (id, status) "
                         "VALUES (:id, :status) "
                         "ON DUPLICATE KEY "
                         "UPDATE status=:status;");*/
         // This query will ignore DS which are not listed in the table
-        mainQuery->prepare("UPDATE "+schema+"."+trackBlock+" SET `status`=:status WHERE `ds_id`=:id;");
+        mainQuery->prepare("UPDATE "+schema+"."+trackBlock+" SET `status`=:status WHERE `id`=:id;");
         QString _id = QString::number(_block.get_board())+"-"+QString::number(_block.get_ds());
         int _status = _block.get_occupied();
         mainQuery->bindValue(":id", _id);
