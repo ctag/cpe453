@@ -38,7 +38,7 @@ public:
     QPointF startPos;
     QPointF endPos;
     QList<vertex*> nodeList;
-    edge * line;
+    QGraphicsLineItem * line;
 
 private:
     bool firstclick;

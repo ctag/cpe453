@@ -44,7 +44,7 @@ void track::mousePressEvent(QMouseEvent *event)
     QGraphicsView::mousePressEvent(event);
     QPointF p = mapToScene(event->pos());
 
-    if(event->buttons() & Qt::RightButton){
+    if(!itemAt(event->pos()) && event->buttons() & Qt::RightButton){
          activeNode = new vertex(p,id_counter);
 
          startPos = activeNode->pos();
@@ -54,6 +54,12 @@ void track::mousePressEvent(QMouseEvent *event)
          nodeList.append(activeNode);
          update();
      }
+    else if(track_rad_state && event->buttons() & Qt::RightButton && itemAt(event->pos())){
+        rightDown=true;
+        startPos=mapToScene(event->pos());
+
+
+    }
 
 
   }
@@ -61,8 +67,18 @@ void track::mousePressEvent(QMouseEvent *event)
 void track::mouseReleaseEvent(QMouseEvent *event)
 {
     QGraphicsView::mouseReleaseEvent(event);
-    if(leftDown)
-        leftDown=!leftDown;
+    if(rightDown && !itemAt(event->pos())){
+        rightDown=!rightDown;
+        line=new QGraphicsLineItem(startPos.x(),startPos.y(),endPos.x(),endPos.y());
+        line->setPen(QPen(Qt::black,5));
+        line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+        line->setFlag(QGraphicsLineItem::ItemIsMovable);
+        scene->addItem(line);
+        activeNode= new vertex(endPos,id_counter);
+        id_counter++;
+        nodeList.append(activeNode);
+
+    }
 }
 
 void track::mouseMoveEvent(QMouseEvent *event){
@@ -70,10 +86,7 @@ void track::mouseMoveEvent(QMouseEvent *event){
     endPos=mapToScene(event->pos());
     if(!nodeList.isEmpty() && itemAt(event->pos())){
          activeNode=dynamic_cast<vertex *>(itemAt(event->pos()));
-        /*if(activeNode->isSelected()){
-            if(activeNode->ItemPositionHasChanged)
-                //emit positionChange(endPos);
-        }*/
+
     }
 }
 
@@ -88,11 +101,15 @@ void track::switch_button_clicked(){
 void track::node_button_clicked(){
     if(!nodeList.isEmpty()  && activeNode->isSelected())
     {
-         activeNode->isNode=!activeNode->isNode;
-         activeNode->isSwitch=false;
-         update();}
+        for(int i=0;i<nodeList.size();i++){
+           if(nodeList.at(i)->isSelected()){
+              activeNode=nodeList.at(i);
+              activeNode->isNode=!activeNode->isNode;
+            update();
+           }
+        }
 
-}
+}}
 
 void track::delete_button_clicked()
 {
@@ -121,6 +138,7 @@ void track::keyPressEvent(QKeyEvent *event)
               i--;
            update();
           }
+
        }
    }
 }

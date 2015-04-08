@@ -13,7 +13,6 @@ vertex::vertex(QPointF eventPos, int itemID)
 {
     doDebug = true; // Set this to enable/disable debugging messages.
     dateTime = QDateTime::currentDateTime();
-
     setFlag(ItemIsSelectable);
     setFlag(ItemIsMovable);
     setAcceptHoverEvents(true);
