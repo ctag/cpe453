@@ -21,6 +21,9 @@ track::track(QWidget *parent): QGraphicsView(parent)
     selectedVertex = NULL;
     line = NULL;
 
+    // Allow selecting all verts with ctrl+a
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_A), this, SLOT(select_all()));
+
     debugMsg("Loaded graphics widget.");
  }
 
@@ -144,8 +147,13 @@ void track::delete_button_clicked()
 
 void track::keyPressEvent(QKeyEvent *event)
 {
+    qDebug() << event->key();
     QGraphicsView::keyPressEvent(event);
-    if(!vertexList.isEmpty() && event->key() == Qt::Key_Delete){
+    if (vertexList.isEmpty())
+    {
+        return;
+    }
+    if(event->key() == Qt::Key_Delete){
         vertex * _vert;
        for(int i=0;i<vertexList.size();i++){
           if(vertexList.at(i)->isSelected()){
@@ -158,6 +166,16 @@ void track::keyPressEvent(QKeyEvent *event)
 
        }
    }
+}
+
+void track::select_all()
+{
+    for (int _index = 0; _index < vertexList.count(); ++_index)
+    {
+        vertex * _vert = vertexList.at(_index);
+        _vert->setSelected(true);
+    }
+    update();
 }
 
 void track::get_track_rad(bool status)

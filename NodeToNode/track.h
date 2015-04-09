@@ -17,6 +17,7 @@
 #include <QRadioButton>
 #include <QList>
 #include <QDateTime>
+#include <QShortcut>
 
 #include "vertex.h"
 #include "edge.h"
@@ -62,6 +63,7 @@ public slots:
     void delete_button_clicked();
     void switch_button_clicked();
     void node_button_clicked();
+    void select_all();
 
 signals:
  //   void positionChange(QPointF );
