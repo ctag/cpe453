@@ -146,7 +146,9 @@ void track::delete_button_clicked()
         {
             vertex * _vert = _selected.at(_index);
             scene->removeItem(_vert);
+            scene->removeItem(_vert->get_labelPtr());
             vertexList.removeOne(_vert);
+            delete _vert;
         }
     }
     update();
@@ -186,10 +188,10 @@ void track::select_all()
 
 void track::shift_left()
 {
-    qDebug() << "Shifting left.";
-    for (int _index = 0; _index < vertexList.count(); ++_index)
+    QList<vertex*> _selected = get_selectedVerts();
+    for (int _index = 0; _index < _selected.count(); ++_index)
     {
-        vertex * _vert = vertexList.at(_index);
+        vertex * _vert = _selected.at(_index);
         _vert->moveBy(-shiftAmount, 0);
         _vert->set_labelLocation();
     }
@@ -197,27 +199,30 @@ void track::shift_left()
 
 void track::shift_down()
 {
-    for (int _index = 0; _index < vertexList.count(); ++_index)
+    QList<vertex*> _selected = get_selectedVerts();
+    for (int _index = 0; _index < _selected.count(); ++_index)
     {
-        vertex * _vert = vertexList.at(_index);
+        vertex * _vert = _selected.at(_index);
         _vert->moveBy(0, shiftAmount);
         _vert->set_labelLocation();
     }
 }
 void track::shift_up()
 {
-    for (int _index = 0; _index < vertexList.count(); ++_index)
+    QList<vertex*> _selected = get_selectedVerts();
+    for (int _index = 0; _index < _selected.count(); ++_index)
     {
-        vertex * _vert = vertexList.at(_index);
+        vertex * _vert = _selected.at(_index);
         _vert->moveBy(0, -shiftAmount);
         _vert->set_labelLocation();
     }
 }
 void track::shift_right()
 {
-    for (int _index = 0; _index < vertexList.count(); ++_index)
+    QList<vertex*> _selected = get_selectedVerts();
+    for (int _index = 0; _index < _selected.count(); ++_index)
     {
-        vertex * _vert = vertexList.at(_index);
+        vertex * _vert = _selected.at(_index);
         _vert->moveBy(shiftAmount, 0);
         _vert->set_labelLocation();
     }
