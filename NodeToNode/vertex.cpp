@@ -15,7 +15,8 @@ vertex::vertex(QPointF eventPos, int itemID)
     nodePosition=eventPos;
     penSize = 2; // 2px pen size
     margin = 3; // 3px between obj and text
-    label = new text(eventPos, QString::number(itemID));
+    QPointF _textPos(boundingRect().x(), boundingRect().y());
+    label = new text(_textPos, QString::number(itemID));
     debugMsg("Loaded new vertex.");
 }
 
@@ -66,8 +67,8 @@ bool vertex::is_node()
 QRectF vertex::boundingRect() const
 {
     //return QRectF(mypoint.x()-8,mypoint.y()-7,30,30);
-    int width = 12 + (penSize*2) + (2*margin);
-    int height = 12 + (penSize*2) + (2*margin);
+    int width = 12 + (2*margin);
+    int height = 12 + (2*margin);
     return QRectF(mypoint.x()-(width/2),mypoint.y()-(height/2),width,height);
 }
 
@@ -127,6 +128,31 @@ void vertex::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
      rect=rect.adjusted(0,0,-5,-5);
      update();
 }
+
+text* vertex::get_labelPtr()
+{
+    return(label);
+}
+
+void vertex::set_labelLocation()
+{
+    //QPointF _textPos(boundingRect().x(), boundingRect().y());
+    //qDebug() << "Moving label to " << _textPos.x() << _textPos.y();
+    label->update_pos(scenePos());
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

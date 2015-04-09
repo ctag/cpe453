@@ -4,8 +4,6 @@ text::text(QPointF _pos, QString _text)
 {
     doDebug = true; // Set this to enable/disable debugging messages.
     dateTime = QDateTime::currentDateTime();
-    //setFlag(ItemIsSelectable);
-    setFlag(ItemIsMovable);
     mypoint = _pos;
     setText(_text);
     rect = boundingRect();
@@ -33,7 +31,7 @@ void text::debugMsg(QString _msg)
  */
 QRectF text::boundingRect() const
 {
-    return QRectF(mypoint.x(),mypoint.y()-(10),80,10);
+    return QRectF(mypoint.x(),mypoint.y()-(12),40,12);
 }
 
 /*
@@ -53,17 +51,35 @@ void text::setText(QString _text)
 
 void text::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    qDebug() << "drawing text";
     QBrush * brush = NULL;
     QPen pen(Qt::black, 2);
     painter->setPen(pen);
 
-brush = new QBrush(Qt::yellow);
+    /*brush = new QBrush(Qt::magenta);
     painter->setBrush(*brush);
-    painter->drawEllipse(textRect());
+    painter->drawRect(textRect());*/
 
-    //painter->drawText(textRect(), displayText);
+    painter->drawText(textRect(), displayText);
     update();
 }
+
+void text::update_pos(QPointF _pos)
+{
+    /*qDebug() << "pos: " << scenePos();
+    mypoint = mapToParent(pos());
+    qDebug() << "point " << mypoint;
+    //update();*/
+    setPos(_pos);
+}
+
+
+
+
+
+
+
+
+
+
 
 

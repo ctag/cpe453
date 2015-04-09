@@ -39,8 +39,6 @@ void track::debugMsg(QString _msg)
 
 void track::mousePressEvent(QMouseEvent *event)
 {
-    qDebug() << itemAt(event->pos());
-
     QGraphicsView::mousePressEvent(event);
     QPointF p = mapToScene(event->pos());
 
@@ -49,6 +47,7 @@ void track::mousePressEvent(QMouseEvent *event)
 
          startPos = _vert->pos();
          scene->addItem(_vert);
+         scene->addItem(_vert->get_labelPtr());
          id_counter++;
          vertexList.append(_vert);
          update();
@@ -81,18 +80,24 @@ void track::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
-void track::mouseMoveEvent(QMouseEvent *event){
+void track::mouseMoveEvent(QMouseEvent *event) {
     QGraphicsView::mouseMoveEvent(event);
     endPos=mapToScene(event->pos());
-    if(!vertexList.isEmpty() && vertexList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
+    if(!vertexList.isEmpty() && vertexList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))) {
          vertex * _vert=dynamic_cast<vertex *>(itemAt(event->pos()));
-        if(_vert->isSelected() && _vert->ItemPositionChange){
+         if (event->buttons() & Qt::LeftButton)
+         {
+             _vert->set_labelLocation();
+             qDebug() << _vert->scenePos();
+         }
+        if(_vert->isSelected() && _vert->ItemPositionChange) {
             _vert->nodePosition=endPos;
+            //_vert->set_labelLocation(endPos);
         }
     }
 }
 
-void track::switch_button_clicked(){
+void track::switch_button_clicked() {
     QList<vertex*> _selected = get_selectedVerts();
     if (!_selected.isEmpty())
     {

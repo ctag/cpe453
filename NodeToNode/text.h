@@ -25,6 +25,8 @@ public:
     QRectF rect;
     QString displayText;
     void setText(QString _text);
+    void update_pos(QPointF _point);
+    //void update_pos();
 
 
 protected:

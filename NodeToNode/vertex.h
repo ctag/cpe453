@@ -36,6 +36,9 @@ public:
     int margin; // distance between text and painting
     int textWidth; // Extra space for text
     QRectF rect;
+    text* get_labelPtr();
+    //void set_labelLocation(QPointF _point);
+    void set_labelLocation();
 
     QPointF nodePosition;
 
