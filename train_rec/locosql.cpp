@@ -79,7 +79,7 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
 
     // At 80ms, generates ~15KB/s of traffic to SQL server.
     // This value can be deprecated by hosting train_rec and SQL on the same machine.
-    reqTimerStart(80); // Wait Xms between SQL scans
+    reqTimerStart(140); // Wait Xms between SQL scans
 
     emit DBopened();
     return(true);
