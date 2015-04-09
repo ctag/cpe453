@@ -11,10 +11,11 @@ track::track(QWidget *parent): QGraphicsView(parent)
     rightDown = false;
 
     connectsToPrevious = false;
-    track_rad_state=false; // What the fuck is this?
+    track_rad_state=false;
     scene = new QGraphicsScene(0,0,300,300);
     this->setScene(scene);
     id_counter=0;
+    shiftAmount = 40;
 
     // Protect undeclared pointers.
     previousVertex = NULL;
@@ -23,6 +24,12 @@ track::track(QWidget *parent): QGraphicsView(parent)
 
     // Allow selecting all verts with ctrl+a
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_A), this, SLOT(select_all()));
+
+    // Hotkeys for moving all verts
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Down), this, SLOT(shift_down()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Left), this, SLOT(shift_left()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Up), this, SLOT(shift_up()));
+    new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Right), this, SLOT(shift_right()));
 
     debugMsg("Loaded graphics widget.");
  }
@@ -147,7 +154,6 @@ void track::delete_button_clicked()
 
 void track::keyPressEvent(QKeyEvent *event)
 {
-    qDebug() << event->key();
     QGraphicsView::keyPressEvent(event);
     if (vertexList.isEmpty())
     {
@@ -176,6 +182,45 @@ void track::select_all()
         _vert->setSelected(true);
     }
     update();
+}
+
+void track::shift_left()
+{
+    qDebug() << "Shifting left.";
+    for (int _index = 0; _index < vertexList.count(); ++_index)
+    {
+        vertex * _vert = vertexList.at(_index);
+        _vert->moveBy(-shiftAmount, 0);
+        _vert->set_labelLocation();
+    }
+}
+
+void track::shift_down()
+{
+    for (int _index = 0; _index < vertexList.count(); ++_index)
+    {
+        vertex * _vert = vertexList.at(_index);
+        _vert->moveBy(0, shiftAmount);
+        _vert->set_labelLocation();
+    }
+}
+void track::shift_up()
+{
+    for (int _index = 0; _index < vertexList.count(); ++_index)
+    {
+        vertex * _vert = vertexList.at(_index);
+        _vert->moveBy(0, -shiftAmount);
+        _vert->set_labelLocation();
+    }
+}
+void track::shift_right()
+{
+    for (int _index = 0; _index < vertexList.count(); ++_index)
+    {
+        vertex * _vert = vertexList.at(_index);
+        _vert->moveBy(shiftAmount, 0);
+        _vert->set_labelLocation();
+    }
 }
 
 void track::get_track_rad(bool status)

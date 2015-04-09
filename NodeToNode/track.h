@@ -57,6 +57,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void debugMsg(QString _msg);
+    int shiftAmount; // shift verts num pixels
 
 public slots:
     void get_track_rad(bool status);
@@ -64,6 +65,10 @@ public slots:
     void switch_button_clicked();
     void node_button_clicked();
     void select_all();
+    void shift_left();
+    void shift_down();
+    void shift_up();
+    void shift_right();
 
 signals:
  //   void positionChange(QPointF );
