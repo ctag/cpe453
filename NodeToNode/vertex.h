@@ -10,9 +10,9 @@
 #include <QObject>
 #include <QDateTime>
 
- class vertex : public QObject, public QGraphicsItem
+ class vertex : public QGraphicsItem
 {
-    Q_OBJECT
+
 public:
     vertex(QPointF eventPos, int itemID);
     ~vertex();
