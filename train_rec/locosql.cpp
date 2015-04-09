@@ -291,14 +291,14 @@ void LocoSQL::do_reqMacro()
             while (!_slots.isEmpty())
             {
                 mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
-                                   "VALUES ('SLOT_USE', '"+_slots.first()+"');");
+                                   "VALUES ('SLOT_USE', '"+QString::number(_slots.first())+"');");
                 mainQuery->exec();
                 mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
-                                   "VALUES ('SLOT_SCAN', '"+_slots.first()+"');");
+                                   "VALUES ('SLOT_SCAN', '"+QString::number(_slots.first())+"');");
                 mainQuery->exec();
                 mainQuery->prepare("INSERT INTO "+schema+"."+reqTrain+" (`slot`, `speed`, `dir`)"
                                    "VALUES (:slot, :speed, :dir);");
-                mainQuery->bindValue(":slot", _slots.takeFirst());
+                mainQuery->bindValue(":slot", QString::number(_slots.takeFirst()));
                 mainQuery->bindValue(":speed", _speed);
                 mainQuery->bindValue(":dir", _dir);
                 mainQuery->exec();
