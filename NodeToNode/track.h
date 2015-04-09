@@ -28,16 +28,16 @@ class track : public QGraphicsView
 public:
     explicit track(QWidget *parent = 0);
     ~track();
-    vertex *previousNode;
-    vertex *activeVertex;
+    vertex *previousVertex;
     int activeItemID;
-    QGraphicsItem* selectedNode;
+    QGraphicsItem* selectedVertex;
     int id_counter;
     QGraphicsScene* scene;
     bool track_rad_state;
     QPointF startPos;
     QPointF endPos;
-    QList<vertex*> nodeList;
+    QList<vertex*> vertexList;
+    QList<vertex*> get_selectedVerts();
     QGraphicsLineItem * line;
 
 private:

@@ -17,9 +17,8 @@ track::track(QWidget *parent): QGraphicsView(parent)
     id_counter=0;
 
     // Protect undeclared pointers.
-    activeVertex = NULL;
-    previousNode = NULL;
-    selectedNode = NULL;
+    previousVertex = NULL;
+    selectedVertex = NULL;
     line = NULL;
 
     debugMsg("Loaded graphics widget.");
@@ -46,16 +45,15 @@ void track::mousePressEvent(QMouseEvent *event)
     QPointF p = mapToScene(event->pos());
 
     if(!itemAt(event->pos()) && (event->buttons()&Qt::RightButton)){
-         activeVertex = new vertex(p,id_counter);
+         vertex * _vert = new vertex(p,id_counter);
 
-         startPos = activeVertex->pos();
-         scene->addItem(activeVertex);
+         startPos = _vert->pos();
+         scene->addItem(_vert);
          id_counter++;
-
-         nodeList.append(activeVertex);
+         vertexList.append(_vert);
          update();
-     }
-    else if(track_rad_state && event->buttons() & Qt::RightButton && nodeList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
+    }
+    else if(track_rad_state && event->buttons() & Qt::RightButton && vertexList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
         rightDown=true;
         startPos=mapToScene(event->pos());
         line = new edge(startPos,endPos);
@@ -77,67 +75,74 @@ void track::mouseReleaseEvent(QMouseEvent *event)
         line->setFlag(QGraphicsLineItem::ItemIsMovable);
         scene->addItem(line);
 
-        activeVertex= new vertex(endPos,id_counter);
+        vertex * _vert = new vertex(endPos,id_counter);
         id_counter++;
-        nodeList.append(activeVertex);
+        vertexList.append(_vert);
     }
 }
 
 void track::mouseMoveEvent(QMouseEvent *event){
     QGraphicsView::mouseMoveEvent(event);
     endPos=mapToScene(event->pos());
-    if(!nodeList.isEmpty() && nodeList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
-         activeVertex=dynamic_cast<vertex *>(itemAt(event->pos()));
-        if(activeVertex->isSelected() && activeVertex->ItemPositionChange){
-            activeVertex->nodePosition=endPos;
+    if(!vertexList.isEmpty() && vertexList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
+         vertex * _vert=dynamic_cast<vertex *>(itemAt(event->pos()));
+        if(_vert->isSelected() && _vert->ItemPositionChange){
+            _vert->nodePosition=endPos;
         }
     }
 }
 
 void track::switch_button_clicked(){
-    if(!nodeList.isEmpty() && activeVertex->isSelected())
+    QList<vertex*> _selected = get_selectedVerts();
+    if (!_selected.isEmpty())
     {
-         activeVertex->set_switch();
-         update();}
+        for (int _index = 0; _index < _selected.size(); ++_index)
+        {
+            vertex * _vert = _selected.at(_index);
+            _vert->set_switch();
+        }
+    }
+    update();
 }
 
 void track::node_button_clicked(){
-    if(!nodeList.isEmpty()  && activeVertex->isSelected())
+    QList<vertex*> _selected = get_selectedVerts();
+    if (!_selected.isEmpty())
     {
-        for(int i=0;i<nodeList.size();i++){
-           if(nodeList.at(i)->isSelected()){
-              activeVertex=nodeList.at(i);
-              activeVertex->set_node();
-            update();
-           }
+        for (int _index = 0; _index < _selected.size(); ++_index)
+        {
+            vertex * _vert = _selected.at(_index);
+            _vert->set_node();
         }
-
-}}
+    }
+    update();
+}
 
 void track::delete_button_clicked()
 {
-    if(!nodeList.isEmpty()){
-        for(int i=0;i<nodeList.size();i++){
-           if(nodeList.at(i)->isSelected()){
-              activeVertex=nodeList.at(i);
-              scene->removeItem(activeVertex);
-              nodeList.removeAt(i);
-               i--;
-            update();
-           }
+    QList<vertex*> _selected = get_selectedVerts();
+    if (!_selected.isEmpty())
+    {
+        for (int _index = 0; _index < _selected.size(); ++_index)
+        {
+            vertex * _vert = _selected.at(_index);
+            scene->removeItem(_vert);
+            vertexList.removeOne(_vert);
         }
     }
+    update();
 }
 
 void track::keyPressEvent(QKeyEvent *event)
 {
     QGraphicsView::keyPressEvent(event);
-    if(!nodeList.isEmpty() && event->key() == Qt::Key_Delete){
-       for(int i=0;i<nodeList.size();i++){
-          if(nodeList.at(i)->isSelected()){
-             activeVertex=nodeList.at(i);
-             scene->removeItem(activeVertex);
-             nodeList.removeAt(i);
+    if(!vertexList.isEmpty() && event->key() == Qt::Key_Delete){
+        vertex * _vert;
+       for(int i=0;i<vertexList.size();i++){
+          if(vertexList.at(i)->isSelected()){
+             _vert=vertexList.at(i);
+             scene->removeItem(_vert);
+             vertexList.removeAt(i);
               i--;
            update();
           }
@@ -150,3 +155,33 @@ void track::get_track_rad(bool status)
 {
     track_rad_state=status;
 }
+
+QList<vertex*> track::get_selectedVerts()
+{
+    QList<vertex*> _selected;
+    for (int _index = 0; _index < vertexList.count(); ++_index)
+    {
+        vertex * _vert = vertexList.at(_index);
+        if (_vert->isSelected())
+        {
+            _selected.append(_vert);
+        }
+    }
+    return(_selected);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
