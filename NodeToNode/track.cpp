@@ -167,6 +167,8 @@ void track::keyPressEvent(QKeyEvent *event)
           if(vertexList.at(i)->isSelected()){
              _vert=vertexList.at(i);
              scene->removeItem(_vert);
+             scene->removeItem(_vert->get_labelPtr());
+
              vertexList.removeAt(i);
               i--;
            update();
