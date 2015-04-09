@@ -106,7 +106,7 @@ bool LocoSerial::do_open(QSerialPortInfo _port)
     {
         if (*debug) qDebug() << timeStamp() << "Serial port appears to have opened sucessfully.";
         connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(do_read()));
-        readTimerStart(15);
+        readTimerStart(20);
         emit serialOpened();
         return(true);
     }
