@@ -19,13 +19,15 @@ SOURCES += main.cpp\
     vertex.cpp \
     track.cpp \
     sql.cpp \
-    edge.cpp
+    edge.cpp \
+    text.cpp
 
 HEADERS  += mainwindow.h \
     vertex.h \
     track.h \
     sql.h \
-    edge.h
+    edge.h \
+    text.h
 
 FORMS    += mainwindow.ui \
 

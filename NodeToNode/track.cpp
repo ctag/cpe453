@@ -11,13 +11,13 @@ track::track(QWidget *parent): QGraphicsView(parent)
     rightDown = false;
 
     connectsToPrevious = false;
-    track_rad_state=false;
+    track_rad_state=false; // What the fuck is this?
     scene = new QGraphicsScene(0,0,300,300);
     this->setScene(scene);
     id_counter=0;
 
     // Protect undeclared pointers.
-    activeNode = NULL;
+    activeVertex = NULL;
     previousNode = NULL;
     selectedNode = NULL;
     line = NULL;
@@ -38,20 +38,21 @@ void track::debugMsg(QString _msg)
     }
 }
 
-//click
 void track::mousePressEvent(QMouseEvent *event)
 {
+    qDebug() << itemAt(event->pos());
+
     QGraphicsView::mousePressEvent(event);
     QPointF p = mapToScene(event->pos());
 
-    if(!itemAt(event->pos()) && event->buttons() & Qt::RightButton){
-         activeNode = new vertex(p,id_counter);
+    if(!itemAt(event->pos()) && (event->buttons()&Qt::RightButton)){
+         activeVertex = new vertex(p,id_counter);
 
-         startPos = activeNode->pos();
-         scene->addItem(activeNode);
+         startPos = activeVertex->pos();
+         scene->addItem(activeVertex);
          id_counter++;
 
-         nodeList.append(activeNode);
+         nodeList.append(activeVertex);
          update();
      }
     else if(track_rad_state && event->buttons() & Qt::RightButton && nodeList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
@@ -76,10 +77,9 @@ void track::mouseReleaseEvent(QMouseEvent *event)
         line->setFlag(QGraphicsLineItem::ItemIsMovable);
         scene->addItem(line);
 
-        activeNode= new vertex(endPos,id_counter);
+        activeVertex= new vertex(endPos,id_counter);
         id_counter++;
-        nodeList.append(activeNode);
-
+        nodeList.append(activeVertex);
     }
 }
 
@@ -87,27 +87,27 @@ void track::mouseMoveEvent(QMouseEvent *event){
     QGraphicsView::mouseMoveEvent(event);
     endPos=mapToScene(event->pos());
     if(!nodeList.isEmpty() && nodeList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
-         activeNode=dynamic_cast<vertex *>(itemAt(event->pos()));
-        if(activeNode->isSelected() && activeNode->ItemPositionChange){
-            activeNode->nodePosition=endPos;}
+         activeVertex=dynamic_cast<vertex *>(itemAt(event->pos()));
+        if(activeVertex->isSelected() && activeVertex->ItemPositionChange){
+            activeVertex->nodePosition=endPos;
+        }
     }
 }
 
 void track::switch_button_clicked(){
-    if(!nodeList.isEmpty() && activeNode->isSelected())
+    if(!nodeList.isEmpty() && activeVertex->isSelected())
     {
-         activeNode->isSwitch=!activeNode->isSwitch;
-          activeNode->isNode=false;
+         activeVertex->set_switch();
          update();}
 }
 
 void track::node_button_clicked(){
-    if(!nodeList.isEmpty()  && activeNode->isSelected())
+    if(!nodeList.isEmpty()  && activeVertex->isSelected())
     {
         for(int i=0;i<nodeList.size();i++){
            if(nodeList.at(i)->isSelected()){
-              activeNode=nodeList.at(i);
-              activeNode->isNode=!activeNode->isNode;
+              activeVertex=nodeList.at(i);
+              activeVertex->set_node();
             update();
            }
         }
@@ -119,8 +119,8 @@ void track::delete_button_clicked()
     if(!nodeList.isEmpty()){
         for(int i=0;i<nodeList.size();i++){
            if(nodeList.at(i)->isSelected()){
-              activeNode=nodeList.at(i);
-              scene->removeItem(activeNode);
+              activeVertex=nodeList.at(i);
+              scene->removeItem(activeVertex);
               nodeList.removeAt(i);
                i--;
             update();
@@ -135,8 +135,8 @@ void track::keyPressEvent(QKeyEvent *event)
     if(!nodeList.isEmpty() && event->key() == Qt::Key_Delete){
        for(int i=0;i<nodeList.size();i++){
           if(nodeList.at(i)->isSelected()){
-             activeNode=nodeList.at(i);
-             scene->removeItem(activeNode);
+             activeVertex=nodeList.at(i);
+             scene->removeItem(activeVertex);
              nodeList.removeAt(i);
               i--;
            update();

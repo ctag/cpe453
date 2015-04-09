@@ -29,7 +29,7 @@ public:
     explicit track(QWidget *parent = 0);
     ~track();
     vertex *previousNode;
-    vertex *activeNode;
+    vertex *activeVertex;
     int activeItemID;
     QGraphicsItem* selectedNode;
     int id_counter;

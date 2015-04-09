@@ -10,6 +10,8 @@
 #include <QObject>
 #include <QDateTime>
 
+#include "text.h"
+
  class vertex : public QGraphicsItem
 {
 
@@ -23,8 +25,11 @@ public:
     QRectF drawRect();
     QRectF textRect();
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget);
-    bool isSwitch;
-    bool isNode;
+    void set_switch();
+    void set_node();
+    QString get_type();
+    bool is_switch();
+    bool is_node();
     bool draw_track;
     int nodeID;
     int penSize; // width of pen brush
@@ -40,10 +45,12 @@ protected:
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
     void debugMsg(QString _msg);
+    QString type;
 
 private:
     bool doDebug;
     QDateTime dateTime;
+    text * label;
 
 public slots:
 

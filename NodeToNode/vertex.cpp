@@ -1,14 +1,5 @@
 #include "vertex.h"
 
-/*
- * Bounding format:
- * Entire Object:
- * x: 30 + 2xpen + 2px + textWidth
- * y: 40 + 2xpen + 2px
- * Text: 30px (+ textWidth) by 10px
- * Painting: 30px by 30px
- */
-
 vertex::vertex(QPointF eventPos, int itemID)
 {
     doDebug = true; // Set this to enable/disable debugging messages.
@@ -16,8 +7,7 @@ vertex::vertex(QPointF eventPos, int itemID)
     setFlag(ItemIsSelectable);
     setFlag(ItemIsMovable);
     setAcceptHoverEvents(true);
-    isNode=false;
-    isSwitch=false;
+    set_node();
     mypoint = eventPos;
     nodeID =  itemID;
     rect = boundingRect();
@@ -25,7 +15,7 @@ vertex::vertex(QPointF eventPos, int itemID)
     nodePosition=eventPos;
     penSize = 2; // 2px pen size
     margin = 3; // 3px between obj and text
-    textWidth = 30; // 30px extra space to write text
+    label = new text(eventPos, QString::number(itemID));
     debugMsg("Loaded new vertex.");
 }
 
@@ -42,6 +32,31 @@ void vertex::debugMsg(QString _msg)
     }
 }
 
+void vertex::set_switch()
+{
+    type="switch";
+}
+
+void vertex::set_node()
+{
+    type="node";
+}
+
+QString vertex::get_type()
+{
+    return(type);
+}
+
+bool vertex::is_switch()
+{
+    return(type=="switch");
+}
+
+bool vertex::is_node()
+{
+    return(type=="node");
+}
+
 /**
  * @brief vertex::boundingRect
  * @return
@@ -51,8 +66,8 @@ void vertex::debugMsg(QString _msg)
 QRectF vertex::boundingRect() const
 {
     //return QRectF(mypoint.x()-8,mypoint.y()-7,30,30);
-    int width = 30 + (penSize*2) + 2 + textWidth;
-    int height = 40 + (penSize*2) + 2 + margin;
+    int width = 12 + (penSize*2) + (2*margin);
+    int height = 12 + (penSize*2) + (2*margin);
     return QRectF(mypoint.x()-(width/2),mypoint.y()-(height/2),width,height);
 }
 
@@ -61,17 +76,7 @@ QRectF vertex::boundingRect() const
  */
 QRectF vertex::drawRect()
 {
-    int padding = penSize + 1;
-    return QRectF(boundingRect().adjusted(padding, 10+padding+margin, -(padding+textWidth), -padding));
-}
-
-/*
- * Total space available in bounding box to draw object
- */
-QRectF vertex::textRect()
-{
-    int padding = penSize + 1;
-    return QRectF(boundingRect().adjusted(padding, padding, (textWidth-padding), -(30+padding)));
+    return QRectF(boundingRect().adjusted(margin, margin, -(margin), -margin));
 }
 
 void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -84,27 +89,29 @@ void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
     {
         brush = new QBrush(Qt::cyan);
     }
-    if (isNode) {
+    if (is_node()) {
         if (brush == NULL) {
             brush = new QBrush(Qt::yellow);
         }
         painter->setBrush(*brush);
         painter->drawEllipse(drawRect());
-        painter->drawText(textRect(), QString::number(nodeID)+"_Node");
-    } else if (isSwitch) {
+        //painter->drawText(textRect(), QString::number(nodeID)+"_Node");
+    } else if (is_switch()) {
         if (brush == NULL) {
             brush = new QBrush(Qt::green);
         }
         painter->setBrush(*brush);
         painter->drawRect(drawRect());
-        painter->drawText(textRect(), QString::number(nodeID)+"_Switch");
+        //painter->drawText(textRect(), QString::number(nodeID)+"_Switch");
     } else {
         if (brush == NULL) {
             brush = new QBrush(Qt::blue);
         }
         painter->setBrush(*brush);
         painter->drawEllipse(drawRect());
-        painter->drawText(textRect(), QString::number(nodeID));
+       // painter->drawText(textRect(), QString::number(nodeID));
+        label->setText(QString::number(nodeID));
+        //label.paint();
     }
     update();
 }
