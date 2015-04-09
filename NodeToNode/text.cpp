@@ -31,7 +31,7 @@ void text::debugMsg(QString _msg)
  */
 QRectF text::boundingRect() const
 {
-    return QRectF(mypoint.x(),mypoint.y()-(12),40,12);
+    return QRectF(mypoint.x(),mypoint.y()-(12),80,12);
 }
 
 /*

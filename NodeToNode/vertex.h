@@ -31,13 +31,12 @@ public:
     bool is_switch();
     bool is_node();
     bool draw_track;
-    int nodeID;
+    int vertexID;
     int penSize; // width of pen brush
     int margin; // distance between text and painting
     int textWidth; // Extra space for text
     QRectF rect;
     text* get_labelPtr();
-    //void set_labelLocation(QPointF _point);
     void set_labelLocation();
 
     QPointF nodePosition;

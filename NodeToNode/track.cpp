@@ -84,16 +84,20 @@ void track::mouseMoveEvent(QMouseEvent *event) {
     QGraphicsView::mouseMoveEvent(event);
     endPos=mapToScene(event->pos());
     if(!vertexList.isEmpty() && vertexList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))) {
-         vertex * _vert=dynamic_cast<vertex *>(itemAt(event->pos()));
+        QList<vertex*> _selected = get_selectedVerts();
+        for (int _index = 0; _index < _selected.count(); ++_index)
+        {
+            vertex* _vert = _selected.at(_index);
+            _vert->set_labelLocation();
+        }
+        /*vertex * _vert=dynamic_cast<vertex *>(itemAt(event->pos()));
          if (event->buttons() & Qt::LeftButton)
          {
              _vert->set_labelLocation();
-             qDebug() << _vert->scenePos();
          }
         if(_vert->isSelected() && _vert->ItemPositionChange) {
             _vert->nodePosition=endPos;
-            //_vert->set_labelLocation(endPos);
-        }
+        }*/
     }
 }
 

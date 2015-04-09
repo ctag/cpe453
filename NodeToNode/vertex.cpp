@@ -9,7 +9,7 @@ vertex::vertex(QPointF eventPos, int itemID)
     setAcceptHoverEvents(true);
     set_node();
     mypoint = eventPos;
-    nodeID =  itemID;
+    vertexID =  itemID;
     rect = boundingRect();
     draw_track=false;
     nodePosition=eventPos;
@@ -97,6 +97,7 @@ void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         painter->setBrush(*brush);
         painter->drawEllipse(drawRect());
         //painter->drawText(textRect(), QString::number(nodeID)+"_Node");
+        label->setText(QString::number(vertexID)+"_node");
     } else if (is_switch()) {
         if (brush == NULL) {
             brush = new QBrush(Qt::green);
@@ -104,6 +105,7 @@ void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         painter->setBrush(*brush);
         painter->drawRect(drawRect());
         //painter->drawText(textRect(), QString::number(nodeID)+"_Switch");
+        label->setText(QString::number(vertexID)+"_switch");
     } else {
         if (brush == NULL) {
             brush = new QBrush(Qt::blue);
@@ -111,7 +113,7 @@ void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         painter->setBrush(*brush);
         painter->drawEllipse(drawRect());
        // painter->drawText(textRect(), QString::number(nodeID));
-        label->setText(QString::number(nodeID));
+        label->setText(QString::number(vertexID));
         //label.paint();
     }
     update();
@@ -136,8 +138,6 @@ text* vertex::get_labelPtr()
 
 void vertex::set_labelLocation()
 {
-    //QPointF _textPos(boundingRect().x(), boundingRect().y());
-    //qDebug() << "Moving label to " << _textPos.x() << _textPos.y();
     label->update_pos(scenePos());
 }
 
