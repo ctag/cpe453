@@ -18,16 +18,14 @@ vertex::vertex(QPointF eventPos, int itemID)
     setAcceptHoverEvents(true);
     isNode=false;
     isSwitch=false;
-    //this->mypoint= QPointF();
     mypoint = eventPos;
     nodeID =  itemID;
     rect = boundingRect();
     draw_track=false;
-
+    nodePosition=eventPos;
     penSize = 2; // 2px pen size
     margin = 3; // 3px between obj and text
     textWidth = 30; // 30px extra space to write text
-
     debugMsg("Loaded new vertex.");
 }
 
@@ -115,6 +113,7 @@ void vertex::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
      rect=rect.adjusted(0,0,5,5);
      update();
+
 }
 
 void vertex::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)

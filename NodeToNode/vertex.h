@@ -7,11 +7,12 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneHoverEvent>
 #include <QDebug>
+#include <QObject>
 #include <QDateTime>
 
- class vertex :  public QGraphicsItem
+ class vertex : public QObject, public QGraphicsItem
 {
-
+    Q_OBJECT
 public:
     vertex(QPointF eventPos, int itemID);
     ~vertex();
@@ -31,6 +32,9 @@ public:
     int textWidth; // Extra space for text
     QRectF rect;
 
+    QPointF nodePosition;
+
+
 protected:
 
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
@@ -42,7 +46,6 @@ private:
     QDateTime dateTime;
 
 public slots:
-    void set_stuff();
 
 signals:
 

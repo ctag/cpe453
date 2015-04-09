@@ -54,11 +54,12 @@ void track::mousePressEvent(QMouseEvent *event)
          nodeList.append(activeNode);
          update();
      }
-    else if(track_rad_state && event->buttons() & Qt::RightButton && itemAt(event->pos())){
+    else if(track_rad_state && event->buttons() & Qt::RightButton && nodeList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
         rightDown=true;
         startPos=mapToScene(event->pos());
-
-
+        line = new edge(startPos,endPos);
+        scene->addItem(line);
+        update();
     }
 
 
@@ -74,6 +75,7 @@ void track::mouseReleaseEvent(QMouseEvent *event)
         line->setFlag(QGraphicsLineItem::ItemIsSelectable);
         line->setFlag(QGraphicsLineItem::ItemIsMovable);
         scene->addItem(line);
+
         activeNode= new vertex(endPos,id_counter);
         id_counter++;
         nodeList.append(activeNode);
@@ -84,9 +86,10 @@ void track::mouseReleaseEvent(QMouseEvent *event)
 void track::mouseMoveEvent(QMouseEvent *event){
     QGraphicsView::mouseMoveEvent(event);
     endPos=mapToScene(event->pos());
-    if(!nodeList.isEmpty() && itemAt(event->pos())){
+    if(!nodeList.isEmpty() && nodeList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
          activeNode=dynamic_cast<vertex *>(itemAt(event->pos()));
-
+        if(activeNode->isSelected() && activeNode->ItemPositionChange){
+            activeNode->nodePosition=endPos;}
     }
 }
 

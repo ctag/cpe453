@@ -5,10 +5,11 @@
 #include <QGraphicsLineItem>
 #include <QPainter>
 
-class edge : public QObject,QGraphicsLineItem
+class edge : public QObject, public QGraphicsLineItem
 {
     Q_OBJECT
 public:
+    QRectF boundingRect() const;
    edge(QPointF beginPos,QPointF finalPos );
    QPointF linestartPos;
    QPointF lineendPos;
@@ -17,7 +18,7 @@ signals:
 
 protected:
    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-
+   void mousePressEvent(QGraphicsSceneMouseEvent *event);
 public slots:
 void updatePosition();
 };
