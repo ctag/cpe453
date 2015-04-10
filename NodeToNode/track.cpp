@@ -139,19 +139,7 @@ void track::node_button_clicked(){
 
 void track::delete_button_clicked()
 {
-    QList<vertex*> _selected = get_selectedVerts();
-    if (!_selected.isEmpty())
-    {
-        for (int _index = 0; _index < _selected.size(); ++_index)
-        {
-            vertex * _vert = _selected.at(_index);
-            scene->removeItem(_vert);
-            scene->removeItem(_vert->get_labelPtr());
-            vertexList.removeOne(_vert);
-            delete _vert;
-        }
-    }
-    update();
+    deleteSelected();
 }
 
 void track::keyPressEvent(QKeyEvent *event)
@@ -162,19 +150,7 @@ void track::keyPressEvent(QKeyEvent *event)
         return;
     }
     if(event->key() == Qt::Key_Delete){
-        vertex * _vert;
-       for(int i=0;i<vertexList.size();i++){
-          if(vertexList.at(i)->isSelected()){
-             _vert=vertexList.at(i);
-             scene->removeItem(_vert);
-             scene->removeItem(_vert->get_labelPtr());
-
-             vertexList.removeAt(i);
-              i--;
-           update();
-          }
-
-       }
+        deleteSelected();
    }
 }
 
@@ -233,6 +209,23 @@ void track::shift_right()
 void track::get_track_rad(bool status)
 {
     track_rad_state=status;
+}
+
+void track::deleteSelected()
+{
+    QList<vertex*> _selected = get_selectedVerts();
+    if (!_selected.isEmpty())
+    {
+        for (int _index = 0; _index < _selected.size(); ++_index)
+        {
+            vertex * _vert = _selected.at(_index);
+            scene->removeItem(_vert);
+            scene->removeItem(_vert->get_labelPtr());
+            vertexList.removeOne(_vert);
+            delete _vert;
+        }
+    }
+    update();
 }
 
 QList<vertex*> track::get_selectedVerts()

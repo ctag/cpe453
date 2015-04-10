@@ -40,6 +40,7 @@ public:
     QList<vertex*> vertexList;
     QList<vertex*> get_selectedVerts();
     QGraphicsLineItem * line;
+    void deleteSelected();
 
 private:
     bool firstclick;
