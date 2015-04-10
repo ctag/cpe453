@@ -41,6 +41,7 @@ public:
     QList<vertex*> get_selectedVerts();
     QGraphicsLineItem * line;
     void deleteSelected();
+    void draw_grid();
 
 private:
     bool firstclick;
@@ -59,6 +60,7 @@ protected:
     void keyPressEvent(QKeyEvent *event);
     void debugMsg(QString _msg);
     int shiftAmount; // shift verts num pixels
+    int grid_px; // w/h of grid spacing
 
 public slots:
     void get_track_rad(bool status);

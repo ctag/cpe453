@@ -16,6 +16,7 @@ track::track(QWidget *parent): QGraphicsView(parent)
     this->setScene(scene);
     id_counter=0;
     shiftAmount = 40;
+    grid_px = 20;
 
     // Protect undeclared pointers.
     previousVertex = NULL;
@@ -25,11 +26,13 @@ track::track(QWidget *parent): QGraphicsView(parent)
     // Allow selecting all verts with ctrl+a
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_A), this, SLOT(select_all()));
 
-    // Hotkeys for moving all verts
+    // Hotkeys for moving all selected verts
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Down), this, SLOT(shift_down()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Left), this, SLOT(shift_left()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Up), this, SLOT(shift_up()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Right), this, SLOT(shift_right()));
+
+    draw_grid();
 
     debugMsg("Loaded graphics widget.");
  }
@@ -44,6 +47,19 @@ void track::debugMsg(QString _msg)
     if (doDebug)
     {
         qDebug() << dateTime.toString("[HH:mm:ss:zzz] ") + _msg;
+    }
+}
+
+void track::draw_grid()
+{
+    int width = 1000;
+    int height = 1000;
+    qDebug() << width << height;
+    QPen pen(QColor(100, 255, 100, 150), 1);
+    for (int _index = -100; _index < 100; ++_index)
+    {
+        scene->addLine((_index*grid_px), -height, (_index*grid_px), height, pen);
+        scene->addLine(-width, (_index*grid_px), width, (_index*grid_px), pen);
     }
 }
 
