@@ -115,6 +115,9 @@ void track::mouseMoveEvent(QMouseEvent *event) {
         {
             vertex* _vert = _selected.at(_index);
             _vert->set_labelLocation();
+           _selected.at(_index)->nodePosition= _selected.at(_index)->mypoint+_selected.at(_index)->pos();
+           qDebug()<< endPos;
+           qDebug() << _selected.at(_index)->nodePosition;
         }
         /*vertex * _vert=dynamic_cast<vertex *>(itemAt(event->pos()));
          if (event->buttons() & Qt::LeftButton)

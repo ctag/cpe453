@@ -3,7 +3,7 @@ edge:: edge(QPointF beginPos,QPointF finalPos)
 {
    linestartPos=beginPos;
    lineendPos=finalPos;
-
+    setFlag(ItemIsSelectable);
 }
 
 
@@ -23,8 +23,7 @@ void edge::updatePosition()
 
 }
 
-void edge::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
+void edge::mousePressEvent(QGraphicsSceneMouseEvent *event){
 
     isSelected();
     QGraphicsLineItem::mousePressEvent(event);
