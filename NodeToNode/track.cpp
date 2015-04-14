@@ -126,6 +126,7 @@ void track::connect_button_clicked() {
         line->setPen(QPen(Qt::black,5));
         line->setFlag(QGraphicsLineItem::ItemIsSelectable);
         line->setFlag(QGraphicsLineItem::ItemIsMovable);
+        edgeList.append(line);
          scene->addItem(line);
     }
     update();
@@ -220,18 +221,32 @@ void track::get_track_rad(bool status)
 
 void track::deleteSelected()
 {
-    QList<vertex*> _selected = get_selectedVerts();
-    if (!_selected.isEmpty())
+    QList<vertex*> _vertexselected = get_selectedVerts();
+    QList<QGraphicsLineItem*> _edgeselected = get_selectedEdges();
+
+    if (!_vertexselected.isEmpty())
     {
-        for (int _index = 0; _index < _selected.size(); ++_index)
+        for (int _index = 0; _index < _vertexselected.size(); ++_index)
         {
-            vertex * _vert = _selected.at(_index);
+            vertex * _vert = _vertexselected.at(_index);
             scene->removeItem(_vert);
             scene->removeItem(_vert->get_labelPtr());
             vertexList.removeOne(_vert);
             delete _vert;
         }
     }
+    if (!_edgeselected.isEmpty())
+    {
+        for (int _index = 0; _index < _edgeselected.size(); ++_index)
+        {
+            QGraphicsLineItem * _edge = _edgeselected.at(_index);
+            scene->removeItem(_edge);
+            edgeList.removeOne(_edge);
+            delete _edge;
+        }
+    }
+
+
     update();
 }
 
@@ -244,6 +259,20 @@ QList<vertex*> track::get_selectedVerts()
         if (_vert->isSelected())
         {
             _selected.append(_vert);
+        }
+    }
+    return(_selected);
+}
+
+QList<QGraphicsLineItem*> track::get_selectedEdges()
+{
+    QList<QGraphicsLineItem*> _selected;
+    for (int _index = 0; _index < edgeList.count(); ++_index)
+    {
+        QGraphicsLineItem* _edge = edgeList.at(_index);
+        if (_edge->isSelected())
+        {
+            _selected.append(_edge);
         }
     }
     return(_selected);

@@ -38,7 +38,10 @@ public:
     QPointF startPos;
     QPointF endPos;
     QList<vertex*> vertexList;
+    QList<QGraphicsLineItem*> edgeList;
     QList<vertex*> get_selectedVerts();
+    QList<QGraphicsLineItem*> get_selectedEdges();
+
     QGraphicsLineItem * line;
     void deleteSelected();
     void draw_grid();
