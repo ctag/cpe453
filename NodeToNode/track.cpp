@@ -78,33 +78,10 @@ void track::mousePressEvent(QMouseEvent *event)
          vertexList.append(_vert);
          update();
     }
-    else if(track_rad_state && event->buttons() & Qt::RightButton && vertexList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))){
-        rightDown=true;
-        startPos=mapToScene(event->pos());
-        line = new edge(startPos,endPos);
-        scene->addItem(line);
-        update();
-    }
-
 
   }
 
-void track::mouseReleaseEvent(QMouseEvent *event)
-{
-    QGraphicsView::mouseReleaseEvent(event);
-    if(rightDown && !itemAt(event->pos())){
-        rightDown=!rightDown;
-        line=new QGraphicsLineItem(startPos.x(),startPos.y(),endPos.x(),endPos.y());
-        line->setPen(QPen(Qt::black,5));
-        line->setFlag(QGraphicsLineItem::ItemIsSelectable);
-        line->setFlag(QGraphicsLineItem::ItemIsMovable);
-        scene->addItem(line);
 
-        vertex * _vert = new vertex(endPos,id_counter);
-        id_counter++;
-        vertexList.append(_vert);
-    }
-}
 
 void track::mouseMoveEvent(QMouseEvent *event) {
     QGraphicsView::mouseMoveEvent(event);
@@ -116,9 +93,7 @@ void track::mouseMoveEvent(QMouseEvent *event) {
             vertex* _vert = _selected.at(_index);
             _vert->set_labelLocation();
            _selected.at(_index)->nodePosition= _selected.at(_index)->mypoint+_selected.at(_index)->pos();
-           qDebug()<< endPos;
-           qDebug() << _selected.at(_index)->nodePosition;
-        }
+         }
         /*vertex * _vert=dynamic_cast<vertex *>(itemAt(event->pos()));
          if (event->buttons() & Qt::LeftButton)
          {
@@ -139,6 +114,19 @@ void track::switch_button_clicked() {
             vertex * _vert = _selected.at(_index);
             _vert->set_switch();
         }
+    }
+    update();
+}
+
+void track::connect_button_clicked() {
+    QList<vertex*> _selected = get_selectedVerts();
+    if (_selected.size()==2)
+    {
+        line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
+        line->setPen(QPen(Qt::black,5));
+        line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+        line->setFlag(QGraphicsLineItem::ItemIsMovable);
+         scene->addItem(line);
     }
     update();
 }

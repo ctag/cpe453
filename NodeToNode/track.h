@@ -55,7 +55,7 @@ private:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+   // void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void debugMsg(QString _msg);
@@ -67,6 +67,7 @@ public slots:
     void delete_button_clicked();
     void switch_button_clicked();
     void node_button_clicked();
+    void connect_button_clicked();
     void select_all();
     void shift_left();
     void shift_down();

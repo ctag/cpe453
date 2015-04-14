@@ -24,8 +24,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(locosql, &SQL::DBopened, this, &MainWindow::handle_DBopened);
     connect(locosql, &SQL::DBclosed, this, &MainWindow::handle_DBclosed);
 
-    connect(ui->rad_track_piece,SIGNAL(clicked()),this,SLOT(check_rad()));//
-    connect(this,SIGNAL(rad_track_status(bool)),ui->mytraintrack,SLOT(get_track_rad(bool)));
+   // connect(ui->rad_track_piece,SIGNAL(clicked()),this,SLOT(check_rad()));//
+    //connect(this,SIGNAL(rad_track_status(bool)),ui->mytraintrack,SLOT(get_track_rad(bool)));
+    connect(ui->connectButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(connect_button_clicked()));
     connect(ui->deleteButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(delete_button_clicked()));
     connect(ui->switchButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(switch_button_clicked()));
     connect(ui->nodeButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(node_button_clicked()));
@@ -81,13 +82,13 @@ void MainWindow::do_disconnectDB()
     locosql->do_closeDB();
 }
 
-void MainWindow::check_rad(){
+/*void MainWindow::check_rad(){
 
    if(ui->rad_track_piece->isChecked())
        emit rad_track_status(true);
    else
        emit rad_track_status(false);
 
-}
+}*/
 
 

@@ -1370,17 +1370,17 @@
                     <property name="title">
                      <string>Track Choices</string>
                     </property>
-                    <widget class="QRadioButton" name="rad_track_piece">
+                    <widget class="QPushButton" name="connectButton">
                      <property name="geometry">
                       <rect>
                        <x>10</x>
                        <y>50</y>
-                       <width>142</width>
-                       <height>20</height>
+                       <width>75</width>
+                       <height>23</height>
                       </rect>
                      </property>
                      <property name="text">
-                      <string>Trak Piece</string>
+                      <string>Connect</string>
                      </property>
                     </widget>
                    </widget>
@@ -1700,7 +1700,7 @@
      <x>0</x>
      <y>0</y>
      <width>778</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
