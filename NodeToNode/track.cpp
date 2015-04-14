@@ -226,22 +226,20 @@ void track::deleteSelected()
             scene->removeItem(_vert);
             scene->removeItem(_vert->get_labelPtr());
             vertexList.removeOne(_vert);
+            if(!edgeList.empty()){
+                for(int j=0; j < edgeList.count();j++){
+                    if(_vert->collidesWithItem(edgeList.at(j))){
+                        scene->removeItem(edgeList.at(j));
+                    qDebug() <<"true";
+                    }
+            }
+        }
             delete _vert;
-        }
-    }
-    if (!_edgeselected.isEmpty())
-    {
-        for (int _index = 0; _index < _edgeselected.size(); ++_index)
-        {
-            QGraphicsLineItem * _edge = _edgeselected.at(_index);
-            scene->removeItem(_edge);
-            edgeList.removeOne(_edge);
-            delete _edge;
-        }
-    }
 
+    }
 
     update();
+    }
 }
 
 QList<vertex*> track::get_selectedVerts()
