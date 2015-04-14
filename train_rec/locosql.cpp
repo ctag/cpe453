@@ -373,6 +373,7 @@ void LocoSQL::do_reqTrain()
         LocoPacket _speedPacket;
         LocoPacket _dirPacket;
         LocoByte _slot;
+        QString _slotString;
         int _slotInt;
         LocoByte _speed;
         int _speedInt;
@@ -380,6 +381,7 @@ void LocoSQL::do_reqTrain()
         _command.set_fromHex("A0");
         _speed.set_fromHex(get_hexFromPercent(mainQuery->value("speed").toInt()));
         _speedInt = mainQuery->value("speed").toInt();
+        _slotString = mainQuery->value("slot").toString();
         _slotInt = mainQuery->value("slot").toInt();
         _slot.set_fromHex(get_hexFromInt(_slotInt));
         _dir = mainQuery->value("dir").toBool();
@@ -398,30 +400,13 @@ void LocoSQL::do_reqTrain()
         if (*doDelete)
         {
             mainQuery->prepare("DELETE FROM "+schema+"."+reqTrain+" WHERE slot=:_slot LIMIT 1;");
-            mainQuery->bindValue(":_slot", _slotInt);
+            mainQuery->bindValue(":_slot", _slotString);
             mainQuery->exec();
         }
         // Request from teams, update train status table immediately on output
-        mainQuery->prepare("SELECT * FROM "+schema+"."+trackTrain+" WHERE slot=:slot LIMIT 1;");
-        mainQuery->bindValue(":slot", _slotInt);
+        mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
+                           "VALUES ('SLOT_SCAN', '"+_slotString+"');");
         mainQuery->exec();
-        if (mainQuery->next())
-        {
-            QString _adr = mainQuery->value("adr").toString();
-            QString _state = mainQuery->value("state").toString();
-            if (*debug) qDebug() << timeStamp() << "Fetched train adr: " << _adr << ", and state: " << _state;
-            mainQuery->prepare("INSERT INTO "+schema+"."+trackTrain+" (slot, adr, speed, dir, state) "
-                              "VALUES (:slot, :adr, :speed, :dir, :state) "
-                              "ON DUPLICATE KEY "
-                              "UPDATE adr=:adr, speed=:speed, dir=:dir, state=:state;");
-            mainQuery->bindValue(":slot", _slotInt);
-            mainQuery->bindValue(":adr", _adr);
-            mainQuery->bindValue(":speed", _speedInt);
-            mainQuery->bindValue(":dir", _dir);
-            mainQuery->bindValue(":state", _state);
-            if (*debug) qDebug() << timeStamp() << "Updating train SQL. " << _slotInt << " : " << _speedInt;
-            mainQuery->exec();
-        }
     }
 }
 
