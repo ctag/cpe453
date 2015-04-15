@@ -176,6 +176,11 @@ void track::shift_left()
         _vert->moveBy(-shiftAmount, 0);
         _vert->set_labelLocation();
     }
+    for (int _index = 0; _index < edgeList.count(); ++_index)
+    {
+        line = edgeList.at(_index);
+        line->moveBy(-shiftAmount, 0);
+    }
 }
 
 void track::shift_down()
@@ -185,6 +190,11 @@ void track::shift_down()
         vertex * _vert = vertexList.at(_index);
         _vert->moveBy(0, shiftAmount);
         _vert->set_labelLocation();
+    }
+    for (int _index = 0; _index < edgeList.count(); ++_index)
+    {
+        line = edgeList.at(_index);
+        line->moveBy(0, shiftAmount);
     }
 }
 
@@ -196,6 +206,11 @@ void track::shift_up()
         _vert->moveBy(0, -shiftAmount);
         _vert->set_labelLocation();
     }
+    for (int _index = 0; _index < edgeList.count(); ++_index)
+    {
+        line = edgeList.at(_index);
+        line->moveBy(0, -shiftAmount);
+    }
 }
 
 void track::shift_right()
@@ -205,6 +220,11 @@ void track::shift_right()
         vertex * _vert = vertexList.at(_index);
         _vert->moveBy(shiftAmount, 0);
         _vert->set_labelLocation();
+    }
+    for (int _index = 0; _index < edgeList.count(); ++_index)
+    {
+        line = edgeList.at(_index);
+        line->moveBy(shiftAmount, 0);
     }
 }
 
