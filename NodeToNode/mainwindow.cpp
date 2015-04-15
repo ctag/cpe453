@@ -8,8 +8,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     // create List
 
-    // GUI
-
     // Declaring thread association
     locosql = new SQL;
     locosql->moveToThread(&threadSQL);
@@ -24,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(locosql, &SQL::DBopened, this, &MainWindow::handle_DBopened);
     connect(locosql, &SQL::DBclosed, this, &MainWindow::handle_DBclosed);
 
-   // connect(ui->rad_track_piece,SIGNAL(clicked()),this,SLOT(check_rad()));//
+    //connect(ui->rad_track_piece,SIGNAL(clicked()),this,SLOT(check_rad()));
     //connect(this,SIGNAL(rad_track_status(bool)),ui->mytraintrack,SLOT(get_track_rad(bool)));
     connect(ui->connectButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(connect_button_clicked()));
     connect(ui->deleteButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(delete_button_clicked()));

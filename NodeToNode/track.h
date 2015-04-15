@@ -41,11 +41,11 @@ public:
     QList<QGraphicsLineItem*> edgeList;
     QList<vertex*> get_selectedVerts();
     QList<QGraphicsLineItem*> get_selectedEdges();
-
     QGraphicsLineItem * line;
     void deleteSelected();
     void draw_grid();
     void parseLists();
+
 private:
     bool firstclick;
     bool secondclick;

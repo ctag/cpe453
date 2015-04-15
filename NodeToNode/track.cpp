@@ -26,7 +26,7 @@ track::track(QWidget *parent): QGraphicsView(parent)
     // Allow selecting all verts with ctrl+a
     new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_A), this, SLOT(select_all()));
 
-    // Hotkeys for moving all selected verts
+    // Hotkeys for moving all verts
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Down), this, SLOT(shift_down()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Left), this, SLOT(shift_left()));
     new QShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_Up), this, SLOT(shift_up()));
@@ -170,10 +170,9 @@ void track::select_all()
 
 void track::shift_left()
 {
-    QList<vertex*> _selected = get_selectedVerts();
-    for (int _index = 0; _index < _selected.count(); ++_index)
+    for (int _index = 0; _index < vertexList.count(); ++_index)
     {
-        vertex * _vert = _selected.at(_index);
+        vertex * _vert = vertexList.at(_index);
         _vert->moveBy(-shiftAmount, 0);
         _vert->set_labelLocation();
     }
@@ -181,30 +180,29 @@ void track::shift_left()
 
 void track::shift_down()
 {
-    QList<vertex*> _selected = get_selectedVerts();
-    for (int _index = 0; _index < _selected.count(); ++_index)
+    for (int _index = 0; _index < vertexList.count(); ++_index)
     {
-        vertex * _vert = _selected.at(_index);
+        vertex * _vert = vertexList.at(_index);
         _vert->moveBy(0, shiftAmount);
         _vert->set_labelLocation();
     }
 }
+
 void track::shift_up()
 {
-    QList<vertex*> _selected = get_selectedVerts();
-    for (int _index = 0; _index < _selected.count(); ++_index)
+    for (int _index = 0; _index < vertexList.count(); ++_index)
     {
-        vertex * _vert = _selected.at(_index);
+        vertex * _vert = vertexList.at(_index);
         _vert->moveBy(0, -shiftAmount);
         _vert->set_labelLocation();
     }
 }
+
 void track::shift_right()
 {
-    QList<vertex*> _selected = get_selectedVerts();
-    for (int _index = 0; _index < _selected.count(); ++_index)
+    for (int _index = 0; _index < vertexList.count(); ++_index)
     {
-        vertex * _vert = _selected.at(_index);
+        vertex * _vert = vertexList.at(_index);
         _vert->moveBy(shiftAmount, 0);
         _vert->set_labelLocation();
     }
