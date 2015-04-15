@@ -14,7 +14,7 @@ QRectF edge::boundingRect() const
 
 void edge::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    painter->setPen(QPen(Qt::black,4));
+    painter->setPen(QPen(Qt::black,2));
     painter->drawLine(linestartPos,lineendPos);
 }
 

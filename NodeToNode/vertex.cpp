@@ -7,7 +7,7 @@ vertex::vertex(QPointF eventPos, int itemID)
     setFlag(ItemIsSelectable);
     setFlag(ItemIsMovable);
     setAcceptHoverEvents(true);
-   // set_node();
+    set_node();
     mypoint = eventPos;
     vertexID =  itemID;
     rect = boundingRect();

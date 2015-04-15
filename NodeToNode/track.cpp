@@ -117,7 +117,7 @@ void track::connect_button_clicked() {
     if (_selected.size()==2)
     {
         line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
-        line->setPen(QPen(Qt::black,5));
+        line->setPen(QPen(Qt::black,2));
         line->setFlag(QGraphicsLineItem::ItemIsSelectable);
         line->setFlag(QGraphicsLineItem::ItemIsMovable);
         edgeList.append(line);
