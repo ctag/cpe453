@@ -123,7 +123,7 @@ void track::connect_button_clicked() {
         edgeList.append(line);
          scene->addItem(line);
     }
-    //parseLists();
+    parseLists();
 
     update();
 }
@@ -281,7 +281,7 @@ void track::parseLists(){
                     if(vertexList.at(i)->collidesWithItem(edgeList.at(j))){
                         for(int k=0; k < vertexList.count();k++){
                             if(vertexList.at(i)!= vertexList.at(k)){
-                                if(edgeList.at(i)->collidesWithItem(vertexList.at(k))){
+                                if(edgeList.at(j)->collidesWithItem(vertexList.at(k))){
                                  qDebug() << vertexList.at(i)->vertexID;
                                  qDebug() << " ----- ";
                                  qDebug() << vertexList.at(k)->vertexID;
