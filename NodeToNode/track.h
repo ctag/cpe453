@@ -45,7 +45,7 @@ public:
     QGraphicsLineItem * line;
     void deleteSelected();
     void draw_grid();
-
+    void parseLists();
 private:
     bool firstclick;
     bool secondclick;

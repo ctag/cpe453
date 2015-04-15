@@ -123,7 +123,7 @@ void vertex::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
      rect=rect.adjusted(0,0,5,5);
      update();
-}
+ }
 
 void vertex::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {

@@ -123,6 +123,8 @@ void track::connect_button_clicked() {
         edgeList.append(line);
          scene->addItem(line);
     }
+    //parseLists();
+
     update();
 }
 
@@ -223,17 +225,16 @@ void track::deleteSelected()
         for (int _index = 0; _index < _vertexselected.size(); ++_index)
         {
             vertex * _vert = _vertexselected.at(_index);
-            scene->removeItem(_vert);
-            scene->removeItem(_vert->get_labelPtr());
-            vertexList.removeOne(_vert);
             if(!edgeList.empty()){
                 for(int j=0; j < edgeList.count();j++){
                     if(_vert->collidesWithItem(edgeList.at(j))){
                         scene->removeItem(edgeList.at(j));
-                    qDebug() <<"true";
-                    }
+                     }
+                }
             }
-        }
+            scene->removeItem(_vert);
+            scene->removeItem(_vert->get_labelPtr());
+            vertexList.removeOne(_vert);
             delete _vert;
 
     }
@@ -272,7 +273,27 @@ QList<QGraphicsLineItem*> track::get_selectedEdges()
 
 
 
+void track::parseLists(){
 
+    if(!vertexList.isEmpty() && !edgeList.isEmpty()){
+        for(int i=0; i < vertexList.count();i++){
+                for(int j=0; j < edgeList.count(); j++){
+                    if(vertexList.at(i)->collidesWithItem(edgeList.at(j))){
+                        for(int k=0; k < vertexList.count();k++){
+                            if(vertexList.at(i)!= vertexList.at(k)){
+                                if(edgeList.at(i)->collidesWithItem(vertexList.at(k))){
+                                 qDebug() << vertexList.at(i)->vertexID;
+                                 qDebug() << " ----- ";
+                                 qDebug() << vertexList.at(k)->vertexID;
+                                 qDebug() <<"\n";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 
