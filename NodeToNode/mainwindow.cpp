@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->switchButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(switch_button_clicked()));
     connect(ui->nodeButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(node_button_clicked()));
 
-    // connect arrow buttons to track panning
+    // Attach arrow buttons to track panning
     connect(ui->pushButton_shiftUp, SIGNAL(clicked()), ui->mytraintrack, SLOT(shift_up()));
     connect(ui->pushButton_shiftLeft, SIGNAL(clicked()), ui->mytraintrack, SLOT(shift_left()));
     connect(ui->pushButton_shiftDown, SIGNAL(clicked()), ui->mytraintrack, SLOT(shift_down()));
@@ -54,10 +54,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::handle_DBopened()
 {
-    ui->textBrowser_sql_2->append("Database opened. Connection test appears successful :)");
+    ui->textBrowser_sql_2->append("Database opened. Connection appears successful :)");
     ui->pushButton_connect_2->setEnabled(false);
     ui->pushButton_disconnect_2->setEnabled(true);
-    //ui->pushButton_runQuery->setEnabled(true);
 }
 
 void MainWindow::handle_DBclosed()
@@ -65,7 +64,6 @@ void MainWindow::handle_DBclosed()
     ui->textBrowser_sql_2->append("Database closed.");
     ui->pushButton_connect_2->setEnabled(true);
     ui->pushButton_disconnect_2->setEnabled(false);
-    //ui->pushButton_runQuery->setEnabled(false);
 }
 
 void MainWindow::do_connectDB()

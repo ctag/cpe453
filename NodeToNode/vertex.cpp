@@ -66,7 +66,6 @@ bool vertex::is_node()
  */
 QRectF vertex::boundingRect() const
 {
-    //return QRectF(mypoint.x()-8,mypoint.y()-7,30,30);
     int width = 12 + (2*margin);
     int height = 12 + (2*margin);
     return QRectF(mypoint.x()-(width/2),mypoint.y()-(height/2),width,height);
@@ -96,7 +95,6 @@ void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         }
         painter->setBrush(*brush);
         painter->drawEllipse(drawRect());
-        //painter->drawText(textRect(), QString::number(nodeID)+"_Node");
         label->setText(QString::number(vertexID)+"_node");
     } else if (is_switch()) {
         if (brush == NULL) {
@@ -104,7 +102,6 @@ void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         }
         painter->setBrush(*brush);
         painter->drawRect(drawRect());
-        //painter->drawText(textRect(), QString::number(nodeID)+"_Switch");
         label->setText(QString::number(vertexID)+"_switch");
     } else {
         if (brush == NULL) {
@@ -112,9 +109,7 @@ void vertex::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QW
         }
         painter->setBrush(*brush);
         painter->drawEllipse(drawRect());
-       // painter->drawText(textRect(), QString::number(nodeID));
         label->setText(QString::number(vertexID));
-        //label.paint();
     }
     update();
 }
