@@ -14,7 +14,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->horizontalLayout_3->setMargin(0);
     ui->horizontalLayout->setMargin(0);
-    ui->tabWidget->setTabText(0,"Layout Options");
 
     // Database Sig/Slots
     connect(ui->pushButton_connect_2, SIGNAL(clicked()), this, SLOT(do_connectDB()));
@@ -28,6 +27,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->deleteButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(delete_button_clicked()));
     connect(ui->switchButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(switch_button_clicked()));
     connect(ui->nodeButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(node_button_clicked()));
+
+    // connect arrow buttons to track panning
+    connect(ui->pushButton_shiftUp, SIGNAL(clicked()), ui->mytraintrack, SLOT(shift_up()));
+    connect(ui->pushButton_shiftLeft, SIGNAL(clicked()), ui->mytraintrack, SLOT(shift_left()));
+    connect(ui->pushButton_shiftDown, SIGNAL(clicked()), ui->mytraintrack, SLOT(shift_down()));
+    connect(ui->pushButton_shiftRight, SIGNAL(clicked()), ui->mytraintrack, SLOT(shift_right()));
 
     // Kickstart thread
     threadSQL.start();

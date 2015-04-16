@@ -55,7 +55,7 @@ void track::draw_grid()
     int width = 1000;
     int height = 1000;
     qDebug() << width << height;
-    QPen pen(QColor(100, 255, 100, 150), 1);
+    QPen pen(QColor(150, 255, 150, 150), 1);
     for (int _index = -100; _index < 100; ++_index)
     {
         scene->addLine((_index*grid_px), -height, (_index*grid_px), height, pen);
@@ -81,8 +81,6 @@ void track::mousePressEvent(QMouseEvent *event)
     }
 
   }
-
-
 
 void track::mouseMoveEvent(QMouseEvent *event) {
     QGraphicsView::mouseMoveEvent(event);
@@ -124,7 +122,6 @@ void track::connect_button_clicked() {
          scene->addItem(line);
     }
     parseLists();
-
     update();
 }
 
@@ -247,16 +244,14 @@ void track::deleteSelected()
                 for(int j=0; j < edgeList.count();j++){
                     if(_vert->collidesWithItem(edgeList.at(j))){
                         scene->removeItem(edgeList.at(j));
-                     }
+                    }
                 }
             }
             scene->removeItem(_vert);
             scene->removeItem(_vert->get_labelPtr());
             vertexList.removeOne(_vert);
             delete _vert;
-
     }
-
     update();
     }
 }
