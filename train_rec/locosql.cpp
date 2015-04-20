@@ -46,7 +46,7 @@ void LocoSQL::do_run()
     *mainDB = QSqlDatabase::addDatabase("QMYSQL", "main");
     reqIndex = new int;
     debug = new bool;
-    *debug = false;
+    *debug = true;
     doDelete = new bool;
     *doDelete = true;
     qDebug() << timeStamp() << "SQL thread initialized.";
@@ -79,7 +79,7 @@ bool LocoSQL::do_openDB(QString hostname, int port, QString database, QString us
 
     // At 80ms, generates ~15KB/s of traffic to SQL server.
     // This value can be deprecated by hosting train_rec and SQL on the same machine.
-    reqTimerStart(80); // Wait Xms between SQL scans
+    reqTimerStart(140); // Wait Xms between SQL scans
 
     emit DBopened();
     return(true);
@@ -291,14 +291,14 @@ void LocoSQL::do_reqMacro()
             while (!_slots.isEmpty())
             {
                 mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
-                                   "VALUES ('SLOT_USE', '"+_slots.first()+"');");
+                                   "VALUES ('SLOT_USE', '"+QString::number(_slots.first())+"');");
                 mainQuery->exec();
                 mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
-                                   "VALUES ('SLOT_SCAN', '"+_slots.first()+"');");
+                                   "VALUES ('SLOT_SCAN', '"+QString::number(_slots.first())+"');");
                 mainQuery->exec();
                 mainQuery->prepare("INSERT INTO "+schema+"."+reqTrain+" (`slot`, `speed`, `dir`)"
                                    "VALUES (:slot, :speed, :dir);");
-                mainQuery->bindValue(":slot", _slots.takeFirst());
+                mainQuery->bindValue(":slot", QString::number(_slots.takeFirst()));
                 mainQuery->bindValue(":speed", _speed);
                 mainQuery->bindValue(":dir", _dir);
                 mainQuery->exec();
@@ -373,11 +373,15 @@ void LocoSQL::do_reqTrain()
         LocoPacket _speedPacket;
         LocoPacket _dirPacket;
         LocoByte _slot;
+        QString _slotString;
         int _slotInt;
         LocoByte _speed;
+        int _speedInt;
         int _dir;
         _command.set_fromHex("A0");
         _speed.set_fromHex(get_hexFromPercent(mainQuery->value("speed").toInt()));
+        _speedInt = mainQuery->value("speed").toInt();
+        _slotString = mainQuery->value("slot").toString();
         _slotInt = mainQuery->value("slot").toInt();
         _slot.set_fromHex(get_hexFromInt(_slotInt));
         _dir = mainQuery->value("dir").toBool();
@@ -396,9 +400,13 @@ void LocoSQL::do_reqTrain()
         if (*doDelete)
         {
             mainQuery->prepare("DELETE FROM "+schema+"."+reqTrain+" WHERE slot=:_slot LIMIT 1;");
-            mainQuery->bindValue(":_slot", _slotInt);
+            mainQuery->bindValue(":_slot", _slotString);
             mainQuery->exec();
         }
+        // Request from teams, update train status table immediately on output
+        mainQuery->prepare("INSERT INTO "+schema+"."+reqMacro+" (`macro`, `arg1`)"
+                           "VALUES ('SLOT_SCAN', '"+_slotString+"');");
+        mainQuery->exec();
     }
 }
 
@@ -447,12 +455,12 @@ void LocoSQL::do_updateBlock(LocoBlock _block)
     }
     if (mainDB->isOpen()) {
         // This query will insert a DS if it isn't already in the table
-        /*mainQuery->prepare("INSERT INTO "+schema+"."+trackBlock+" (ds_id, status) "
+        /*mainQuery->prepare("INSERT INTO "+schema+"."+trackBlock+" (id, status) "
                         "VALUES (:id, :status) "
                         "ON DUPLICATE KEY "
                         "UPDATE status=:status;");*/
         // This query will ignore DS which are not listed in the table
-        mainQuery->prepare("UPDATE "+schema+"."+trackBlock+" SET `status`=:status WHERE `ds_id`=:id;");
+        mainQuery->prepare("UPDATE "+schema+"."+trackBlock+" SET `status`=:status WHERE `id`=:id;");
         QString _id = QString::number(_block.get_board())+"-"+QString::number(_block.get_ds());
         int _status = _block.get_occupied();
         mainQuery->bindValue(":id", _id);

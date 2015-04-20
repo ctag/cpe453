@@ -46,11 +46,12 @@ private:
  private slots:
     // det_node_pressed();
     //void switch_pressed();
-    void check_rad();
+  //  void check_rad();
     void handle_DBopened();
     void handle_DBclosed();
     void do_connectDB();
     void do_disconnectDB();
+    void do_sqlUpload();
 
  signals:
         void rad_track_status(bool status);

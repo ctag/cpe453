@@ -17,6 +17,8 @@
 #include <QRadioButton>
 #include <QList>
 #include <QDateTime>
+#include <QShortcut>
+#include <QVector>
 
 #include "vertex.h"
 #include "edge.h"
@@ -28,17 +30,22 @@ class track : public QGraphicsView
 public:
     explicit track(QWidget *parent = 0);
     ~track();
-    vertex *previousNode;
-    vertex *activeNode;
+    vertex *previousVertex;
     int activeItemID;
-    QGraphicsItem* selectedNode;
+    QGraphicsItem* selectedVertex;
     int id_counter;
     QGraphicsScene* scene;
     bool track_rad_state;
     QPointF startPos;
     QPointF endPos;
-    QList<vertex*> nodeList;
-    edge * line;
+    QList<vertex*> vertexList;
+    QList<QGraphicsLineItem*> edgeList;
+    QList<vertex*> get_selectedVerts();
+    QList<QGraphicsLineItem*> get_selectedEdges();
+    QGraphicsLineItem * line;
+    void deleteSelected();
+    void draw_grid();
+    void parseLists();
 
 private:
     bool firstclick;
@@ -52,18 +59,31 @@ private:
 
 protected:
     void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
+   // void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void debugMsg(QString _msg);
+    int shiftAmount; // shift verts num pixels
+    int grid_px; // w/h of grid spacing
 
 public slots:
     void get_track_rad(bool status);
     void delete_button_clicked();
     void switch_button_clicked();
     void node_button_clicked();
+    void connect_button_clicked();
+    void select_all();
+    void shift_left();
+    void shift_down();
+    void shift_up();
+    void shift_right();
+    QList<vertex*> get_vertices();
+    QList<vertex*> get_connectedVertices(vertex*);
+    void get_allConnectedVertices();
 
 signals:
+    void vertices(QList<vertex*>);
+    void connectedVertices(vertex*, QList<vertex*>);
  //   void positionChange(QPointF );
 };
 

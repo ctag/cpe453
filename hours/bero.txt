@@ -1,5 +1,36 @@
 
 
+# Sprint 6
+20-4 3.3hr
+	SQL basic for NTN working
+19-4 3hr
+	Wrote guide for train_rec, worked on NTN sql
+15-4 4.3hr
+	cleaned vert class, added panning to NTN
+13-4 4hr
+	bugfixes for train_rec
+09-4 7hr
+	Added grid to NTN, bugfixes galore
+08-4 5.3hr
+	fixed thread issues, added ds labelling bugfix
+07-4 4.3hr
+	Added tables, working on nodetonode
+06-4 8.3hr
+	Added sql loader, bugfixes for demo
+
+# Sprint 5
+05-4 4.3hr
+	Working on dinst and bugfixes
+04-4 5.3hr
+	Cleaned up structure and fixed bugs
+03-4 2hr
+	Added sql test code
+02-4 4.3hr
+	Working train rec sql requests
+01-4 6.3hr
+	Switch and macro requests from sql
+30-3 5.3hr
+	Added UDP support
 21-3 5hr
 	testing usb connection and writing udp class
 20-3 4hr
@@ -8,7 +39,16 @@
 	retooling program for threaded handling of sql tables.
 
 # Sprint 4
-Many hours
+18-3 3.3hr
+	Major code rewrite for serial underway
+16-3 7.3hr
+	Threading and sql improvements
+15-3 8hr
+	Still working on threads
+05-3 6hr
+	Restructured loconet class for SQL
+04-3 4.3hr
+	added boilerplate for packet parsing
 
 
 # Sprint 3
