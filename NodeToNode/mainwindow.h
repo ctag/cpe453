@@ -51,6 +51,7 @@ private:
     void handle_DBclosed();
     void do_connectDB();
     void do_disconnectDB();
+    void do_sqlUpload();
 
  signals:
         void rad_track_status(bool status);

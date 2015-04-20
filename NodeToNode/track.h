@@ -18,6 +18,7 @@
 #include <QList>
 #include <QDateTime>
 #include <QShortcut>
+#include <QVector>
 
 #include "vertex.h"
 #include "edge.h"
@@ -76,8 +77,13 @@ public slots:
     void shift_down();
     void shift_up();
     void shift_right();
+    QList<vertex*> get_vertices();
+    QList<vertex*> get_connectedVertices(vertex*);
+    void get_allConnectedVertices();
 
 signals:
+    void vertices(QList<vertex*>);
+    void connectedVertices(vertex*, QList<vertex*>);
  //   void positionChange(QPointF );
 };
 

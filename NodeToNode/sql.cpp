@@ -20,6 +20,8 @@ const QString reqSwitch = "`req_switch`"; // Table name for switch position requ
 const QString reqPacket = "`req_packet`"; // Table name for raw packet requests.
 const QString trackTrain = "`track_train`"; // Table name for list of scanned trains/slots.
 const QString trackBlock = "`track_ds`"; // Table name for list of Detection Sections
+const QString trackVertices = "`track_vertices`"; // Table name for list of Detection Sections
+const QString trackEdges = "`track_edges`"; // Table name for list of Detection Sections
 
 SQL::SQL()
 {
@@ -83,6 +85,51 @@ void SQL::do_closeDB()
     delete mainQuery;
     emit DBclosed();
 }
+
+/*
+ * NodeToNode Specific SQL methods
+ */
+
+void SQL::do_clearVertices()
+{
+    do_clearTable("track_vertices");
+    do_clearTable("track_edges");
+}
+
+void SQL::do_uploadVertex(vertex *_vert, QList<vertex *> _connected)
+{
+    if (*debug) qDebug() << "Uploading vertex.";
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        return;
+    }
+    mainQuery->prepare("INSERT INTO "+schema+"."+trackVertices+" (`id`,`x`,`y`)"
+                       "VALUES (:id,:x,:y);");
+    mainQuery->bindValue(":id", _vert->vertexID);
+    mainQuery->bindValue(":x", _vert->xposition);
+    mainQuery->bindValue(":y", _vert->yposition);
+    mainQuery->exec();
+
+    for (int _index = 0; _index < _connected.count(); ++_index)
+    {
+        // TODO: add type and ds once available
+        int edge_id = (_vert->vertexID * 10) + _index;
+        mainQuery->prepare("INSERT INTO "+schema+"."+trackEdges+" (`edge_id`,`vert_from`,`vert_to`, `type`, `ds`)"
+                           "VALUES (:edge_id,:vert_from,:vert_to,'0','0-0');");
+        mainQuery->bindValue(":edge_id", edge_id);
+        mainQuery->bindValue(":vert_from", _vert->vertexID);
+        mainQuery->bindValue(":vert_to", _connected.at(_index)->vertexID);
+        mainQuery->exec();
+    }
+}
+
+
+/*
+ * General SQL methods
+ */
 
 void SQL::req_trackReset()
 {

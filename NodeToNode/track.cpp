@@ -309,7 +309,50 @@ void track::parseLists(){
 }
 
 
+QList<vertex*> track::get_vertices()
+{
+    return(vertexList);
+}
 
+QList<vertex*> track::get_connectedVertices(vertex * _vertex)
+{
+QList<vertex*> connected;
+if(!vertexList.isEmpty() && !edgeList.isEmpty()){ // sanity check
+    for(int j=0; j < edgeList.count(); j++){
+        if(_vertex->collidesWithItem(edgeList.at(j))){
+            for(int k=0; k < vertexList.count();k++){
+                if(_vertex!= vertexList.at(k)){
+                    if(edgeList.at(j)->collidesWithItem(vertexList.at(k))){
+                        connected.append(vertexList.at(k));
+                    }
+                }
+            }
+        }
+    }
+}
+return(connected);
+}
+
+void track::get_allConnectedVertices()
+{
+if(!vertexList.isEmpty() && !edgeList.isEmpty()){
+    for(int i=0; i < vertexList.count();i++){
+        QList<vertex*> connected;
+        for(int j=0; j < edgeList.count(); j++){
+            if(vertexList.at(i)->collidesWithItem(edgeList.at(j))){
+                    for(int k=0; k < vertexList.count();k++){
+                        if(vertexList.at(i)!= vertexList.at(k)){
+                            if(edgeList.at(j)->collidesWithItem(vertexList.at(k))){
+                             connected.append(vertexList.at(k));
+                        }
+                    }
+                }
+            }
+        }
+        emit connectedVertices(vertexList.at(i), connected);
+    }
+}
+}
 
 
 

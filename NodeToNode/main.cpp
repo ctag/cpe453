@@ -11,5 +11,8 @@ int main(int argc, char *argv[])
     qRegisterMetaType< QVector<int> >("QVector<int>");
     qRegisterMetaType< QVector<QString> >("QVector<QString>");
 
+    // for passing vertices around
+    qRegisterMetaType< QList<vertex*> >("QList<vertex*>");
+
     return a.exec();
 }

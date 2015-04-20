@@ -12,6 +12,8 @@
 #include <QTimer>
 #include <QPointer>
 
+#include "vertex.h"
+
 namespace std {
 class SQL;
 }
@@ -31,6 +33,9 @@ public slots:
     void do_run();
     void do_clearTable(QString _table);
     void do_clearAllTables();
+    // NodeToNode
+    void do_clearVertices();
+    void do_uploadVertex(vertex* _vert, QList<vertex*> _connected);
     // Requests and Listings
     void req_train(int _slot, int _speed, int _dir);
     void req_switch(int _adr, int _state);

@@ -20,6 +20,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_disconnect_2, SIGNAL(clicked()), this, SLOT(do_disconnectDB()));
     connect(locosql, &SQL::DBopened, this, &MainWindow::handle_DBopened);
     connect(locosql, &SQL::DBclosed, this, &MainWindow::handle_DBclosed);
+    connect(ui->pushButton_sqlUpload, SIGNAL(clicked()), this, SLOT(do_sqlUpload()));
+    connect(ui->pushButton_sqlClear, SIGNAL(clicked()), locosql, SLOT(do_clearVertices()));
+
+    connect(ui->mytraintrack, SIGNAL(connectedVertices(vertex*,QList<vertex*>)), locosql, SLOT(do_uploadVertex(vertex*,QList<vertex*>)));
 
     //connect(ui->rad_track_piece,SIGNAL(clicked()),this,SLOT(check_rad()));
     //connect(this,SIGNAL(rad_track_status(bool)),ui->mytraintrack,SLOT(get_track_rad(bool)));
@@ -57,6 +61,8 @@ void MainWindow::handle_DBopened()
     ui->textBrowser_sql_2->append("Database opened. Connection appears successful :)");
     ui->pushButton_connect_2->setEnabled(false);
     ui->pushButton_disconnect_2->setEnabled(true);
+    ui->pushButton_sqlUpload->setEnabled(true);
+    ui->pushButton_sqlClear->setEnabled(true);
 }
 
 void MainWindow::handle_DBclosed()
@@ -64,6 +70,8 @@ void MainWindow::handle_DBclosed()
     ui->textBrowser_sql_2->append("Database closed.");
     ui->pushButton_connect_2->setEnabled(true);
     ui->pushButton_disconnect_2->setEnabled(false);
+    ui->pushButton_sqlUpload->setEnabled(false);
+    ui->pushButton_sqlClear->setEnabled(false);
 }
 
 void MainWindow::do_connectDB()
@@ -81,6 +89,11 @@ void MainWindow::do_connectDB()
 void MainWindow::do_disconnectDB()
 {
     locosql->do_closeDB();
+}
+
+void MainWindow::do_sqlUpload()
+{
+    ui->mytraintrack->get_allConnectedVertices();
 }
 
 /*void MainWindow::check_rad(){
