@@ -42,6 +42,7 @@ public:
     QList<QGraphicsLineItem*> edgeList;
     QList<vertex*> get_selectedVerts();
     QList<QGraphicsLineItem*> get_selectedEdges();
+    QList<QGraphicsLineItem*> get_connectedEdges(vertex * _vert);
     QGraphicsLineItem * line;
     void deleteSelected();
     void draw_grid();

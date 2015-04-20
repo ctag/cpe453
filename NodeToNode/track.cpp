@@ -87,13 +87,31 @@ void track::mouseMoveEvent(QMouseEvent *event) {
     endPos=mapToScene(event->pos());
     if(!vertexList.isEmpty() && vertexList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))) {
         QList<vertex*> _selected = get_selectedVerts();
+
         for (int _index = 0; _index < _selected.count(); ++_index)
         {
             vertex* _vert = _selected.at(_index);
-            _vert->set_labelLocation();
-           _selected.at(_index)->nodePosition= _selected.at(_index)->mypoint+_selected.at(_index)->pos();
-         }
+            QList<QGraphicsLineItem*> connected = get_connectedEdges(_vert);
 
+            qDebug() << "Moved: " << _vert->pos() << _vert->mypoint << _vert->nodePosition;
+            _vert->set_labelLocation();
+            for (int _edgeID = 0; _edgeID < connected.count(); ++_edgeID)
+            {
+                QGraphicsLineItem * _edge = connected.at(_edgeID);
+                qDebug() << "Edges: " << _edge->pos();
+                if ((20 > abs(_edge->line().p1().x() - _vert->nodePosition.x())) && (20 > abs(_edge->line().p1().y() - _vert->nodePosition.y()))) {
+                    QLineF _line = _edge->line();
+                    _line.setP1(_vert->mypoint + _vert->pos());
+                    connected.at(_edgeID)->setLine(_line);
+                } else if ((20 > abs(_edge->line().p2().x() - _vert->nodePosition.x())) && (20 > abs(_edge->line().p2().y() - _vert->nodePosition.y()))) {
+                    QLineF _line = _edge->line();
+                    _line.setP2(_vert->mypoint + _vert->pos());
+                    _edge->setLine(_line);
+                }
+            }
+            _vert->nodePosition = _vert->mypoint + _vert->pos();
+            //
+        }
     }
 }
 
@@ -287,7 +305,6 @@ QList<QGraphicsLineItem*> track::get_selectedEdges()
 
 
 void track::parseLists(){
-
     if(!vertexList.isEmpty() && !edgeList.isEmpty()){
         for(int i=0; i < vertexList.count();i++){
                 for(int j=0; j < edgeList.count(); j++){
@@ -352,6 +369,17 @@ if(!vertexList.isEmpty() && !edgeList.isEmpty()){
         emit connectedVertices(vertexList.at(i), connected);
     }
 }
+}
+
+QList<QGraphicsLineItem*> track::get_connectedEdges(vertex * _vert)
+{
+    QList<QGraphicsLineItem*> connected;
+    for(int j=0; j < edgeList.count(); j++){
+        if(_vert->collidesWithItem(edgeList.at(j))){
+            connected.append(edgeList.at(j));
+        }
+    }
+    return(connected);
 }
 
 
