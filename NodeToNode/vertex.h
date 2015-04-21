@@ -38,7 +38,7 @@ public:
     QRectF rect;
     text* get_labelPtr();
     void set_labelLocation();
-    int count_edge;
+
     QPointF nodePosition;
 
 

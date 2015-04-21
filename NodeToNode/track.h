@@ -21,6 +21,7 @@
 #include <QVector>
 
 #include "vertex.h"
+#include "edge.h"
 
 class track : public QGraphicsView
 {
@@ -45,7 +46,7 @@ public:
     QGraphicsLineItem * line;
     void deleteSelected();
     void draw_grid();
-    void get_connectedEdges();
+    void parseLists();
 
 private:
     bool firstclick;
