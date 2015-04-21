@@ -100,9 +100,9 @@ bool LocoSerial::do_open(QSerialPortInfo _port)
     usbBuffer->setPort(_port);
     usbBuffer->setBaudRate(57600);
     usbBuffer->setFlowControl(QSerialPort::HardwareControl);
-    //usbBuffer->open(QIODevice::ReadWrite);
+    usbBuffer->open(QIODevice::ReadWrite);
 
-    if (usbBuffer->open(QIODevice::ReadWrite)) //(usbBuffer->isOpen())
+    if (usbBuffer->isOpen())
     {
         if (*debug) qDebug() << timeStamp() << "Serial port appears to have opened sucessfully.";
         connect(usbBuffer, SIGNAL(readyRead()), this, SLOT(do_read()));
