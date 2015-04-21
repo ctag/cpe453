@@ -113,6 +113,7 @@ void track::mouseMoveEvent(QMouseEvent *event) {
             //
         }
     }
+    //get_connectedEdges();
 }
 
 void track::switch_button_clicked() {
@@ -130,7 +131,7 @@ void track::switch_button_clicked() {
 
 void track::connect_button_clicked() {
     QList<vertex*> _selected = get_selectedVerts();
-    if (_selected.size()==2)
+    if (_selected.size()==2 &&  _selected.at(0)->is_node() && _selected.at(0)->count_edge<2)
     {
         line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
         line->setPen(QPen(Qt::black,2));
@@ -138,6 +139,27 @@ void track::connect_button_clicked() {
         line->setFlag(QGraphicsLineItem::ItemIsMovable);
         edgeList.append(line);
          scene->addItem(line);
+         get_selectedEdges();
+
+    }
+    else if (_selected.size()==2 &&  _selected.at(0)->is_switch() && _selected.at(0)->count_edge < 3)
+    {
+        if(_selected.at(0)->count_edge ==1){
+        line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
+        line->setPen(QPen(Qt::black,2,Qt::DashDotLine));
+        line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+        line->setFlag(QGraphicsLineItem::ItemIsMovable);
+        edgeList.append(line);
+        scene->addItem(line);
+        get_selectedEdges();}
+        else if(_selected.at(0)->count_edge ==2){
+            line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
+            line->setPen(QPen(Qt::black,2,Qt::DashDotDotLine));
+            line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+            line->setFlag(QGraphicsLineItem::ItemIsMovable);
+            edgeList.append(line);
+            scene->addItem(line);
+            get_selectedEdges();}
     }
     parseLists();
     update();
@@ -262,6 +284,7 @@ void track::deleteSelected()
                 for(int j=0; j < edgeList.count();j++){
                     if(_vert->collidesWithItem(edgeList.at(j))){
                         scene->removeItem(edgeList.at(j));
+                        edgeList.removeAt(j);
                     }
                 }
             }
@@ -269,9 +292,20 @@ void track::deleteSelected()
             scene->removeItem(_vert->get_labelPtr());
             vertexList.removeOne(_vert);
             delete _vert;
+        }
+    }
+    //update();
+    if (!_edgeselected.isEmpty())
+    {
+        for (int _index = 0; _index < _edgeselected.size(); ++_index)
+        {
+            QGraphicsLineItem * _edge = _edgeselected.at(_index);
+            scene->removeItem(_edge);
+            edgeList.removeOne(_edge);
+            delete _edge;
+        }
     }
     update();
-    }
 }
 
 QList<vertex*> track::get_selectedVerts()
@@ -307,9 +341,11 @@ QList<QGraphicsLineItem*> track::get_selectedEdges()
 void track::parseLists(){
     if(!vertexList.isEmpty() && !edgeList.isEmpty()){
         for(int i=0; i < vertexList.count();i++){
-                for(int j=0; j < edgeList.count(); j++){
+            vertexList.at(i)->count_edge=0;
+                 for(int j=0; j < edgeList.count(); j++){
                     if(vertexList.at(i)->collidesWithItem(edgeList.at(j))){
-                        for(int k=0; k < vertexList.count();k++){
+                        vertexList.at(i)->count_edge++;
+                        /*for(int k=0; k < vertexList.count();k++){
                             if(vertexList.at(i)!= vertexList.at(k)){
                                 if(edgeList.at(j)->collidesWithItem(vertexList.at(k))){
                                  qDebug() << vertexList.at(i)->vertexID;
@@ -317,12 +353,12 @@ void track::parseLists(){
                                  qDebug() << vertexList.at(k)->vertexID;
                                  qDebug() <<"\n";
                             }
-                        }
+                        }*/
                     }
                 }
-            }
+            //}
         }
-    }
+     }
 }
 
 
