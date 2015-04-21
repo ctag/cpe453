@@ -26,7 +26,6 @@ HEADERS  += mainwindow.h \
     vertex.h \
     track.h \
     sql.h \
-    edge.h \
     text.h
 
 FORMS    += mainwindow.ui \

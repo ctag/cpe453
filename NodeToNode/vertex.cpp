@@ -18,6 +18,7 @@ vertex::vertex(QPointF eventPos, int itemID)
     QPointF _textPos(boundingRect().x(), boundingRect().y());
     label = new text(_textPos, QString::number(itemID));
     debugMsg("Loaded new vertex.");
+    count_edge=0;
 }
 
 vertex::~vertex()
