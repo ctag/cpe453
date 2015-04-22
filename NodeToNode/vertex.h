@@ -41,7 +41,7 @@ public:
     int count_edge;
     QPointF nodePosition;
 
-
+    int edgecount;
 protected:
 
     void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
