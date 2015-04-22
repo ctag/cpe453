@@ -15,11 +15,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
+    mainwindow.cpp \
     vertex.cpp \
     track.cpp \
     sql.cpp \
-    edge.cpp \
     text.cpp
 
 HEADERS  += mainwindow.h \
