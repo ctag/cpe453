@@ -114,6 +114,7 @@ void track::mouseMoveEvent(QMouseEvent *event) {
             //
         }
     }
+    //get_connectedEdges();
 }
 
 void track::switch_button_clicked() {
@@ -131,7 +132,11 @@ void track::switch_button_clicked() {
 
 void track::connect_button_clicked() {
     QList<vertex*> _selected = get_selectedVerts();
+<<<<<<< HEAD
     if (_selected.size()==2 && _selected.at(0)->is_node() && _selected.at(0)->edgecount< 2 )
+=======
+    if (_selected.size()==2 &&  _selected.at(0)->is_node() && _selected.at(0)->count_edge<2)
+>>>>>>> origin/master
     {
         line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
         line->setPen(QPen(Qt::black,2));
@@ -139,6 +144,27 @@ void track::connect_button_clicked() {
         line->setFlag(QGraphicsLineItem::ItemIsMovable);
         edgeList.append(line);
          scene->addItem(line);
+         get_selectedEdges();
+
+    }
+    else if (_selected.size()==2 &&  _selected.at(0)->is_switch() && _selected.at(0)->count_edge < 3)
+    {
+        if(_selected.at(0)->count_edge ==1){
+        line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
+        line->setPen(QPen(Qt::black,2,Qt::DashDotLine));
+        line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+        line->setFlag(QGraphicsLineItem::ItemIsMovable);
+        edgeList.append(line);
+        scene->addItem(line);
+        get_selectedEdges();}
+        else if(_selected.at(0)->count_edge ==2){
+            line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
+            line->setPen(QPen(Qt::black,2,Qt::DashDotDotLine));
+            line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+            line->setFlag(QGraphicsLineItem::ItemIsMovable);
+            edgeList.append(line);
+            scene->addItem(line);
+            get_selectedEdges();}
     }
    else if (_selected.size()==2&& _selected.at(0)->is_switch() && _selected.at(0)->edgecount< 3)
     {if(_selected.at(0)->edgecount==1){
@@ -288,6 +314,10 @@ void track::deleteSelected()
             delete _vert;
         }
     }
+<<<<<<< HEAD
+=======
+    //update();
+>>>>>>> origin/master
     if (!_edgeselected.isEmpty())
     {
         for (int _index = 0; _index < _edgeselected.size(); ++_index)
@@ -296,9 +326,14 @@ void track::deleteSelected()
             scene->removeItem(_edge);
             edgeList.removeOne(_edge);
             delete _edge;
+<<<<<<< HEAD
      }
    }
     count_edges();
+=======
+        }
+    }
+>>>>>>> origin/master
     update();
 }
 
@@ -332,6 +367,7 @@ QList<QGraphicsLineItem*> track::get_selectedEdges()
 
 
 
+<<<<<<< HEAD
 void track::count_edges(){
     if(!vertexList.isEmpty() && !edgeList.isEmpty()){
         for(int i=0; i < vertexList.count();i++){
@@ -343,6 +379,29 @@ void track::count_edges(){
              }
           }
     }
+=======
+void track::parseLists(){
+    if(!vertexList.isEmpty() && !edgeList.isEmpty()){
+        for(int i=0; i < vertexList.count();i++){
+            vertexList.at(i)->count_edge=0;
+                 for(int j=0; j < edgeList.count(); j++){
+                    if(vertexList.at(i)->collidesWithItem(edgeList.at(j))){
+                        vertexList.at(i)->count_edge++;
+                        /*for(int k=0; k < vertexList.count();k++){
+                            if(vertexList.at(i)!= vertexList.at(k)){
+                                if(edgeList.at(j)->collidesWithItem(vertexList.at(k))){
+                                 qDebug() << vertexList.at(i)->vertexID;
+                                 qDebug() << " ----- ";
+                                 qDebug() << vertexList.at(k)->vertexID;
+                                 qDebug() <<"\n";
+                            }
+                        }*/
+                    }
+                }
+            //}
+        }
+     }
+>>>>>>> origin/master
 }
 
 

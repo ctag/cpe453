@@ -21,6 +21,10 @@
 #include <QVector>
 
 #include "vertex.h"
+<<<<<<< HEAD
+=======
+//#include "edge.h"
+>>>>>>> origin/master
 
 class track : public QGraphicsView
 {
@@ -46,7 +50,12 @@ public:
     void deleteSelected();
     void draw_grid();
     void get_connectedEdges();
+<<<<<<< HEAD
     void count_edges();
+=======
+    //void parseLists();
+
+>>>>>>> origin/master
 private:
     bool firstclick;
     bool secondclick;
@@ -80,6 +89,7 @@ public slots:
     QList<vertex*> get_vertices();
     QList<vertex*> get_connectedVertices(vertex*);
     void get_allConnectedVertices();
+    void parseLists();
 
 signals:
     void vertices(QList<vertex*>);
