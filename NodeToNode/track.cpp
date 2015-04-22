@@ -143,25 +143,6 @@ void track::connect_button_clicked() {
          get_selectedEdges();
 
     }
-    else if (_selected.size()==2 &&  _selected.at(0)->is_switch() && _selected.at(0)->count_edge < 3)
-    {
-        if(_selected.at(0)->count_edge ==1){
-        line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
-        line->setPen(QPen(Qt::black,2,Qt::DashDotLine));
-        line->setFlag(QGraphicsLineItem::ItemIsSelectable);
-        line->setFlag(QGraphicsLineItem::ItemIsMovable);
-        edgeList.append(line);
-        scene->addItem(line);
-        get_selectedEdges();}
-        else if(_selected.at(0)->count_edge ==2){
-            line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
-            line->setPen(QPen(Qt::black,2,Qt::DashDotDotLine));
-            line->setFlag(QGraphicsLineItem::ItemIsSelectable);
-            line->setFlag(QGraphicsLineItem::ItemIsMovable);
-            edgeList.append(line);
-            scene->addItem(line);
-            get_selectedEdges();}
-    }
    else if (_selected.size()==2&& _selected.at(0)->is_switch() && _selected.at(0)->edgecount< 3)
     {if(_selected.at(0)->edgecount==1){
         line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
