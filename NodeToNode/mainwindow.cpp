@@ -24,13 +24,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->pushButton_sqlClear, SIGNAL(clicked()), locosql, SLOT(do_clearVertices()));
 
     connect(ui->mytraintrack, SIGNAL(connectedVertices(vertex*,QList<vertex*>)), locosql, SLOT(do_uploadVertex(vertex*,QList<vertex*>)));
+    connect(ui->mytraintrack, SIGNAL(allEdges(QList<edge*>)), locosql, SLOT(do_uploadEdges(QList<edge*>)));
 
     //connect(ui->rad_track_piece,SIGNAL(clicked()),this,SLOT(check_rad()));
     //connect(this,SIGNAL(rad_track_status(bool)),ui->mytraintrack,SLOT(get_track_rad(bool)));
     connect(ui->connectButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(connect_button_clicked()));
     connect(ui->deleteButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(delete_button_clicked()));
     connect(ui->switchButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(switch_button_clicked()));
-    connect(ui->groupButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(group_button_clicked()));
+    connect(ui->groupButton,SIGNAL(clicked()),this,SLOT(handle_groupButton()));
 
     // Attach arrow buttons to track panning
     connect(ui->pushButton_shiftUp, SIGNAL(clicked()), ui->mytraintrack, SLOT(shift_up()));
@@ -93,7 +94,14 @@ void MainWindow::do_disconnectDB()
 
 void MainWindow::do_sqlUpload()
 {
-    ui->mytraintrack->get_allConnectedVertices();
+    //ui->mytraintrack->get_allConnectedVertices();
+    ui->mytraintrack->updateVertInches();
+    ui->mytraintrack->get_allEdges();
+}
+
+void MainWindow::handle_groupButton()
+{
+    ui->mytraintrack->group_button_clicked(ui->lineEdit_group->text());
 }
 
 /*void MainWindow::check_rad(){

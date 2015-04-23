@@ -21,6 +21,7 @@
 #include <QVector>
 
 #include "vertex.h"
+#include "edge.h"
 
 class track : public QGraphicsView
 {
@@ -38,16 +39,16 @@ public:
     QPointF startPos;
     QPointF endPos;
     QList<vertex*> vertexList;
-    QList<QGraphicsLineItem*> edgeList;
+    QList<edge*> edgeList;
     QList<vertex*> get_selectedVerts();
-    QList<QGraphicsLineItem*> get_selectedEdges();
-    QList<QGraphicsLineItem*> get_connectedEdges(vertex * _vert);
-    QGraphicsLineItem * line;
+    QList<edge*> get_selectedEdges();
+    QList<edge*> get_connectedEdges(vertex * _vert);
+    edge * line;
     void deleteSelected();
     void draw_grid();
-    void get_connectedEdges();
     void count_edges();
     bool dragSelect;
+    void do_assignDS(QString _ds, QList<vertex*> _verts, QList<edge*> _edges);
 
 
  private:
@@ -73,7 +74,7 @@ public slots:
     void get_track_rad(bool status);
     void delete_button_clicked();
     void switch_button_clicked();
-    void group_button_clicked();
+    void group_button_clicked(QString _ds);
     void connect_button_clicked();
     void select_all();
     void shift_left();
@@ -83,10 +84,13 @@ public slots:
     QList<vertex*> get_vertices();
     QList<vertex*> get_connectedVertices(vertex*);
     void get_allConnectedVertices();
+    QList<edge*> get_allEdges();
+    void updateVertInches();
 
 signals:
     void vertices(QList<vertex*>);
     void connectedVertices(vertex*, QList<vertex*>);
+    void allEdges(QList<edge*>);
  //   void positionChange(QPointF );
 };
 

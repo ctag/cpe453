@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 
     // for passing vertices around
     qRegisterMetaType< QList<vertex*> >("QList<vertex*>");
+    qRegisterMetaType< QList<edge*> >("QList<edge*>");
 
     return a.exec();
 }

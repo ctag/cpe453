@@ -13,6 +13,7 @@
 #include <QPointer>
 
 #include "vertex.h"
+#include "edge.h"
 
 namespace std {
 class SQL;
@@ -36,6 +37,7 @@ public slots:
     // NodeToNode
     void do_clearVertices();
     void do_uploadVertex(vertex* _vert, QList<vertex*> _connected);
+    void do_uploadEdges(QList<edge*>);
     // Requests and Listings
     void req_train(int _slot, int _speed, int _dir);
     void req_switch(int _adr, int _state);

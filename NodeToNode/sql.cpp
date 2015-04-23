@@ -126,6 +126,45 @@ void SQL::do_uploadVertex(vertex *_vert, QList<vertex *> _connected)
     }
 }
 
+void SQL::do_uploadEdges(QList<edge*> _edges)
+{
+    if (*debug) qDebug() << "Uploading edges.";
+    if (!mainDB) {
+        return;
+    }
+    if (!mainDB->isOpen())
+    {
+        return;
+    }
+
+    for (int _index = 0; _index < _edges.count(); ++_index)
+    {
+        edge * _edge = _edges.at(_index);
+        mainQuery->prepare("INSERT INTO "+schema+"."+trackVertices+" (`id`,`x`,`y`)"
+                           "VALUES (:id,:x,:y);");
+        mainQuery->bindValue(":id", _edge->getVertFrom()->vertexID);
+        mainQuery->bindValue(":x", _edge->getVertFrom()->xInch);
+        mainQuery->bindValue(":y", _edge->getVertFrom()->yInch);
+        mainQuery->exec();
+
+        mainQuery->prepare("INSERT INTO "+schema+"."+trackVertices+" (`id`,`x`,`y`)"
+                           "VALUES (:id,:x,:y);");
+        mainQuery->bindValue(":id", _edge->getVertTo()->vertexID);
+        mainQuery->bindValue(":x", _edge->getVertTo()->xInch);
+        mainQuery->bindValue(":y", _edge->getVertTo()->yInch);
+        mainQuery->exec();
+
+        mainQuery->prepare("INSERT INTO "+schema+"."+trackEdges+" (`id`,`vert_from`,`vert_to`, `type`, `ds`)"
+                           "VALUES (:edge_id,:vert_from,:vert_to,:type,:ds);");
+        mainQuery->bindValue(":id", _index);
+        mainQuery->bindValue(":vert_from", _edge->getVertFrom()->vertexID);
+        mainQuery->bindValue(":vert_to", _edge->getVertTo()->vertexID);
+        mainQuery->bindValue(":type", _edge->getType());
+        mainQuery->bindValue(":ds", _edge->getDS());
+        mainQuery->exec();
+    }
+}
+
 /*
  * General SQL methods
  */

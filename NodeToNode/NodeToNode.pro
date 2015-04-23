@@ -12,20 +12,22 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = NodeToNode
 TEMPLATE = app
-
+CONFIG += c++11
 
 SOURCES += main.cpp\
     mainwindow.cpp \
     vertex.cpp \
     track.cpp \
     sql.cpp \
-    text.cpp
+    text.cpp \
+    edge.cpp
 
 HEADERS  += mainwindow.h \
     vertex.h \
     track.h \
     sql.h \
-    text.h
+    text.h \
+    edge.h
 
 FORMS    += mainwindow.ui \
 

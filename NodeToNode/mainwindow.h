@@ -52,6 +52,7 @@ private:
     void do_connectDB();
     void do_disconnectDB();
     void do_sqlUpload();
+    void handle_groupButton();
 
  signals:
         void rad_track_status(bool status);

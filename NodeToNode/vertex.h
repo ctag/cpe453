@@ -21,6 +21,7 @@ public:
     QPointF mypoint;
     int xposition;
     int yposition;
+    float xInch, yInch;
     QRectF boundingRect() const;
     QRectF drawRect();
     QRectF textRect();
