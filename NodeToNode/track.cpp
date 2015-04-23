@@ -394,9 +394,9 @@ void track::deleteSelected()
                         if(edgeList.at(j)->pen().style()==Qt::DotLine)
                                     vertexList.at(_index)->altline=NULL;
                         if(edgeList.at(j)->pen().style()==Qt::SolidLine)
-                                    qDebug() << "/!\  made it to debug point a";
+                                    qDebug() << "made it to debug point a";
                                     vertexList.at(_index)->root=NULL; // <-- causing crash when deleting using Ctrl+A selection
-                                    qDebug() << "/!\  made it to debug point b";
+                                    qDebug() << "made it to debug point b";
                         removeItemFromDetectionSections(edgeList[j]);
                         scene->removeItem(edgeList.at(j));
                         edgeList.removeAt(j);
@@ -565,6 +565,48 @@ void track::addSelectedToNewDS(){
     listContentsOfAllDetectionSections(); //uneeded, for debugging purposes only
     //dsCounter = detectionSections.count();
 }
+
+/*
+ * Does addSelectedToNewDS() correctly.
+ *
+void track::do_addEdgesToBlock(){
+    qDebug() << "---------NEW DETECTION SECTION ADDED----------";
+    int addedVertexCount = 0;
+    int addedEdgeCount = 0;
+
+    reSortItemsInDetectionSections();
+    cleanUpDetectionSections(false);
+    dsCounter = detectionSections.count();
+
+    //create an empty new detection section (QList) called _itemList
+    QList<QGraphicsItem*> _itemList;
+    QList<vertex*> _selectedVerts = get_selectedVerts();
+    QList<QGraphicsLineItem*> _selectedEdges = get_selectedEdges();
+
+    //add selected verts to _itemList
+    for (int _index = 0; _index < _selectedVerts.count(); _index++){
+        vertex * _vert = _selectedVerts.at(_index);
+        if (_vert->isSelected()){
+            _itemList.append(_vert);
+            addedVertexCount++; //for debugging only
+        }
+    }
+
+    //cycle through all edges, add to _itemGroup
+    for (int _index = 0; _index < _selectedEdges.count(); _index++){
+        QGraphicsLineItem * _edge = _selectedEdges.at(_index);
+        if (_edge->isSelected()){
+            _itemList.append(_edge);
+            addedEdgeCount++; //for debugging only
+        }
+    }
+
+    qDebug() << "+ added" << addedVertexCount << "vertices and" << addedEdgeCount << "edges to ds" << dsCounter;
+    cleanUpDetectionSections(false);
+    detectionSections.append(_itemList);
+    listContentsOfAllDetectionSections(); //uneeded, for debugging purposes only
+    //dsCounter = detectionSections.count();
+}*/
 
 //---------------------------------------------------------------------------------------------
 // CALLED IN addSelectedToNewDS() TO DISASSOCIATE ITEMS FROM ANY PREVIOUS DETECTION SECTIONS

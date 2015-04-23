@@ -47,9 +47,7 @@ public:
     void draw_grid();
     void get_connectedEdges();
     void count_edges();
-    QList<QList<QGraphicsItem*> > detectionSections; //--------------------------------------------------
     bool dragSelect;
-    int dsCounter; //------------------------------------------------------------------------------------
 
 
  private:
@@ -61,11 +59,6 @@ public:
     bool connectsToPrevious;
     bool doDebug;
     QDateTime dateTime;
-    void reSortItemsInDetectionSections(); //-----------------------------------------
-    void removeItemFromDetectionSections(QGraphicsItem* itemToRemove); //----------------------------------
-    void cleanUpDetectionSections(bool deleteSelected); //-------------------------------------------------
-
-    void listContentsOfAllDetectionSections(); //for debugging only ---------------------------------------
 
 protected:
     void mousePressEvent(QMouseEvent *event);
@@ -90,7 +83,6 @@ public slots:
     QList<vertex*> get_vertices();
     QList<vertex*> get_connectedVertices(vertex*);
     void get_allConnectedVertices();
-    void addSelectedToNewDS(); //----------------------------------------------------
 
 signals:
     void vertices(QList<vertex*>);

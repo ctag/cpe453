@@ -126,7 +126,6 @@ void SQL::do_uploadVertex(vertex *_vert, QList<vertex *> _connected)
     }
 }
 
-
 /*
  * General SQL methods
  */
