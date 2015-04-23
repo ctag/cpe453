@@ -132,32 +132,77 @@ void track::switch_button_clicked() {
 
 void track::connect_button_clicked() {
     QList<vertex*> _selected = get_selectedVerts();
-     if (_selected.size()==2 && _selected.at(0)->is_node() && _selected.at(0)->edgecount< 2 )
-      {
+    if(_selected.size()==2){
+    if ( _selected.at(0)->is_node() && _selected.at(1)->is_node() && _selected.at(0)->edgecount< 2 && _selected.at(1)->edgecount<2 ){
         line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
-        line->setPen(QPen(Qt::black,2));
+        line->setPen(QPen(Qt::black,2,Qt::SolidLine));
         line->setFlag(QGraphicsLineItem::ItemIsSelectable);
         line->setFlag(QGraphicsLineItem::ItemIsMovable);
         edgeList.append(line);
          scene->addItem(line);
          get_selectedEdges();
+         _selected.at(0)->root=line;
+         _selected.at(1)->root=line;
 
-    }
-   else if (_selected.size()==2&& _selected.at(0)->is_switch() && _selected.at(0)->edgecount< 3)
-    {if(_selected.at(0)->edgecount==1){
+
+     }
+   else if  ((_selected.at(0)->is_switch() &&_selected.at(1)->is_node() && _selected.at(0)->edgecount< 3&&_selected.at(1)->edgecount<2)||(_selected.at(1)->is_switch() &&_selected.at(0)->is_node() && _selected.at(1)->edgecount< 3 &&_selected.at(0)->edgecount<2) )
+    {
+      if(_selected.at(0)->is_switch() && _selected.at(0)->root==NULL){
         line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
-        line->setPen(QPen(Qt::black,2,Qt::DashDotDotLine));
+        line->setPen(QPen(Qt::black,2,Qt::SolidLine));
         line->setFlag(QGraphicsLineItem::ItemIsSelectable);
         line->setFlag(QGraphicsLineItem::ItemIsMovable);
         edgeList.append(line);
-        scene->addItem(line);}
-      else if(_selected.at(0)->edgecount==2){
+        scene->addItem(line);
+        _selected.at(0)->root=line;
+        }
+      else if(_selected.at(1)->is_switch() && _selected.at(1)->root==NULL){
+        line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
+        line->setPen(QPen(Qt::black,2,Qt::SolidLine));
+        line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+        line->setFlag(QGraphicsLineItem::ItemIsMovable);
+        edgeList.append(line);
+        scene->addItem(line);
+        _selected.at(1)->root=line;
+        }
+       else if(_selected.at(0)->is_switch() &&_selected.at(0)->primaryline==NULL && _selected.at(0)->root!=NULL  ){
           line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
           line->setPen(QPen(Qt::black,2,Qt::DashLine));
           line->setFlag(QGraphicsLineItem::ItemIsSelectable);
           line->setFlag(QGraphicsLineItem::ItemIsMovable);
           edgeList.append(line);
-          scene->addItem(line);}
+          scene->addItem(line);
+          _selected.at(0)->primaryline=line;
+            }
+        else if(_selected.at(1)->is_switch() &&_selected.at(1)->primaryline==NULL  && _selected.at(1)->root!=NULL){
+          line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
+          line->setPen(QPen(Qt::black,2,Qt::DashLine));
+          line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+          line->setFlag(QGraphicsLineItem::ItemIsMovable);
+          edgeList.append(line);
+          scene->addItem(line);
+          _selected.at(1)->primaryline=line;
+            }
+        else if(_selected.at(0)->is_switch() &&_selected.at(0)->primaryline!=NULL && _selected.at(0)->altline==NULL && _selected.at(0)->root!=NULL){
+          line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
+          line->setPen(QPen(Qt::black,2,Qt::DotLine));
+          line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+          line->setFlag(QGraphicsLineItem::ItemIsMovable);
+          edgeList.append(line);
+          scene->addItem(line);
+          _selected.at(0)->altline=line;
+            }
+        else if(_selected.at(1)->is_switch() &&_selected.at(1)->primaryline!=NULL &&_selected.at(1)->altline==NULL && _selected.at(1)->root!=NULL){
+          line= new QGraphicsLineItem(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
+          line->setPen(QPen(Qt::black,2,Qt::DotLine));
+          line->setFlag(QGraphicsLineItem::ItemIsSelectable);
+          line->setFlag(QGraphicsLineItem::ItemIsMovable);
+          edgeList.append(line);
+          scene->addItem(line);
+          _selected.at(1)->altline=line;
+            }
+        }
     }
      update();
 }
@@ -280,6 +325,12 @@ void track::deleteSelected()
             if(!edgeList.empty()){
                 for(int j=0; j < edgeList.count();j++){
                     if(_vert->collidesWithItem(edgeList.at(j))){
+                        if(edgeList.at(j)->pen().style()==Qt::DashLine)
+                                    vertexList.at(_index)->primaryline=NULL;
+                        if(edgeList.at(j)->pen().style()==Qt::DotLine)
+                                    vertexList.at(_index)->altline=NULL;
+                        if(edgeList.at(j)->pen().style()==Qt::SolidLine)
+                                    vertexList.at(_index)->root=NULL;
                         scene->removeItem(edgeList.at(j));
                         edgeList.removeAt(j);
                     }
@@ -296,6 +347,21 @@ void track::deleteSelected()
         for (int _index = 0; _index < _edgeselected.size(); ++_index)
         {
             QGraphicsLineItem * _edge = _edgeselected.at(_index);
+            if(_edge->pen().style()==Qt::DashLine)
+                for(int i=0;i < vertexList.count();i++)
+                    if(vertexList.at(i)->collidesWithItem(_edge))
+                        vertexList.at(i)->primaryline=NULL;
+
+            if(_edge->pen().style()==Qt::DotLine)
+                for(int i=0;i < vertexList.count();i++)
+                    if(vertexList.at(i)->collidesWithItem(_edge))
+                        vertexList.at(i)->altline=NULL;
+
+            if(_edge->pen().style()==Qt::SolidLine)
+                   for(int i=0;i < vertexList.count();i++)
+                       if(vertexList.at(i)->collidesWithItem(_edge))
+                      vertexList.at(i)->root=NULL;
+
             scene->removeItem(_edge);
             edgeList.removeOne(_edge);
             delete _edge;
@@ -390,7 +456,7 @@ if(!vertexList.isEmpty() && !edgeList.isEmpty()){
         }
         emit connectedVertices(vertexList.at(i), connected);
     }
-}
+  }
 }
 
 QList<QGraphicsLineItem*> track::get_connectedEdges(vertex * _vert)

@@ -38,8 +38,10 @@ public:
     QRectF rect;
     text* get_labelPtr();
     void set_labelLocation();
-    int count_edge;
     QPointF nodePosition;
+    QGraphicsLineItem* primaryline;
+    QGraphicsLineItem* altline;
+    QGraphicsLineItem* root;
 
     int edgecount;
 protected:

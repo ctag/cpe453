@@ -19,6 +19,9 @@ vertex::vertex(QPointF eventPos, int itemID)
     label = new text(_textPos, QString::number(itemID));
     debugMsg("Loaded new vertex.");
      edgecount=0;
+     root=NULL;
+     altline=NULL;
+    primaryline=NULL;
  }
 
 vertex::~vertex()
