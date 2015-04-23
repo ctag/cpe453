@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->connectButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(connect_button_clicked()));
     connect(ui->deleteButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(delete_button_clicked()));
     connect(ui->switchButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(switch_button_clicked()));
-    connect(ui->nodeButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(node_button_clicked()));
+    connect(ui->groupButton,SIGNAL(clicked()),ui->mytraintrack,SLOT(group_button_clicked()));
 
     // Attach arrow buttons to track panning
     connect(ui->pushButton_shiftUp, SIGNAL(clicked()), ui->mytraintrack, SLOT(shift_up()));

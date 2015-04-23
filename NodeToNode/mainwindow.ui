@@ -39,7 +39,7 @@
        <item>
         <widget class="QTabWidget" name="tabWidget_2">
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <widget class="QWidget" name="tab">
           <attribute name="title">
@@ -1023,28 +1023,28 @@
                     <item>
                      <widget class="QPushButton" name="connectButton">
                       <property name="text">
-                       <string>Connect</string>
+                       <string>Connect (C)</string>
                       </property>
                      </widget>
                     </item>
                     <item>
-                     <widget class="QPushButton" name="nodeButton">
+                     <widget class="QPushButton" name="groupButton">
                       <property name="text">
-                       <string>Detection Node</string>
+                       <string>New Group (G)</string>
                       </property>
                      </widget>
                     </item>
                     <item>
                      <widget class="QPushButton" name="switchButton">
                       <property name="text">
-                       <string>Switch</string>
+                       <string>Switch (S)</string>
                       </property>
                      </widget>
                     </item>
                     <item>
                      <widget class="QPushButton" name="deleteButton">
                       <property name="text">
-                       <string>Delete</string>
+                       <string>Delete (del)</string>
                       </property>
                      </widget>
                     </item>
@@ -1366,7 +1366,7 @@
      <x>0</x>
      <y>0</y>
      <width>778</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

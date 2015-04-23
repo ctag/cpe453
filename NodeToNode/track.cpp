@@ -9,10 +9,13 @@ track::track(QWidget *parent): QGraphicsView(parent)
 
     leftDown = false;
     rightDown = false;
+    dragSelect = false;
 
+    dsCounter = 0; //global int used to keep track of the number of detection sections in the track
     connectsToPrevious = false;
     track_rad_state=false;
     scene = new QGraphicsScene(0,0,300,300);
+    setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
     this->setScene(scene);
     id_counter=0;
     shiftAmount = 40;
@@ -68,6 +71,14 @@ void track::mousePressEvent(QMouseEvent *event)
     QGraphicsView::mousePressEvent(event);
     QPointF p = mapToScene(event->pos());
 
+    if(event->buttons()&Qt::LeftButton){
+        leftDown = true;
+        QGraphicsItem *item;
+        item = itemAt(event->pos()); //Check if there is no item at the position
+        if (!item){
+            dragSelect = true;
+        }
+    }
     if(!vertexList.contains(dynamic_cast<vertex *>(itemAt(event->pos()))) && (event->buttons()&Qt::RightButton)){
          vertex * _vert = new vertex(p,id_counter);
 
@@ -82,8 +93,27 @@ void track::mousePressEvent(QMouseEvent *event)
 
   }
 
+void track::mouseReleaseEvent(QMouseEvent *event)
+{
+    QGraphicsView::mouseReleaseEvent(event);
+    if(leftDown = true){
+        leftDown = false;
+        dragSelect = false;
+    }
+}
+
 void track::mouseMoveEvent(QMouseEvent *event) {
     QGraphicsView::mouseMoveEvent(event);
+
+    if(leftDown && dragSelect){
+        QGraphicsItem *item;
+        item = itemAt(event->pos()); //Get the item at the position
+        if (item) //If there is an item at that position
+        {
+            item->setSelected(true);
+        }
+    }
+
     count_edges();
     endPos=mapToScene(event->pos());
     if(!vertexList.isEmpty() && vertexList.contains(dynamic_cast<vertex *>(itemAt(event->pos())))) {
@@ -207,17 +237,8 @@ void track::connect_button_clicked() {
      update();
 }
 
-void track::node_button_clicked(){
-    QList<vertex*> _selected = get_selectedVerts();
-    if (!_selected.isEmpty())
-    {
-        for (int _index = 0; _index < _selected.size(); ++_index)
-        {
-            vertex * _vert = _selected.at(_index);
-            _vert->set_node();
-        }
-    }
-    update();
+void track::group_button_clicked(){
+    addSelectedToNewDS();
 }
 
 void track::delete_button_clicked()
@@ -228,13 +249,24 @@ void track::delete_button_clicked()
 void track::keyPressEvent(QKeyEvent *event)
 {
     QGraphicsView::keyPressEvent(event);
-    if (vertexList.isEmpty())
-    {
-        return;
-    }
+
     if(event->key() == Qt::Key_Delete){
-        deleteSelected();
-   }
+        if(!vertexList.isEmpty()){
+            deleteSelected();
+        }
+    }
+    else if(event->key() == Qt::Key_Return){
+        connect_button_clicked();
+    }
+    else if(event->key() == Qt::Key_C){
+        connect_button_clicked();
+    }
+    else if(event->key() == Qt::Key_G){
+        addSelectedToNewDS();
+    }
+    else if(event->key() == Qt::Key_S){
+        switch_button_clicked();
+    }
 }
 
 void track::select_all()
@@ -317,35 +349,8 @@ void track::deleteSelected()
     QList<vertex*> _vertexselected = get_selectedVerts();
     QList<QGraphicsLineItem*> _edgeselected = get_selectedEdges();
 
-    if (!_vertexselected.isEmpty())
-    {
-        for (int _index = 0; _index < _vertexselected.size(); ++_index)
-        {
-            vertex * _vert = _vertexselected.at(_index);
-            if(!edgeList.empty()){
-                for(int j=0; j < edgeList.count();j++){
-                    if(_vert->collidesWithItem(edgeList.at(j))){
-                        if(edgeList.at(j)->pen().style()==Qt::DashLine)
-                                    vertexList.at(_index)->primaryline=NULL;
-                        if(edgeList.at(j)->pen().style()==Qt::DotLine)
-                                    vertexList.at(_index)->altline=NULL;
-                        if(edgeList.at(j)->pen().style()==Qt::SolidLine)
-                                    vertexList.at(_index)->root=NULL;
-                        scene->removeItem(edgeList.at(j));
-                        edgeList.removeAt(j);
-                    }
-                }
-            }
-            scene->removeItem(_vert);
-            scene->removeItem(_vert->get_labelPtr());
-            vertexList.removeOne(_vert);
-            delete _vert;
-        }
-    }
-      if (!_edgeselected.isEmpty())
-    {
-        for (int _index = 0; _index < _edgeselected.size(); ++_index)
-        {
+    if (!_edgeselected.isEmpty()){
+        for (int _index = 0; _index < _edgeselected.size(); _index++){
             QGraphicsLineItem * _edge = _edgeselected.at(_index);
             if(_edge->pen().style()==Qt::DashLine)
                 for(int i=0;i < vertexList.count();i++)
@@ -357,18 +362,62 @@ void track::deleteSelected()
                     if(vertexList.at(i)->collidesWithItem(_edge))
                         vertexList.at(i)->altline=NULL;
 
-            if(_edge->pen().style()==Qt::SolidLine)
-                   for(int i=0;i < vertexList.count();i++)
-                       if(vertexList.at(i)->collidesWithItem(_edge))
-                      vertexList.at(i)->root=NULL;
+            if(_edge->pen().style()==Qt::SolidLine){
+                for(int i=0;i < vertexList.count();i++){
+                    if(vertexList.at(i)->collidesWithItem(_edge)){
+                        vertexList.at(i)->root=NULL;
+                    }
+                }
+            }
 
+
+            removeItemFromDetectionSections(_edge);
             scene->removeItem(_edge);
             edgeList.removeOne(_edge);
             delete _edge;
-      }
-   }
+            _index--;
+            _edgeselected = get_selectedEdges();
+        }
+    }
+    qDebug() << "successfully deleted edges";
+
+    if (!_vertexselected.isEmpty())
+    {
+        for (int _index = 0; _index < _vertexselected.size(); _index++)
+        {
+            vertex * _vert = _vertexselected.at(_index);
+            if(!edgeList.empty()){
+                for(int j=0; j < edgeList.count();j++){
+                    if(_vert->collidesWithItem(edgeList.at(j))){
+                        if(edgeList.at(j)->pen().style()==Qt::DashLine)
+                                    vertexList.at(_index)->primaryline=NULL;
+                        if(edgeList.at(j)->pen().style()==Qt::DotLine)
+                                    vertexList.at(_index)->altline=NULL;
+                        if(edgeList.at(j)->pen().style()==Qt::SolidLine)
+                                    qDebug() << "/!\  made it to debug point a";
+                                    vertexList.at(_index)->root=NULL; // <-- causing crash when deleting using Ctrl+A selection
+                                    qDebug() << "/!\  made it to debug point b";
+                        removeItemFromDetectionSections(edgeList[j]);
+                        scene->removeItem(edgeList.at(j));
+                        edgeList.removeAt(j);
+                        qDebug() << "j:" << j << "edgeList.count():" << edgeList.count();
+                        j--;
+
+                    }
+                }
+            }
+            removeItemFromDetectionSections(_vert);
+            scene->removeItem(_vert);
+            scene->removeItem(_vert->get_labelPtr());
+            vertexList.removeOne(_vert);
+            delete _vert;
+        }
+    }
+    qDebug() << "successfully deleted verts";
+
     count_edges();
-     update();
+    //cleanUpDetectionSections(true);
+    update();
 }
 
 QList<vertex*> track::get_selectedVerts()
@@ -470,6 +519,161 @@ QList<QGraphicsLineItem*> track::get_connectedEdges(vertex * _vert)
     return(connected);
 }
 
+
+
+
+
+
+//----------------------------------------------------------------------------------------------
+// CREATE NEW EMPTY DETECTION SECTION, AND ADD SELECTION TO IT  (CLEANS UP AFTER ITSELF)
+//----------------------------------------------------------------------------------------------
+void track::addSelectedToNewDS(){
+    qDebug() << "---------NEW DETECTION SECTION ADDED----------";
+    int addedVertexCount = 0;
+    int addedEdgeCount = 0;
+
+    reSortItemsInDetectionSections();
+    cleanUpDetectionSections(false);
+    dsCounter = detectionSections.count();
+
+    //create an empty new detection section (QList) called _itemList
+    QList<QGraphicsItem*> _itemList;
+    QList<vertex*> _selectedVerts = get_selectedVerts();
+    QList<QGraphicsLineItem*> _selectedEdges = get_selectedEdges();
+
+    //add selected verts to _itemList
+    for (int _index = 0; _index < _selectedVerts.count(); _index++){
+        vertex * _vert = _selectedVerts.at(_index);
+        if (_vert->isSelected()){
+            _itemList.append(_vert);
+            addedVertexCount++; //for debugging only
+        }
+    }
+
+    //cycle through all edges, add to _itemGroup
+    for (int _index = 0; _index < _selectedEdges.count(); _index++){
+        QGraphicsLineItem * _edge = _selectedEdges.at(_index);
+        if (_edge->isSelected()){
+            _itemList.append(_edge);
+            addedEdgeCount++; //for debugging only
+        }
+    }
+
+    qDebug() << "+ added" << addedVertexCount << "vertices and" << addedEdgeCount << "edges to ds" << dsCounter;
+    cleanUpDetectionSections(false);
+    detectionSections.append(_itemList);
+    listContentsOfAllDetectionSections(); //uneeded, for debugging purposes only
+    //dsCounter = detectionSections.count();
+}
+
+//---------------------------------------------------------------------------------------------
+// CALLED IN addSelectedToNewDS() TO DISASSOCIATE ITEMS FROM ANY PREVIOUS DETECTION SECTIONS
+//---------------------------------------------------------------------------------------------
+void track::reSortItemsInDetectionSections(){
+    //eliminate selected nodes or edges from participating in any other detection sections
+    if (!detectionSections.isEmpty()){
+        for (int _dsIndex = 0; _dsIndex < detectionSections.count(); _dsIndex++){
+            int numberOfItemsMoved = 0;
+            if (!detectionSections[_dsIndex].isEmpty()){
+                for (int _itemIndex = 0; _itemIndex < detectionSections[_dsIndex].count(); _itemIndex++){
+                    QGraphicsItem * _item = detectionSections.at(_dsIndex).at(_itemIndex);
+                    if (_item->isSelected()){
+                        numberOfItemsMoved++;
+                        detectionSections[_dsIndex].removeAt(_itemIndex);
+                        _itemIndex--; //repeat at current index, everything just got bumped down
+
+                    }
+                }
+            }
+            if(numberOfItemsMoved > 0){
+                qDebug() << numberOfItemsMoved << "item(s) moved from ds " << _dsIndex << "to new ds";
+
+            }
+        }
+    }
+}
+
+
+//-----------------------------------------------------------------------------------
+// CALL BEFORE DELETING ITEMS: REMOVES PASSED QGraphicsItem FROM ITS DETECTION SECTION
+//-----------------------------------------------------------------------------------
+void track::removeItemFromDetectionSections(QGraphicsItem* itemToRemove){
+    for (int _dsIndex = 0; _dsIndex < detectionSections.count(); _dsIndex++){
+        if (!detectionSections.isEmpty()){
+            for(int _itemIndex = 0; _itemIndex < detectionSections[_dsIndex].count(); _itemIndex++){
+                if(itemToRemove == dynamic_cast<vertex *>(detectionSections[_dsIndex][_itemIndex])) {
+                    qDebug() << "removed a deleted vertex from it's detection section";
+                    detectionSections[_dsIndex].removeAt(_itemIndex);
+                    _itemIndex--;
+                }
+                else if(itemToRemove == dynamic_cast<QGraphicsLineItem *>(detectionSections[_dsIndex][_itemIndex])) {
+                    qDebug() << "removed a deleted edge from it's detection section";
+                    detectionSections[_dsIndex].removeAt(_itemIndex);
+                    _itemIndex--;
+                }
+            }
+        }
+    }
+}
+
+
+//-----------------------------------------------------------------------------------
+// DELETES EMPTY DETECTION SECTIONS & RESORTS.
+//-----------------------------------------------------------------------------------
+void track::cleanUpDetectionSections(bool deleteSelected){
+
+    //delete any empty detectionSections
+    if (!detectionSections.isEmpty()){
+        for (int _dsIndex = 0; _dsIndex < detectionSections.count(); _dsIndex++){
+            if(detectionSections[_dsIndex].isEmpty()){
+                detectionSections.removeAt(_dsIndex);
+                _dsIndex--;
+            }
+            //else remove selected items from DS if delete key was pressed
+            else if (deleteSelected){
+                for(int _itemIndex = 0; _itemIndex < detectionSections[_dsIndex].count(); _itemIndex++){
+                    if(get_selectedVerts().contains(dynamic_cast<vertex *>(detectionSections[_dsIndex][_itemIndex]))) {
+                        qDebug() << "removed a deleted vertex from it's detection section";
+                        detectionSections[_dsIndex].removeAt(_itemIndex);
+                        _itemIndex--;
+                    }
+                    else if(get_selectedEdges().contains(dynamic_cast<QGraphicsLineItem *>(detectionSections[_dsIndex][_itemIndex]))) {
+                        qDebug() << "removed a deleted edge from it's detection section";
+                        detectionSections[_dsIndex].removeAt(_itemIndex);
+                        _itemIndex--;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//-------------------------------------------------------------------------------------------
+// FOR DEBUGGING ONLY: Lists all the vertices and edges of each detection node in the console
+//-------------------------------------------------------------------------------------------
+void track::listContentsOfAllDetectionSections(){
+    //list contents of detection sections
+    qDebug() << "----------------------------------------------";
+    if (!detectionSections.isEmpty()){
+        for (int _dsIndex = 0; _dsIndex < detectionSections.count(); _dsIndex++){
+            if (!detectionSections[_dsIndex].isEmpty()){
+                int vCount = 0;
+                int eCount = 0;
+                for (int _itemIndex = 0; _itemIndex < detectionSections[_dsIndex].count(); _itemIndex++){
+                    if(!vertexList.isEmpty() && vertexList.contains(dynamic_cast<vertex *>(detectionSections[_dsIndex][_itemIndex]))) {
+                        vCount++;
+                    }
+                    else{
+                        eCount++;
+                    }
+                }
+                qDebug() << "ds" << _dsIndex << " contains" << vCount << "vertices and" << eCount << "edges";
+            }
+        }
+    }
+    qDebug() << " ";
+    qDebug() << " ";
+}
 
 
 

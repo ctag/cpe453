@@ -46,7 +46,11 @@ public:
     void deleteSelected();
     void draw_grid();
     void get_connectedEdges();
-     void count_edges();
+    void count_edges();
+    QList<QList<QGraphicsItem*> > detectionSections; //--------------------------------------------------
+    bool dragSelect;
+    int dsCounter; //------------------------------------------------------------------------------------
+
 
  private:
     bool firstclick;
@@ -57,10 +61,15 @@ public:
     bool connectsToPrevious;
     bool doDebug;
     QDateTime dateTime;
+    void reSortItemsInDetectionSections(); //-----------------------------------------
+    void removeItemFromDetectionSections(QGraphicsItem* itemToRemove); //----------------------------------
+    void cleanUpDetectionSections(bool deleteSelected); //-------------------------------------------------
+
+    void listContentsOfAllDetectionSections(); //for debugging only ---------------------------------------
 
 protected:
     void mousePressEvent(QMouseEvent *event);
-   // void mouseReleaseEvent(QMouseEvent *event);
+    void mouseReleaseEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);
     void debugMsg(QString _msg);
@@ -71,7 +80,7 @@ public slots:
     void get_track_rad(bool status);
     void delete_button_clicked();
     void switch_button_clicked();
-    void node_button_clicked();
+    void group_button_clicked();
     void connect_button_clicked();
     void select_all();
     void shift_left();
@@ -81,6 +90,7 @@ public slots:
     QList<vertex*> get_vertices();
     QList<vertex*> get_connectedVertices(vertex*);
     void get_allConnectedVertices();
+    void addSelectedToNewDS(); //----------------------------------------------------
 
 signals:
     void vertices(QList<vertex*>);
