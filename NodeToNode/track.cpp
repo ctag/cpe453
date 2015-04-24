@@ -174,71 +174,40 @@ void track::connect_button_clicked() {
         line->setFlag(edge::ItemIsMovable);
 
     if ( _selected.at(0)->is_node() && _selected.at(1)->is_node() && _selected.at(0)->edgecount< 2 && _selected.at(1)->edgecount<2 ){
-        //edgeList.append(line);
-         //scene->addItem(line);
-         //get_selectedEdges();
          _selected.at(0)->root=line;
          _selected.at(1)->root=line;
      }
    else if  ((_selected.at(0)->is_switch() &&_selected.at(1)->is_node() && _selected.at(0)->edgecount< 3&&_selected.at(1)->edgecount<2)||(_selected.at(1)->is_switch() &&_selected.at(0)->is_node() && _selected.at(1)->edgecount< 3 &&_selected.at(0)->edgecount<2) )
     {
       if(_selected.at(0)->is_switch() && _selected.at(0)->root==NULL){
-        //line= new edge(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
         line->setPen(QPen(Qt::black,2,Qt::SolidLine));
         line->setType("root");
-        //line->setFlag(edge::ItemIsSelectable);
-        //line->setFlag(edge::ItemIsMovable);
-
         _selected.at(0)->root=line;
         }
       else if(_selected.at(1)->is_switch() && _selected.at(1)->root==NULL){
-        //line= new edge(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
         line->setPen(QPen(Qt::black,2,Qt::SolidLine));
         line->setType("root");
-        //line->setFlag(edge::ItemIsSelectable);
-        //line->setFlag(edge::ItemIsMovable);
-        //edgeList.append(line);
-        //scene->addItem(line);
         _selected.at(1)->root=line;
         }
        else if(_selected.at(0)->is_switch() &&_selected.at(0)->primaryline==NULL && _selected.at(0)->root!=NULL  ){
-          //line= new edge(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
           line->setPen(QPen(Qt::black,2,Qt::DashLine));
           line->setType("passthrough");
-          //line->setFlag(edge::ItemIsSelectable);
-          //line->setFlag(edge::ItemIsMovable);
-          //edgeList.append(line);
-          //scene->addItem(line);
+
           _selected.at(0)->primaryline=line;
             }
         else if(_selected.at(1)->is_switch() &&_selected.at(1)->primaryline==NULL  && _selected.at(1)->root!=NULL){
-          //line= new edge(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
           line->setPen(QPen(Qt::black,2,Qt::DashLine));
           line->setType("passthrough");
-          //line->setFlag(edge::ItemIsSelectable);
-          //line->setFlag(edge::ItemIsMovable);
-          //edgeList.append(line);
-          //scene->addItem(line);
           _selected.at(1)->primaryline=line;
             }
         else if(_selected.at(0)->is_switch() &&_selected.at(0)->primaryline!=NULL && _selected.at(0)->altline==NULL && _selected.at(0)->root!=NULL){
-          //line= new edge(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
           line->setPen(QPen(Qt::black,2,Qt::DotLine));
           line->setType("bypass");
-          //line->setFlag(edge::ItemIsSelectable);
-          //line->setFlag(edge::ItemIsMovable);
-          //edgeList.append(line);
-          //scene->addItem(line);
           _selected.at(0)->altline=line;
             }
         else if(_selected.at(1)->is_switch() &&_selected.at(1)->primaryline!=NULL &&_selected.at(1)->altline==NULL && _selected.at(1)->root!=NULL){
-          //line= new edge(_selected.at(0)->nodePosition.x(),_selected.at(0)->nodePosition.y(),_selected.at(1)->nodePosition.x(),_selected.at(1)->nodePosition.y());
           line->setPen(QPen(Qt::black,2,Qt::DotLine));
           line->setType("bypass");
-          //line->setFlag(edge::ItemIsSelectable);
-          //line->setFlag(edge::ItemIsMovable);
-          //edgeList.append(line);
-          //scene->addItem(line);
           _selected.at(1)->altline=line;
             }
         }
@@ -249,7 +218,6 @@ void track::connect_button_clicked() {
 }
 
 void track::group_button_clicked(QString _ds){
-    //addSelectedToNewDS();
     do_assignDS(_ds, get_selectedVerts(), get_selectedEdges());
 }
 
