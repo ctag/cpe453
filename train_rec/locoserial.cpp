@@ -5,6 +5,7 @@ LocoSerial::LocoSerial()
     debug = NULL;
     incomingPacket = NULL;
     outgoingPacket = NULL;
+    usbBuffer = NULL;
 }
 
 LocoSerial::~LocoSerial()
@@ -13,6 +14,7 @@ LocoSerial::~LocoSerial()
     delete incomingPacket;
     delete outgoingPacket;
     delete debug;
+    //usbBuffer->deleteLater();
 }
 
 QString LocoSerial::timeStamp()
@@ -27,7 +29,7 @@ void LocoSerial::do_run()
     incomingPacket->clear();
     outgoingPacket->clear();
     debug = new bool;
-    *debug = false;
+    *debug = true;
     qDebug() << timeStamp() << "Serial thread initialized.";
 }
 
@@ -97,11 +99,13 @@ void LocoSerial::do_close()
 bool LocoSerial::do_open(QSerialPortInfo _port)
 {
     usbBuffer = new QSerialPort;
+    usbBuffer->close();
     usbBuffer->setPort(_port);
     usbBuffer->setBaudRate(57600);
     usbBuffer->setFlowControl(QSerialPort::HardwareControl);
-    //usbBuffer->open(QIODevice::ReadWrite);
 
+    //usbBuffer->open(QIODevice::ReadWrite);
+    if (*debug) qDebug() << timeStamp() << "Serial Device being opened: " << _port.portName();
     if (usbBuffer->open(QIODevice::ReadWrite)) //(usbBuffer->isOpen())
     {
         if (*debug) qDebug() << timeStamp() << "Serial port appears to have opened sucessfully.";
@@ -111,7 +115,8 @@ bool LocoSerial::do_open(QSerialPortInfo _port)
         return(true);
     }
 
-    if (*debug) qDebug() << timeStamp() << "Serial port failed to open.";
+    qDebug() << timeStamp() << "Serial port failed to open.";
+    qDebug() << "Serial device error: " << usbBuffer->errorString();
     usbBuffer->close();
     emit serialClosed();
     return(false);
