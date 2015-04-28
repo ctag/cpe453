@@ -121,6 +121,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    locoserial->do_close();
     // Clean up sub-threads
     threadSerial.quit();
     threadSerial.wait();
