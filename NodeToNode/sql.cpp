@@ -154,14 +154,18 @@ void SQL::do_uploadEdges(QList<edge*> _edges)
         mainQuery->bindValue(":y", _edge->getVertTo()->yInch);
         mainQuery->exec();
 
+        qDebug() << "Sending edge to SQL: " << _index << _edge->getVertFrom()->vertexID << _edge->getVertTo()->vertexID << _edge->getType() << _edge->getDS();
         mainQuery->prepare("INSERT INTO "+schema+"."+trackEdges+" (`id`,`vert_from`,`vert_to`, `type`, `ds`)"
-                           "VALUES (:edge_id,:vert_from,:vert_to,:type,:ds);");
+                           "VALUES (:id,:vert_from,:vert_to,:type,:ds);");
         mainQuery->bindValue(":id", _index);
         mainQuery->bindValue(":vert_from", _edge->getVertFrom()->vertexID);
         mainQuery->bindValue(":vert_to", _edge->getVertTo()->vertexID);
         mainQuery->bindValue(":type", _edge->getType());
         mainQuery->bindValue(":ds", _edge->getDS());
-        mainQuery->exec();
+        if (!mainQuery->exec())
+        {
+            qDebug () << "Error uploading edge: " << mainQuery->lastError().text();
+        }
     }
 }
 
