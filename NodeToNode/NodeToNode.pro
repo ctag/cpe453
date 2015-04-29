@@ -12,7 +12,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = NodeToNode
 TEMPLATE = app
-CONFIG += c++11
+
+# ECE computers don't have C++11
+# :(
+#CONFIG += c++11
 
 SOURCES += main.cpp\
     mainwindow.cpp \

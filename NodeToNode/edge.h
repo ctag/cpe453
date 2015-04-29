@@ -19,7 +19,9 @@
 {
 
 public:
-     using QGraphicsLineItem::QGraphicsLineItem; // We're using c++11 standards to get around some horrible code styling.
+     // We don't have access to C++11
+     //using QGraphicsLineItem::QGraphicsLineItem; // We're using c++11 standards to get around some horrible code styling.
+     edge(qreal x1, qreal y1, qreal x2, qreal y2) : QGraphicsLineItem(x1, y1, x2, y2) {};
      void setDS(QString _ds);
      void setVertTo(vertex* _vert);
      void setVertFrom(vertex* _vert);
