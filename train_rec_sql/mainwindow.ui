@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>718</width>
-    <height>481</height>
+    <width>788</width>
+    <height>584</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -273,8 +273,8 @@ p, li { white-space: pre-wrap; }
        <widget class="QPushButton" name="pushButton_getTrains">
         <property name="geometry">
          <rect>
-          <x>590</x>
-          <y>340</y>
+          <x>650</x>
+          <y>390</y>
           <width>81</width>
           <height>22</height>
          </rect>
@@ -286,206 +286,234 @@ p, li { white-space: pre-wrap; }
        <widget class="QPlainTextEdit" name="plainTextEdit_listTrains">
         <property name="geometry">
          <rect>
-          <x>310</x>
-          <y>20</y>
+          <x>370</x>
+          <y>10</y>
           <width>371</width>
-          <height>311</height>
+          <height>371</height>
          </rect>
         </property>
         <property name="acceptDrops">
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QGroupBox" name="groupBox_2">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>50</y>
-          <width>186</width>
-          <height>52</height>
+          <x>30</x>
+          <y>290</y>
+          <width>192</width>
+          <height>150</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Train #</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QSpinBox" name="spinBox_slotReq">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QPushButton" name="pushButton_slotReq">
-           <property name="text">
-            <string>Req Slot for Train</string>
-           </property>
-          </widget>
+        <property name="title">
+         <string>Slot Macros</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="1" column="0">
+            <widget class="QSpinBox" name="spinBox_slotMacros">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>119</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButton_slotUse">
+             <property name="text">
+              <string>SLOT_USE</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="pushButton_slotDispatch">
+             <property name="text">
+              <string>SLOT_DISPATCH</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QPushButton" name="pushButton_slotClear">
+             <property name="text">
+              <string>SLOT_CLEAR</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="text">
+              <string>Slot #</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QPushButton" name="pushButton_slotScan">
+             <property name="text">
+              <string>SLOT_SCAN</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QGroupBox" name="groupBox_3">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>276</width>
-          <height>29</height>
+          <x>30</x>
+          <y>200</y>
+          <width>314</width>
+          <height>86</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="0">
-          <widget class="QPushButton" name="pushButton_trackOn">
-           <property name="text">
-            <string>Track On</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="pushButton_trackOff">
-           <property name="text">
-            <string>Track Off</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QPushButton" name="pushButton_trackReset">
-           <property name="text">
-            <string>Track Reset</string>
-           </property>
-          </widget>
+        <property name="title">
+         <string>Train Request</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_2">
+             <property name="text">
+              <string>Slot #</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Speed %</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_4">
+             <property name="text">
+              <string>Reverse</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QSpinBox" name="spinBox_slotTrainReq">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>119</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QSpinBox" name="spinBox_setTrainSpeed">
+             <property name="minimum">
+              <number>0</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="value">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QSpinBox" name="spinBox_trainDir">
+             <property name="maximum">
+              <number>1</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QPushButton" name="pushButton_trainReq">
+             <property name="text">
+              <string>Set Train Speed</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QGroupBox" name="groupBox_4">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>30</x>
           <y>110</y>
-          <width>307</width>
-          <height>52</height>
+          <width>196</width>
+          <height>86</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Slot #</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_3">
-           <property name="text">
-            <string>Speed %</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Reverse</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QSpinBox" name="spinBox_slotTrainReq">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>119</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QSpinBox" name="spinBox_setTrainSpeed">
-           <property name="minimum">
-            <number>0</number>
-           </property>
-           <property name="maximum">
-            <number>100</number>
-           </property>
-           <property name="value">
-            <number>0</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="2">
-          <widget class="QSpinBox" name="spinBox_trainDir">
-           <property name="maximum">
-            <number>1</number>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="3">
-          <widget class="QPushButton" name="pushButton_trainReq">
-           <property name="text">
-            <string>Set Train Speed</string>
-           </property>
-          </widget>
+        <property name="title">
+         <string>Slot Request</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Train #</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QSpinBox" name="spinBox_slotReq">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QPushButton" name="pushButton_slotReq">
+             <property name="text">
+              <string>Req Slot for Train</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="layoutWidget">
+       <widget class="QGroupBox" name="groupBox_5">
         <property name="geometry">
          <rect>
-          <x>10</x>
-          <y>170</y>
-          <width>186</width>
-          <height>128</height>
+          <x>30</x>
+          <y>30</y>
+          <width>280</width>
+          <height>65</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_5">
-         <item row="1" column="0">
-          <widget class="QSpinBox" name="spinBox_slotMacros">
-           <property name="minimum">
-            <number>1</number>
-           </property>
-           <property name="maximum">
-            <number>119</number>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="pushButton_slotUse">
-           <property name="text">
-            <string>SLOT_USE</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QPushButton" name="pushButton_slotDispatch">
-           <property name="text">
-            <string>SLOT_DISPATCH</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QPushButton" name="pushButton_slotClear">
-           <property name="text">
-            <string>SLOT_CLEAR</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>Slot #</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QPushButton" name="pushButton_slotScan">
-           <property name="text">
-            <string>SLOT_SCAN</string>
-           </property>
-          </widget>
+        <property name="title">
+         <string>Track Macros</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButton_trackOn">
+             <property name="text">
+              <string>Track On</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="pushButton_trackOff">
+             <property name="text">
+              <string>Track Off</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="pushButton_trackReset">
+             <property name="text">
+              <string>Track Reset</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </widget>
@@ -605,7 +633,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>718</width>
+     <width>788</width>
      <height>19</height>
     </rect>
    </property>
